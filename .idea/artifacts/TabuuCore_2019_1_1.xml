@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TabuuCore 2019.1.1">
+    <output-path>P:/03_Projects/01_Minecraft_Plugins/04_Plugin_Making/03_Test_Servers/1.13.2/plugins</output-path>
+    <root id="archive" name="TabuuCore 2019.1.1.jar">
+      <element id="module-output" name="TabuuCore 2019" />
+    </root>
+  </artifact>
+</component>
