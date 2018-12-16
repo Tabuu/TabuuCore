@@ -66,7 +66,8 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     private void createInventory(){
-        _inventory = Bukkit.createInventory(this, _size, _title);
+        _inventory = Bukkit.createInventory(null, _size, _title);
+        TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
     public void setTile(String title){

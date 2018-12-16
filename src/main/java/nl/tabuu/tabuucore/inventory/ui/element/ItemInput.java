@@ -36,7 +36,8 @@ public class ItemInput extends StylableElement<Style> implements IClickable, IVa
             player.setItemOnCursor(_value.clone());
 
         setValue(newValue);
-        setDisplayItem(_value);
+        setDisplayItem(newValue);
+        updateStyle();
 
         if(_consumer != null)
             _consumer.accept(player, newValue);

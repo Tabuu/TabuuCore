@@ -26,11 +26,11 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     protected abstract void draw();
 
-    public void setBrush(IBrush brush){
+    protected void setBrush(IBrush brush){
         _currentBrush = brush;
     }
 
-    public void drawLine(Vector2f from, Vector2f to) {
+    protected void drawLine(Vector2f from, Vector2f to) {
         if(from.length() > to.length()){
             Vector2f t = new Vector2f(0, 0).copy(to);
             to = from;
@@ -56,7 +56,7 @@ public abstract class InventoryCanvas implements IInventoryUI {
         }
     }
 
-    public void drawRectangle(Vector2f from, Vector2f to){
+    protected void drawRectangle(Vector2f from, Vector2f to){
         for(int i = from.getIntX(); i <= to.getIntX(); i++){
             Vector2f pos1 = new Vector2f(i, from.getIntY());
             Vector2f pos2 = new Vector2f(i, to.getIntY());
@@ -72,16 +72,24 @@ public abstract class InventoryCanvas implements IInventoryUI {
         }
     }
 
-    public void drawPoint(Vector2f position){
+    protected void drawFilledRectangle(Vector2f from, Vector2f to){
+        for(int y = from.getIntY(); y <= to.getIntY(); y++){
+            for(int x = from.getIntX(); x <= to.getIntX(); x++){
+                drawPoint(new Vector2f(x, y));
+            }
+        }
+    }
+
+    protected void drawPoint(Vector2f position){
         setItemAt(position, _currentBrush);
     }
 
-    public void setItemAt(Vector2f vector, ItemStack item){
+    protected void setItemAt(Vector2f vector, ItemStack item){
         Inventory inventory = getInventory();
         inventory.setItem(vectorToSlot(vector), item);
     }
 
-    public void setItemAt(Vector2f position, IBrush brush){
+    protected void setItemAt(Vector2f position, IBrush brush){
         setItemAt(position, brush.get(position));
     }
 }

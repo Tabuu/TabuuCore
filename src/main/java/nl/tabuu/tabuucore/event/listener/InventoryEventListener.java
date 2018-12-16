@@ -24,19 +24,18 @@ public class InventoryEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event){
-
         if(event.getWhoClicked() instanceof Player){
             Player player = (Player) event.getWhoClicked();
-            Inventory uiInventory = event.getView().getTopInventory();
+            Inventory inventory = event.getView().getTopInventory();
+            InventoryUI inventoryUI = getUI(inventory);
 
-            if(isUI(uiInventory)){
-                InventoryUI ui = (InventoryUI) uiInventory.getHolder();
-                if(ui.isBlockedAction(event.getAction())){
+            if(inventoryUI != null){
+                if(inventoryUI.isBlockedAction(event.getAction())){
                     event.setCancelled(true);
                 }
-                else if(event.getClickedInventory() != null && event.getClickedInventory().equals(uiInventory)){
+                else if(event.getClickedInventory() != null && event.getClickedInventory().equals(inventory)){
                     InventoryUIClick click = new InventoryUIClick(event);
-                    event.setCancelled(ui.onClick(player, click));
+                    event.setCancelled(inventoryUI.onClick(player, click));
                 }
             }
         }
@@ -46,20 +45,22 @@ public class InventoryEventListener implements Listener {
     public void onPlayerItemDrop(PlayerDropItemEvent event){
         Player player  = event.getPlayer();
         InventoryView view = player.getOpenInventory();
+        InventoryUI inventoryUI = getUI(view.getTopInventory());
 
-        if(isUI(view.getTopInventory()) && !player.getItemOnCursor().getType().equals(Material.AIR)){
+        if(inventoryUI != null && !player.getItemOnCursor().getType().equals(Material.AIR)){
             ItemStack itemStack = event.getItemDrop().getItemStack().clone();
             event.getItemDrop().remove();
-            Bukkit.getScheduler().runTaskLater(TabuuCore.getInstance(), () -> player.setItemOnCursor(itemStack), 1L);
+            Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> player.setItemOnCursor(itemStack));
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
         Inventory inventory = event.getInventory();
         Player player = (Player) event.getWhoClicked();
+        InventoryUI inventoryUI = getUI(inventory);
 
-        if(inventory.equals(event.getView().getTopInventory()) && isUI(inventory)){
+        if(inventory.equals(event.getView().getTopInventory())&& inventoryUI != null){
             event.setCancelled(true);
             player.updateInventory();
         }
@@ -69,9 +70,9 @@ public class InventoryEventListener implements Listener {
     public void onInventoryOpen(InventoryOpenEvent event){
         Inventory inventory = event.getInventory();
         Player player = (Player) event.getPlayer();
+        InventoryUI inventoryUI = getUI(inventory);
 
-        if(isUI(inventory)){
-            InventoryUI inventoryUI = (InventoryUI) inventory.getHolder();
+        if(inventoryUI != null){
             if(!inventoryUI.isReloading())
                 inventoryUI.onOpen(player);
         }
@@ -81,19 +82,16 @@ public class InventoryEventListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event){
         Inventory inventory = event.getInventory();
         Player player = (Player) event.getPlayer();
+        InventoryUI inventoryUI = getUI(inventory);
 
-        if(isUI(inventory)){
-            InventoryUI inventoryUI = (InventoryUI) inventory.getHolder();
+        if(inventoryUI != null){
             if(!inventoryUI.isReloading())
                 inventoryUI.onClose(player);
         }
     }
 
-    private boolean isUI(Inventory inventory){
-        return inventory != null &&
-                inventory.getHolder() != null &&
-                inventory.getHolder() instanceof IInventoryUI;
+    private InventoryUI getUI(Inventory inventory){
+        return TabuuCore.getInstance().getInventoryUIManager().get(inventory);
     }
-
 
 }

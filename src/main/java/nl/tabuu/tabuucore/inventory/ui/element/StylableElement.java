@@ -21,7 +21,7 @@ public abstract class StylableElement<S extends Style> extends Element {
         return _currentDisplayItem;
     }
 
-    protected void setDisplayItem(ItemStack item){
+    public void setDisplayItem(ItemStack item){
         _currentDisplayItem = item;
     }
 
