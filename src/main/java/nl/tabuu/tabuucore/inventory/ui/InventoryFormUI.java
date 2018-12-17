@@ -1,7 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui;
 
 import nl.tabuu.tabuucore.inventory.InventorySize;
-import nl.tabuu.tabuucore.inventory.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.Element;
 import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
 import nl.tabuu.tabuucore.inventory.ui.element.StylableElement;
@@ -25,7 +24,7 @@ public abstract class InventoryFormUI extends InventoryUI {
     }
 
     @Override
-    public boolean onClick(Player player, InventoryUIClick click) {
+    public void onClick(Player player, InventoryUIClick click) {
         Vector2f position = InventoryCanvas.vectorToSlot(click.getSlot());
         Element element = _elements.get(position);
 
@@ -35,7 +34,7 @@ public abstract class InventoryFormUI extends InventoryUI {
             updateElement(position);
         }
 
-        return true;
+        click.setCanceled(true);
     }
 
     @Override
@@ -43,7 +42,7 @@ public abstract class InventoryFormUI extends InventoryUI {
         _elements.keySet().forEach(this::updateElement);
     }
 
-    protected void updateElement(Vector2f position){
+    public void updateElement(Vector2f position){
         Element element = _elements.get(position);
 
         if(element instanceof StylableElement){
@@ -55,5 +54,6 @@ public abstract class InventoryFormUI extends InventoryUI {
 
     public void addElement(Vector2f position, Element element){
         _elements.put(position, element);
+        element.setPosition(position);
     }
 }

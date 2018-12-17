@@ -6,3 +6,8 @@ author: Tabuu
 authors: [Tabuu]
 website: https://www.tabuu.nl
 api-version: 1.13
+
+commands:
+  tabuucore:
+    usage: /tabuucore
+    description: Debug command.

@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore;
+package nl.tabuu.tabuucore.debug;
 
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.InventoryFormUI;
@@ -23,7 +23,7 @@ public class TestUI extends InventoryFormUI {
     private Button _submitButton;
 
     public TestUI(){
-        super("Item Renamer", InventorySize.FOUR_ROWS);
+        super("Item Editor", InventorySize.FOUR_ROWS);
     }
 
     @Override
@@ -36,11 +36,12 @@ public class TestUI extends InventoryFormUI {
         Style itemInputStyle = new Style(Material.AIR, Material.IRON_BARS);
         _itemInput = new ItemInput(itemInputStyle, false);
 
-        Style buttonStyle = new Style(Material.LIME_DYE, Material.IRON_BARS);
+        Style buttonStyle = new Style(Material.LIME_DYE, Material.GRAY_DYE);
         _submitButton = new Button(buttonStyle, this::onSubmitButtonClick);
+        _submitButton.setEnabled(false);
 
         TextInputStyle textStyle = new TextInputStyle(Material.MAP, Material.FILLED_MAP, Material.NAME_TAG, "Enter Text");
-        _textInput = new TextInput(textStyle, this.getInventory());
+        _textInput = new TextInput(textStyle, this.getInventory(), this::onTextChange);
 
         addElement(new Vector2f(4, 1), _itemInput);
         addElement(new Vector2f(2, 2), _submitButton);
@@ -56,6 +57,15 @@ public class TestUI extends InventoryFormUI {
         item.setItemMeta(itemMeta);
 
         updateElement(new Vector2f(4, 1));
+
+        _submitButton.setEnabled(false);
+        _submitButton.update(this);
+    }
+
+    private void onTextChange(Player player, String string){
+        player.sendMessage(string );
+        _submitButton.setEnabled(true);
+        _submitButton.update(this);
     }
 
 

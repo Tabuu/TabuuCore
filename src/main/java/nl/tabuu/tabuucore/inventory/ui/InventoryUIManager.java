@@ -13,7 +13,22 @@ public class InventoryUIManager {
     }
 
     public void register(InventoryUI ui){
+        if(_uis.values().contains(ui)){
+            unregister(ui);
+            register(ui);
+        }
         _uis.put(ui.getInventory(), ui);
+    }
+
+    public void unregister(Inventory inventory){
+        _uis.remove(inventory);
+    }
+
+    public void unregister(InventoryUI ui){
+        _uis.keySet().stream()
+                .filter(inv -> get(inv).equals(ui))
+                .findAny()
+                .ifPresent(this::unregister);
     }
 
     public InventoryUI get(Inventory inventory){

@@ -1,6 +1,8 @@
 package nl.tabuu.tabuucore;
 
-import nl.tabuu.tabuucore.event.listener.InventoryEventListener;
+import nl.tabuu.tabuucore.debug.DebugCommand;
+import nl.tabuu.tabuucore.debug.DebugListener;
+import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
@@ -8,27 +10,38 @@ import org.bukkit.Bukkit;
 public class TabuuCore extends TabuuCorePlugin {
 
     private static TabuuCore _instance;
-    private InventoryUIManager _uiManager;
+    private InventoryUIManager _inventoryUIManager;
 
     @Override
     public void onEnable(){
         _instance = this;
+
+        getInstance().getLogger().info("Enabling TabuuCore...");
+
+        // Registering configuration.
         getConfigurationManager().addConfiguration("config");
+        getConfigurationManager().addConfiguration("lang");
 
-        _uiManager = new InventoryUIManager();
+        // Inventory user interface related.
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(), getInstance());
+        _inventoryUIManager = new InventoryUIManager();
 
-        Bukkit.getPluginManager().registerEvents(new InventoryEventListener(), getInstance());
+        // Metrics.
+        new nl.tabuu.tabuucore.metrics.bstats.Metrics(this);
+        new nl.tabuu.tabuucore.metrics.massivestats.MassiveStats(this);
 
-        Bukkit.getScheduler().runTask(this, () -> Bukkit.getOnlinePlayers().forEach(p -> new TestUI().open(p)));
+        // Debug purposes.
+        Bukkit.getPluginManager().registerEvents(new DebugListener(), getInstance());
+        this.getCommand("tabuucore").setExecutor(new DebugCommand());
     }
 
     @Override
     public void onDisable(){
-
+        getInstance().getLogger().info("Disabling TabuuCore...");
     }
 
     public InventoryUIManager getInventoryUIManager(){
-        return _uiManager;
+        return _inventoryUIManager;
     }
 
     public static TabuuCore getInstance(){

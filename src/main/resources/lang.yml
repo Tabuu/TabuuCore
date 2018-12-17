@@ -1,0 +1,10 @@
+ERROR_MESSAGE_CONVERT_PLAYER: "&cCould not find any player with name '{ARG}', the player might be offline."
+ERROR_MESSAGE_CONVERT_OFFLINE_PLAYER: "&cCould not find any player with name '{ARG}', they might have never joined the server before."
+ERROR_MESSAGE_CONVERT_INTEGER: "&c'{ARG}' is not a whole number."
+ERROR_MESSAGE_CONVERT_LONG: "&c'{ARG}' is not a whole number."
+ERROR_MESSAGE_CONVERT_DOUBLE: "&c'{ARG}' is not a number."
+ERROR_MESSAGE_CONVERT_GENERAL: "&cSomething went wrong while processing the argument '{ARG}'."
+
+ERROR_MESSAGE_INVALID_COMMANDSENDER_TYPE: "&cYou must be a '{SENDER_TYPE}' to execute this command."
+
+ERROR_MESSAGE_MISSING_PERMISSION: "&cYou do not have permission to do that."

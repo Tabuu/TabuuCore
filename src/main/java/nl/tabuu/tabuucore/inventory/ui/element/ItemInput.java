@@ -52,4 +52,11 @@ public class ItemInput extends StylableElement<Style> implements IClickable, IVa
     public void setValue(ItemStack value) {
         _value = value;
     }
+
+    @Override
+    public void updateStyle(){
+        super.updateStyle();
+        if(isEnabled())
+            setDisplayItem(_value);
+    }
 }

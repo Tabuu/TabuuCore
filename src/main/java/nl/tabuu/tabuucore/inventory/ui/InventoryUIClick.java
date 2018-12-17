@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore.inventory;
+package nl.tabuu.tabuucore.inventory.ui;
 
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -14,6 +14,7 @@ public class InventoryUIClick {
     private int _hotbarButton, _rawSlot, _slot;
     private boolean _isRightClick, _isLeftClick, _isShiftClick;
     private ItemStack _clickedItem, _cursorItem;
+    private boolean _canceled;
 
     public InventoryUIClick(InventoryClickEvent event){
         _clickType          = event.getClick();
@@ -27,6 +28,7 @@ public class InventoryUIClick {
         _isShiftClick       = event.isShiftClick();
         _clickedItem        = event.getCurrentItem();
         _cursorItem         = event.getCursor();
+        _canceled           = false;
     }
 
     public ClickType getClickType() {
@@ -71,6 +73,14 @@ public class InventoryUIClick {
 
     public ItemStack getCursorItem() {
         return _cursorItem;
+    }
+
+    public void setCanceled(boolean canceled){
+        _canceled = canceled;
+    }
+
+    public boolean isCanceled(){
+        return _canceled;
     }
 
 }

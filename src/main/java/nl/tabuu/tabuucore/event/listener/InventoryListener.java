@@ -1,14 +1,12 @@
 package nl.tabuu.tabuucore.event.listener;
 
 import nl.tabuu.tabuucore.TabuuCore;
-import nl.tabuu.tabuucore.inventory.InventoryUIClick;
-import nl.tabuu.tabuucore.inventory.ui.IInventoryUI;
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -19,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryEventListener implements Listener {
+public class InventoryListener implements Listener {
 
 
     @EventHandler(ignoreCancelled = true)
@@ -35,7 +33,8 @@ public class InventoryEventListener implements Listener {
                 }
                 else if(event.getClickedInventory() != null && event.getClickedInventory().equals(inventory)){
                     InventoryUIClick click = new InventoryUIClick(event);
-                    event.setCancelled(inventoryUI.onClick(player, click));
+                    inventoryUI.onClick(player, click);
+                    event.setCancelled(click.isCanceled());
                 }
             }
         }

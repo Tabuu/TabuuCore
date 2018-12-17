@@ -26,7 +26,6 @@ public abstract class StylableElement<S extends Style> extends Element {
     }
 
     public void updateStyle(){
-        if(!isEnabled())
-            setDisplayItem(_style.getDisabled());
+        setDisplayItem(isEnabled() ? _style.getEnabled() : _style.getDisabled());
     }
 }

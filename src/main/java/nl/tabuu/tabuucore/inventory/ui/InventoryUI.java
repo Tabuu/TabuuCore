@@ -2,7 +2,6 @@ package nl.tabuu.tabuucore.inventory.ui;
 
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
-import nl.tabuu.tabuucore.inventory.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -105,7 +104,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     @Override
-    public boolean onClick(Player player, InventoryUIClick click){ return false; }
+    public void onClick(Player player, InventoryUIClick click){ }
 
     @Override
     public void onOpen(Player player){}

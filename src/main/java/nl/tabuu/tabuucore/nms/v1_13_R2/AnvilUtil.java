@@ -2,13 +2,10 @@ package nl.tabuu.tabuucore.nms.v1_13_R2;
 
 import net.minecraft.server.v1_13_R2.*;
 import nl.tabuu.tabuucore.nms.wrapper.IAnvilUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_13_R2.event.CraftEventFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-
-import java.lang.reflect.Field;
 
 public class AnvilUtil implements IAnvilUtil {
     @Override

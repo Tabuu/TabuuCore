@@ -24,7 +24,7 @@ public class TextInputUI extends InventoryFormUI{
     public TextInputUI(String title, TextInput textInputElement) {
         super(title, InventorySize.DOUBLE_CHEST);
         _textInputElement = textInputElement;
-        _anvilUtil = NMSUtil.getAnvilUtil();
+        _anvilUtil = IAnvilUtil.getAnvilUtil();
     }
 
     private void returnToUI(Player player){
@@ -67,7 +67,6 @@ public class TextInputUI extends InventoryFormUI{
 
     @Override
     public void onClose(Player player){
-        _anvilUtil.handleInventoryCloseEvent(player);
         _anvilUtil.setActiveContainerDefault(player);
         _anvilUtil.sendPacketCloseWindow(player, _containerId);
     }
