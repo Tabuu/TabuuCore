@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.TextInputUI;
 import nl.tabuu.tabuucore.inventory.ui.element.style.TextInputStyle;
 import org.bukkit.entity.Player;
@@ -11,17 +12,17 @@ public class TextInput extends StylableElement<TextInputStyle> implements IClick
 
     private String _value;
     private BiConsumer<Player, String> _consumer;
-    private Inventory _returnInventory;
+    private InventoryUI _returnUI;
 
-    public TextInput(TextInputStyle style, Inventory inventory) {
-        this(style, inventory, null);
+    public TextInput(TextInputStyle style, InventoryUI returnUI) {
+        this(style, returnUI, null);
     }
 
-    public TextInput(TextInputStyle style, Inventory returnInventory, BiConsumer<Player, String> consumer) {
+    public TextInput(TextInputStyle style, InventoryUI returnUI, BiConsumer<Player, String> consumer) {
         super(style);
         _value = style.getPlaceHolder();
         _consumer = consumer;
-        _returnInventory = returnInventory;
+        _returnUI = returnUI;
     }
 
     public BiConsumer<Player, String> getConsumer(){
@@ -30,7 +31,7 @@ public class TextInput extends StylableElement<TextInputStyle> implements IClick
 
     @Override
     public void click(Player player) {
-        new TextInputUI("TextInput", this).open(player);
+        new TextInputUI(getStyle().getRenameItem(), getStyle().getPlaceHolder(), this::setValue).open(player);
     }
 
     @Override
@@ -44,12 +45,19 @@ public class TextInput extends StylableElement<TextInputStyle> implements IClick
     }
 
     public void setValue(Player player, String value){
-        setValue(value);
-        if(_consumer != null)
-            _consumer.accept(player, value);
+        if(!value.equals(getStyle().getPlaceHolder())){
+            setValue(value);
+            if(_consumer != null)
+                _consumer.accept(player, value);
+        }
+        returnToUI(player);
     }
 
-    public Inventory returnInventory(){
-        return _returnInventory;
+    private void returnToUI(Player player){
+        getReturnUI().open(player);
+    }
+
+    public InventoryUI getReturnUI(){
+        return _returnUI;
     }
 }

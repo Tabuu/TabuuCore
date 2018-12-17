@@ -11,7 +11,8 @@ public class NMSUtil {
     public static Class getWrapperClass(String className){
         try {
             return Class.forName("nl.tabuu.tabuucore.nms." + getVersion() + "." + className);
-        } catch (ClassNotFoundException e) {
+        }
+        catch (ClassNotFoundException e) {
             Bukkit.getLogger().severe("Class with name '" + className + "' was not found for your Spigot version!");
         }
 

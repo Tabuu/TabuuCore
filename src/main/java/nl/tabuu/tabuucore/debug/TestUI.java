@@ -41,7 +41,7 @@ public class TestUI extends InventoryFormUI {
         _submitButton.setEnabled(false);
 
         TextInputStyle textStyle = new TextInputStyle(Material.MAP, Material.FILLED_MAP, Material.NAME_TAG, "Enter Text");
-        _textInput = new TextInput(textStyle, this.getInventory(), this::onTextChange);
+        _textInput = new TextInput(textStyle, this, this::onTextChange);
 
         addElement(new Vector2f(4, 1), _itemInput);
         addElement(new Vector2f(2, 2), _submitButton);

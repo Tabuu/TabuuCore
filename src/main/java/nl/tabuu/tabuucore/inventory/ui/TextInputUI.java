@@ -3,9 +3,7 @@ package nl.tabuu.tabuucore.inventory.ui;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
-import nl.tabuu.tabuucore.inventory.ui.element.TextInput;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
-import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.wrapper.IAnvilUtil;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Material;
@@ -15,27 +13,29 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.function.BiConsumer;
+
 public class TextInputUI extends InventoryFormUI{
 
     private IAnvilUtil _anvilUtil;
-    private TextInput _textInputElement;
     private int _containerId;
+    private BiConsumer<Player, String> _onTextSubmit;
+    private ItemStack _renameItem;
+    private String _defaultValue;
 
-    public TextInputUI(String title, TextInput textInputElement) {
-        super(title, InventorySize.DOUBLE_CHEST);
-        _textInputElement = textInputElement;
-        _anvilUtil = IAnvilUtil.getAnvilUtil();
-    }
-
-    private void returnToUI(Player player){
-        player.openInventory(_textInputElement.returnInventory());
+    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit){
+        super("", InventorySize.ONE_ROW);
+        _onTextSubmit = onTextSubmit;
+        _renameItem = renameItem;
+        _anvilUtil = IAnvilUtil.get();
+        _defaultValue = defaultValue;
     }
 
     @Override
     public void draw(){
-        ItemStack renameItem = _textInputElement.getStyle().getRenameItem().clone();
+        ItemStack renameItem = _renameItem;
         ItemMeta itemMeta = renameItem.getItemMeta();
-        itemMeta.setDisplayName(_textInputElement.getValue());
+        itemMeta.setDisplayName(_defaultValue);
         renameItem.setItemMeta(itemMeta);
 
         Style submitButtonStyle = new Style(renameItem, new ItemStack(Material.AIR));
@@ -73,7 +73,7 @@ public class TextInputUI extends InventoryFormUI{
 
     private void submit(Player player){
         String string = ((AnvilInventory) _inventory).getRenameText();
-        _textInputElement.setValue(player, string);
-        returnToUI(player);
+        _onTextSubmit.accept(player, string);
+        _anvilUtil.handleInventoryCloseEvent(player);
     }
 }
