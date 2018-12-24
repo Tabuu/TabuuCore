@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -17,15 +18,15 @@ import java.util.List;
 
 public abstract class InventoryUI extends InventoryCanvas {
 
-    protected Inventory _inventory;
+    private Inventory _inventory;
     private String _title;
-    private int _size;
+    private InventorySize _size;
     private List<InventoryAction> _blockedActions;
     private boolean _reloading;
 
     public InventoryUI(String title, InventorySize size){
         _title = title;
-        _size = size.getSize();
+        _size = size;
         _blockedActions = new ArrayList<>();
         _reloading = false;
         createInventory();
@@ -52,7 +53,7 @@ public abstract class InventoryUI extends InventoryCanvas {
         _reloading = true;
         List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
-        ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, _size);
+        ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, _size.getSize());
         createInventory();
         getInventory().setContents(contents);
 
@@ -65,7 +66,18 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     private void createInventory(){
-        _inventory = Bukkit.createInventory(null, _size, _title);
+        switch (_size){
+
+            case HOPPER:
+                _inventory = Bukkit.createInventory(null, InventoryType.HOPPER, _title);
+                break;
+
+            default:
+                _inventory = Bukkit.createInventory(null, _size.getSize(), _title);
+                break;
+
+        }
+
         TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
@@ -74,7 +86,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     public void setSize(InventorySize size){
-        _size = size.getSize();
+        _size = size;
     }
 
     public List<InventoryAction> getBlockedActions(){
@@ -101,6 +113,11 @@ public abstract class InventoryUI extends InventoryCanvas {
     @Override
     public Inventory getInventory(){
         return _inventory;
+    }
+
+    @Override
+    public void setInventory(Inventory inventory){
+        _inventory = inventory;
     }
 
     @Override

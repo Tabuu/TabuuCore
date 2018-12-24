@@ -9,7 +9,8 @@ public enum InventorySize {
     FIVE_ROWS(45),
     SIX_ROWS(54),
     SINGLE_CHEST(27),
-    DOUBLE_CHEST(54);
+    DOUBLE_CHEST(54),
+    HOPPER(5);
 
     private int _size;
 

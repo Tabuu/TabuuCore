@@ -54,7 +54,7 @@ public class TextInputUI extends InventoryFormUI{
         _anvilUtil.setActiveContainerDefault(player);
 
         Object container = _anvilUtil.newContainerAnvil(player);
-        _inventory = _anvilUtil.toBukkitInventory(container);
+        setInventory(_anvilUtil.toBukkitInventory(container));
 
         _containerId = _anvilUtil.getNextContainerId(player);
         _anvilUtil.sendPacketOpenWindow(player, _containerId);
@@ -72,7 +72,7 @@ public class TextInputUI extends InventoryFormUI{
     }
 
     private void submit(Player player){
-        String string = ((AnvilInventory) _inventory).getRenameText();
+        String string = ((AnvilInventory) getInventory()).getRenameText();
         _onTextSubmit.accept(player, string);
         _anvilUtil.handleInventoryCloseEvent(player);
     }

@@ -12,15 +12,7 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     private IBrush _currentBrush;
 
-    public static int vectorToSlot(Vector2f vector){
-        return (vector.getIntY() * 9) + vector.getIntX();
-    }
-
-    public static Vector2f vectorToSlot(int slot){
-        return new Vector2f(slot % 9, (float) Math.floor(slot / 9f));
-    }
-
-    public InventoryCanvas(){
+    protected InventoryCanvas(){
         _currentBrush = new Brush(Material.COARSE_DIRT);
     }
 
@@ -91,5 +83,13 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     protected void setItemAt(Vector2f position, IBrush brush){
         setItemAt(position, brush.get(position));
+    }
+
+    public static int vectorToSlot(Vector2f vector){
+        return (vector.getIntY() * 9) + vector.getIntX();
+    }
+
+    public static Vector2f vectorToSlot(int slot){
+        return new Vector2f(slot % 9, (float) Math.floor(slot / 9f));
     }
 }
