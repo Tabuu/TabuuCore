@@ -1,0 +1,13 @@
+name: TabuuCore
+version: ${project.version}
+main: nl.tabuu.tabuucore.TabuuCore
+description: ${project.description}
+author: Tabuu
+authors: [Tabuu]
+website: http://www.tabuu.nl
+api-version: 1.13
+
+commands:
+  tabuucore:
+    usage: /tabuucore
+    description: Debug command.
