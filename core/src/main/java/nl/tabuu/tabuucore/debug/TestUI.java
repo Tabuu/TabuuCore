@@ -63,7 +63,7 @@ public class TestUI extends InventoryFormUI {
     }
 
     private void onTextChange(Player player, String string){
-        player.sendMessage(string );
+        player.sendMessage(string);
         _submitButton.setEnabled(true);
         _submitButton.update(this);
     }

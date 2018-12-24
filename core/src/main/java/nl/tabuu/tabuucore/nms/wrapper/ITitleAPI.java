@@ -16,8 +16,8 @@ public interface ITitleAPI {
     static ITitleAPI get(){
         try {
             return (ITitleAPI) NMSUtil.getWrapperClass("TitleAPI").getConstructor().newInstance();
-        }catch (NullPointerException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
         }
+        catch (Exception ignored) {}
 
         return null;
     }
