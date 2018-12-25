@@ -33,7 +33,7 @@ public class ItemStackSerializer extends AbstractByteSerializer<ItemStack[]>{
     }
 
     @Override
-    public ItemStack[] deserialize(byte[] data) throws IOException {
+    public ItemStack[] deserialize(byte[] data) {
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
@@ -46,7 +46,7 @@ public class ItemStackSerializer extends AbstractByteSerializer<ItemStack[]>{
 
             return items;
         } catch (IOException | ClassNotFoundException e) {
-            throw new IOException("Unable to convert bytes to items.", e);
+            throw new IllegalStateException("Unable to convert bytes to items.", e);
         }
     }
 }

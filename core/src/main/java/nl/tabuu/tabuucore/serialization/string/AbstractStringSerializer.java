@@ -2,6 +2,7 @@ package nl.tabuu.tabuucore.serialization.string;
 
 import nl.tabuu.tabuucore.serialization.ISerializer;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public abstract class AbstractStringSerializer<T> implements ISerializer<T, Stri
     }
 
     @Override
-    public T[] deserializeArray(String string){
+    public T[] deserializeArray(String string) {
         String[] strings = string.split(" ");
         List<T> objects = new ArrayList<>();
 
