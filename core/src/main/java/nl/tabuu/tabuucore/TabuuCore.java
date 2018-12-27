@@ -1,13 +1,12 @@
 package nl.tabuu.tabuucore;
 
-import nl.tabuu.tabuucore.debug.DebugCommand;
-import nl.tabuu.tabuucore.debug.DebugListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
+import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
-import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
-import org.bukkit.Bukkit;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
 import nl.tabuu.tabuucore.metrics.massivestats.MassiveStats;
+import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
+import org.bukkit.Bukkit;
 
 public class TabuuCore extends TabuuCorePlugin {
 
@@ -21,7 +20,6 @@ public class TabuuCore extends TabuuCorePlugin {
         getInstance().getLogger().info("Enabling TabuuCore...");
 
         // Registering configuration.
-        getConfigurationManager().addConfiguration("config");
         getConfigurationManager().addConfiguration("lang");
 
         // Inventory user interface related.
@@ -31,15 +29,12 @@ public class TabuuCore extends TabuuCorePlugin {
         // Metrics.
         new Metrics(this);
         new MassiveStats(this);
-
-        // Debug purposes.
-        Bukkit.getPluginManager().registerEvents(new DebugListener(), getInstance());
-        this.getCommand("tabuucore").setExecutor(new DebugCommand());
     }
 
     @Override
     public void onDisable(){
         getInstance().getLogger().info("Disabling TabuuCore...");
+        getInventoryUIManager().forEach(InventoryUI::closeAll);
     }
 
     public InventoryUIManager getInventoryUIManager(){

@@ -41,8 +41,8 @@ public class TextInputUI extends InventoryFormUI{
         Style submitButtonStyle = new Style(renameItem, new ItemStack(Material.AIR));
         Button submitButton = new Button(submitButtonStyle, this::submit);
 
-        addElement(new Vector2f(2, 0), submitButton);
-        addElement(new Vector2f(0, 0), submitButton);
+        setElement(new Vector2f(2, 0), submitButton);
+        setElement(new Vector2f(0, 0), submitButton);
         super.draw();
     }
 

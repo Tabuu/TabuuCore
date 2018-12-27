@@ -60,7 +60,7 @@ public abstract class InventoryFormUI extends InventoryUI {
         }
     }
 
-    public void addElement(Vector2f position, Element element){
+    public void setElement(Vector2f position, Element element){
         _elements.put(position, element);
         element.setPosition(position);
     }

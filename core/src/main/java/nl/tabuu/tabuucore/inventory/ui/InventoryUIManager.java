@@ -2,7 +2,9 @@ package nl.tabuu.tabuucore.inventory.ui;
 
 import org.bukkit.inventory.Inventory;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class InventoryUIManager {
 
@@ -29,6 +31,10 @@ public class InventoryUIManager {
                 .filter(inv -> get(inv).equals(ui))
                 .findAny()
                 .ifPresent(this::unregister);
+    }
+
+    public void forEach(Consumer<InventoryUI> consumer){
+        _uis.values().forEach(consumer);
     }
 
     public InventoryUI get(Inventory inventory){
