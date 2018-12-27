@@ -23,11 +23,11 @@ public abstract class InventoryCanvas implements IInventoryUI {
     }
 
     protected void drawLine(Vector2f from, Vector2f to) {
-        if(from.length() > to.length()){
-            Vector2f t = new Vector2f(0, 0).copy(to);
-            to = from;
-            from = t;
-        }
+//        if(from.length() > to.length()){
+//            Vector2f t = new Vector2f(0, 0).copy(to);
+//            to = from;
+//            from = t;
+//        }
 
         Vector2f delta = to.subtract(from);
 

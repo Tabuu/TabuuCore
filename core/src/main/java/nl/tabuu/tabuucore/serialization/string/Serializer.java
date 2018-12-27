@@ -12,5 +12,5 @@ public class Serializer {
     public static StringSerializer          STRING          = new StringSerializer();
     public static UUIDSerializer            UUID            = new UUIDSerializer();
     public static VectorSerializer          VECTOR          = new VectorSerializer();
-
+    public static TimeSerializer            TIME            = new TimeSerializer();
 }

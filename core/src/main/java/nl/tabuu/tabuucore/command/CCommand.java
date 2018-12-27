@@ -2,6 +2,7 @@ package nl.tabuu.tabuucore.command;
 
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.util.Dictionary;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -89,7 +90,7 @@ public abstract class CCommand extends BukkitCommand implements CommandExecutor 
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] arguments){
-        String[] convertedArgs = convertArguments(arguments);
+        String[] convertedArgs = arguments;
         if(convertedArgs.length > 0 && _subCommands.get(convertedArgs[0]) != null){
             CCommand subCommand = _subCommands.get(convertedArgs[0]);
             subCommand.execute(commandSender, label, Arrays.copyOfRange(convertedArgs, 1, convertedArgs.length));

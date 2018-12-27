@@ -3,10 +3,12 @@ package nl.tabuu.tabuucore.debug;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.InventoryFormUI;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
+import nl.tabuu.tabuucore.inventory.ui.element.Checkbox;
 import nl.tabuu.tabuucore.inventory.ui.element.ItemInput;
 import nl.tabuu.tabuucore.inventory.ui.element.TextInput;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.inventory.ui.element.style.TextInputStyle;
+import nl.tabuu.tabuucore.inventory.ui.element.style.ToggleableStyle;
 import nl.tabuu.tabuucore.inventory.ui.graphics.brush.CheckerBrush;
 import nl.tabuu.tabuucore.inventory.ui.graphics.brush.IBrush;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
@@ -43,9 +45,13 @@ public class TestUI extends InventoryFormUI {
         TextInputStyle textStyle = new TextInputStyle(Material.FEATHER, Material.STONE, Material.NAME_TAG, "Enter Text");
         _textInput = new TextInput(textStyle, this, this::onTextChange);
 
+        ToggleableStyle style = new ToggleableStyle(Material.LIME_DYE, Material.GRAY_DYE, Material.IRON_BARS);
+        Checkbox checkbox = new Checkbox(style);
+
         addElement(new Vector2f(4, 1), _itemInput);
         addElement(new Vector2f(2, 2), _submitButton);
         addElement(new Vector2f(6, 2), _textInput);
+        addElement(new Vector2f(1, 1), checkbox);
 
         super.draw();
     }

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.BiConsumer;
 
-public class Checkbox extends ToggleableElement implements IClickable {
+public class Checkbox extends ToggleableElement {
 
     public Checkbox(ToggleableStyle style) {
         super(style);

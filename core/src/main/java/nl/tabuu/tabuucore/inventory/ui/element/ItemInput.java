@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class ItemInput extends StylableElement<Style> implements IClickable, IVa
     }
 
     @Override
-    public void click(Player player) {
+    public void click(Player player, InventoryUIClick click) {
         ItemStack newValue = player.getItemOnCursor().clone();
 
         if(!_clone)

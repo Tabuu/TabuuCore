@@ -4,6 +4,7 @@ import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
@@ -121,11 +122,25 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     @Override
-    public void onClick(Player player, InventoryUIClick click){ }
+    public void onClick(Player player, InventoryUIClick click) { }
+
+    @Override
+    public void onClickUI(Player player, InventoryUIClick click){ }
+
+    @Override
+    public void onDrag(Player player, InventoryUIDrag drag) { }
+
+    @Override
+    public void onDragUI(Player player, InventoryUIDrag drag) { }
 
     @Override
     public void onOpen(Player player){}
 
     @Override
-    public void onClose(Player player){}
+    public void onClose(Player player){
+        if(player.getItemOnCursor() != null && !player.getItemOnCursor().getType().equals(Material.AIR)){
+            player.getWorld().dropItemNaturally(player.getLocation(), player.getItemOnCursor());
+            player.setItemOnCursor(null);
+        }
+    }
 }

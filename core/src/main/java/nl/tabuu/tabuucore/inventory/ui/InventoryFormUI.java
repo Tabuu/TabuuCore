@@ -6,6 +6,7 @@ import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
 import nl.tabuu.tabuucore.inventory.ui.element.StylableElement;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 
@@ -20,21 +21,28 @@ public abstract class InventoryFormUI extends InventoryUI {
     public InventoryFormUI(String title, InventorySize size) {
         super(title, size);
         _elements = new HashMap<>();
-        addBlockedAction(InventoryAction.MOVE_TO_OTHER_INVENTORY);
+        addBlockedAction(InventoryAction.MOVE_TO_OTHER_INVENTORY, InventoryAction.COLLECT_TO_CURSOR);
     }
 
     @Override
-    public void onClick(Player player, InventoryUIClick click) {
+    public void onClickUI(Player player, InventoryUIClick click) {
+        click.setCanceled(true);
+
         Vector2f position = InventoryCanvas.vectorToSlot(click.getSlot());
         Element element = _elements.get(position);
 
         if(element instanceof IClickable && element.isEnabled()){
             IClickable clickable = (IClickable) element;
-            clickable.click(player);
+            clickable.click(player, click);
             updateElement(position);
         }
+    }
 
-        click.setCanceled(true);
+    @Override
+    public void onDragUI(Player player, InventoryUIDrag drag) {
+        drag.setCanceled(true);
+
+        //TODO: ItemInput?
     }
 
     @Override

@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.ToggleableStyle;
 import org.bukkit.entity.Player;
 
@@ -20,7 +21,7 @@ public class RadioButton extends Checkbox {
     }
 
     @Override
-    public void click(Player player) {
+    public void click(Player player, InventoryUIClick click) {
         if(!getValue()){
             _group.getElements().forEach((e) -> {
                 if(e instanceof RadioButton && e != this) {

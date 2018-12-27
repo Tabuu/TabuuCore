@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.ToggleableStyle;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public abstract class ToggleableElement extends StylableElement<ToggleableStyle>
     }
 
     @Override
-    public void click(Player player) {
+    public void click(Player player, InventoryUIClick click) {
         _value ^= true;
 
         if(_consumer != null)
@@ -34,8 +35,10 @@ public abstract class ToggleableElement extends StylableElement<ToggleableStyle>
 
     @Override
     public void updateStyle() {
-        setDisplayItem(_value ? getStyle().getOn() : getStyle().getOff());
         super.updateStyle();
+
+        if(isEnabled())
+            setDisplayItem(_value ? getStyle().getOn() : getStyle().getOff());
     }
 
     @Override

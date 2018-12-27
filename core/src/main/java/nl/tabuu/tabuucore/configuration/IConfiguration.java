@@ -43,6 +43,13 @@ public interface IConfiguration extends Configuration {
         set(path, value.name());
     }
 
+    default Long getTime(String path){
+        return Serializer.TIME.deserialize(getString(path));
+    }
+    default void setTime(String path, Long value){
+        set(path, Serializer.TIME.serialize(value));
+    }
+
     default Dictionary getDictionary(String path) {
 
         Dictionary dictionary = new Dictionary();

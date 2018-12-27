@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public class Button extends StylableElement<Style> implements IClickable {
     }
 
     @Override
-    public void click(Player player) {
+    public void click(Player player, InventoryUIClick click) {
         if(_consumer != null)
             _consumer.accept(player);
     }

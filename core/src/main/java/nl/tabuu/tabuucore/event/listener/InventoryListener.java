@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.event.listener;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIDrag;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,51 +18,53 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-public class InventoryListener implements Listener {
+import java.util.Collections;
 
+public class InventoryListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event){
-        if(event.getWhoClicked() instanceof Player){
+        if(event.getClickedInventory() != null && event.getWhoClicked() instanceof Player){
             Player player = (Player) event.getWhoClicked();
-            Inventory inventory = event.getView().getTopInventory();
-            InventoryUI inventoryUI = getUI(inventory);
+            Inventory topInventory = event.getView().getTopInventory();
+            InventoryUI inventoryUI = getUI(topInventory);
 
             if(inventoryUI != null){
                 if(inventoryUI.isBlockedAction(event.getAction())){
                     event.setCancelled(true);
+                    return;
                 }
-                else if(event.getClickedInventory() != null && event.getClickedInventory().equals(inventory)){
-                    InventoryUIClick click = new InventoryUIClick(event);
-                    inventoryUI.onClick(player, click);
-                    event.setCancelled(click.isCanceled());
+
+                InventoryUIClick click = new InventoryUIClick(event);
+                inventoryUI.onClick(player, click);
+
+                if(event.getClickedInventory().equals(topInventory)){
+                    inventoryUI.onClickUI(player, click);
                 }
+                event.setCancelled(click.isCanceled());
             }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerItemDrop(PlayerDropItemEvent event){
-        Player player  = event.getPlayer();
-        InventoryView view = player.getOpenInventory();
-        InventoryUI inventoryUI = getUI(view.getTopInventory());
-
-        if(inventoryUI != null && !player.getItemOnCursor().getType().equals(Material.AIR)){
-            ItemStack itemStack = event.getItemDrop().getItemStack().clone();
-            event.getItemDrop().remove();
-            Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> player.setItemOnCursor(itemStack));
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
-        Inventory inventory = event.getInventory();
-        Player player = (Player) event.getWhoClicked();
-        InventoryUI inventoryUI = getUI(inventory);
+        if(event.getInventory() != null && event.getWhoClicked() instanceof Player){
+            Player player = (Player) event.getWhoClicked();
+            Inventory topInventory = event.getView().getTopInventory();
+            InventoryUI inventoryUI = getUI(topInventory);
 
-        if(inventory.equals(event.getView().getTopInventory())&& inventoryUI != null){
-            event.setCancelled(true);
-            player.updateInventory();
+            if(inventoryUI != null){
+                InventoryUIDrag drag = new InventoryUIDrag(event);
+                inventoryUI.onDrag(player, drag);
+
+                int highestSlot = Collections.max(event.getRawSlots());
+                int lowestSlot = Collections.min(event.getRawSlots());
+
+                if(highestSlot < topInventory.getSize() || lowestSlot < topInventory.getSize())
+                    inventoryUI.onDragUI(player, drag);
+
+                event.setCancelled(drag.isCanceled());
+            }
         }
     }
 
@@ -86,6 +89,19 @@ public class InventoryListener implements Listener {
         if(inventoryUI != null){
             if(!inventoryUI.isReloading())
                 inventoryUI.onClose(player);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerItemDrop(PlayerDropItemEvent event){
+        Player player  = event.getPlayer();
+        InventoryView view = player.getOpenInventory();
+        InventoryUI inventoryUI = getUI(view.getTopInventory());
+
+        if(inventoryUI != null && !player.getItemOnCursor().getType().equals(Material.AIR)){
+            ItemStack itemStack = event.getItemDrop().getItemStack().clone();
+            event.getItemDrop().remove();
+            Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> player.setItemOnCursor(itemStack));
         }
     }
 

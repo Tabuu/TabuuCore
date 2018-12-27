@@ -8,8 +8,8 @@ public class DebugListener implements Listener {
 
     @EventHandler
     public void onSneak(PlayerToggleSneakEvent event){
-        if(event.isSneaking())
-            new TestUI().open(event.getPlayer());
+        // if(event.isSneaking())
+            // new TestUI().open(event.getPlayer());
     }
 
 }

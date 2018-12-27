@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
+import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.TextInputUI;
 import nl.tabuu.tabuucore.inventory.ui.element.style.TextInputStyle;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class TextInput extends StylableElement<TextInputStyle> implements IClick
     }
 
     @Override
-    public void click(Player player) {
+    public void click(Player player, InventoryUIClick click) {
         new TextInputUI(getStyle().getRenameItem(), getStyle().getPlaceHolder(), this::setValue).open(player);
     }
 
