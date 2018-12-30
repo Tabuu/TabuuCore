@@ -8,6 +8,11 @@ public class DoubleSerializer extends AbstractStringSerializer<Double> {
 
     @Override
     public Double deserialize(String string) {
-        return Double.parseDouble(string);
+        try {
+            return Double.parseDouble(string);
+        }
+        catch (NumberFormatException exception){
+            return null;
+        }
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum CommandArgumentType {
+public enum ArgumentType {
 
     PLAYER(Serializer.PLAYER),
 
@@ -29,9 +29,9 @@ public enum CommandArgumentType {
 
     NULL(null);
 
-    private AbstractStringSerializer _serializer;
+    private AbstractStringSerializer<?> _serializer;
 
-    CommandArgumentType(AbstractStringSerializer serializer){
+    ArgumentType(AbstractStringSerializer serializer){
         _serializer = serializer;
     }
 
@@ -39,13 +39,5 @@ public enum CommandArgumentType {
         if(_serializer != null)
             return (T) _serializer.deserialize(argument);
         return null;
-    }
-
-    public <T extends Object> List<T> convertToList(String argument){
-        List<T> list = new ArrayList<>();
-        if(_serializer != null)
-            list.addAll(Arrays.asList((T[]) _serializer.deserializeArray(argument)));
-
-        return list;
     }
 }

@@ -8,6 +8,11 @@ public class IntegerSerializer extends AbstractStringSerializer<Integer> {
 
     @Override
     public Integer deserialize(String string) {
-        return Integer.parseInt(string);
+        try {
+            return Integer.parseInt(string);
+        }
+        catch (NumberFormatException exception){
+            return null;
+        }
     }
 }

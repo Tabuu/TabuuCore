@@ -33,18 +33,21 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
             return null;
 
         World world = Bukkit.getWorld(args[0].replace("|", " "));
-        double
+        Double
                 x = doubleSerializer.deserialize(args[1]),
                 y = doubleSerializer.deserialize(args[2]),
                 z = doubleSerializer.deserialize(args[3]);
 
-        float yaw = 0f, pitch = 0f;
+        Double yaw = 0d, pitch = 0d;
 
         if (args.length > 4) {
-            yaw = Float.parseFloat(args[4]);
-            pitch = Float.parseFloat(args[5]);
+            yaw = doubleSerializer.deserialize(args[4]);
+            pitch = doubleSerializer.deserialize(args[5]);
         }
 
-        return new Location(world, x, y, z, yaw, pitch);
+        if(x == null || y == null || z == null || yaw == null || pitch == null)
+            return null;
+
+        return new Location(world, x, y, z, yaw.floatValue(), pitch.floatValue());
     }
 }

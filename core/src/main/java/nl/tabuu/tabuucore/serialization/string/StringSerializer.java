@@ -6,12 +6,12 @@ import java.util.List;
 public class StringSerializer extends AbstractStringSerializer<String> {
     @Override
     public String serialize(String object) {
-        return null;
+        return object;
     }
 
     @Override
     public String deserialize(String value) {
-        return null;
+        return value;
     }
 
     @Override
@@ -45,6 +45,7 @@ public class StringSerializer extends AbstractStringSerializer<String> {
         List<String> stringList = new ArrayList<>();
 
         StringBuilder builder = new StringBuilder();
+        boolean openQuote = false;
         for(int i = 0; i < string.length(); i++){
             char character = string.charAt(i);
             if(character == '\\'){
@@ -53,13 +54,18 @@ public class StringSerializer extends AbstractStringSerializer<String> {
                     i++;
                 }
             }
-            else if(character == '"'){
+            else if(character == ' ' && !openQuote){
                 stringList.add(builder.toString());
                 builder = new StringBuilder();
+            }
+            else if(character == '"'){
+                openQuote ^= true;
             }
             else
                 builder.append(character);
         }
+
+        stringList.add(builder.toString());
 
         return stringList.stream().toArray(String[]::new);
     }

@@ -6,7 +6,7 @@
 
     <groupId>nl.tabuu</groupId>
     <artifactId>tabuucore-parent</artifactId>
-    <version>2019.1.1</version>
+    <version>2019.1.2</version>
     <name>TabuuCore</name>
     <url>http://www.tabuu.nl</url>
     <description>TabuuCore plugin.</description>

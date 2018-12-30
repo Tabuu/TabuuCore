@@ -8,6 +8,11 @@ public class LongSerializer extends AbstractStringSerializer<Long> {
 
     @Override
     public Long deserialize(String string) {
-        return Long.parseLong(string);
+        try {
+            return Long.parseLong(string);
+        }
+        catch (NumberFormatException exception){
+            return null;
+        }
     }
 }

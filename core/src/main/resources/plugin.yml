@@ -6,3 +6,22 @@ author: Tabuu
 authors: [Tabuu]
 website: http://www.tabuu.nl
 api-version: 1.13
+
+commands:
+  example:
+    usage: /example <player> <number> [string...]
+    description: Send a trade request to the player.
+    permission: tabuucore.example
+
+  example sub:
+    usage: /example <location>
+    description: Send a trade request to the player.
+    permission: tabuucore.example.sub
+
+permissions:
+  tabuucore.example:
+    description: Allows users to start a trade with another player.
+    default: true
+  tabuucore.example.sub:
+    description: Allows users to accept a trade with another player.
+    default: false
