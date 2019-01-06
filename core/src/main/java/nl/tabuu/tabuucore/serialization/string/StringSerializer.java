@@ -58,14 +58,13 @@ public class StringSerializer extends AbstractStringSerializer<String> {
                 stringList.add(builder.toString());
                 builder = new StringBuilder();
             }
-            else if(character == '"'){
+            else if(character == '"')
                 openQuote ^= true;
-            }
             else
                 builder.append(character);
         }
-
-        stringList.add(builder.toString());
+        if(builder.length() > 0)
+            stringList.add(builder.toString());
 
         return stringList.stream().toArray(String[]::new);
     }

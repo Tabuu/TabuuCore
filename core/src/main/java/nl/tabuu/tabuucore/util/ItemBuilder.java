@@ -31,7 +31,6 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder(ItemStack itemStack) {
 		_itemStack = itemStack.clone();
-		_tagCompound = INBTTagCompound.get(itemStack);
 	}
 
 	/**
@@ -47,8 +46,9 @@ public class ItemBuilder {
 	 * @return The item stack.
 	 */
 	public ItemStack build() {
-		_tagCompound.apply(_itemStack);
-		return _itemStack;
+		if(_tagCompound != null)
+			_tagCompound.apply(_itemStack);
+		return _itemStack.clone();
 	}
 
 	/**
@@ -220,6 +220,9 @@ public class ItemBuilder {
 	}
 
 	public INBTTagCompound getNBTTagCompound(){
+		if(_tagCompound != null)
+			_tagCompound.apply(_itemStack);
+		_tagCompound = INBTTagCompound.get(_itemStack);
 		return _tagCompound;
 	}
 }

@@ -18,12 +18,12 @@ public class NBTTagCompound implements INBTTagCompound {
         ItemStack itemStack = CraftItemStack.asNMSCopy(item);
 
         net.minecraft.server.v1_8_R3.NBTTagCompound oldTagCompound = itemStack.getTag();
-        if(oldTagCompound != null){
-            for(String key : oldTagCompound.c()){
-                NBTBase base = oldTagCompound.get(key).clone();
-                _tagCompound.set(key, base);
-            }
-        }
+//        if(oldTagCompound != null){
+//            for(String key : oldTagCompound.c()){
+//                NBTBase base = oldTagCompound.get(key).clone();
+//                _tagCompound.set(key, base);
+//            }
+//        }
 
         itemStack.setTag(_tagCompound);
         item.setItemMeta(CraftItemStack.getItemMeta(itemStack));

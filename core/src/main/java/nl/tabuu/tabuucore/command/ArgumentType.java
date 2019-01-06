@@ -27,6 +27,8 @@ public enum ArgumentType {
 
     UUID(Serializer.UUID),
 
+    TIME(Serializer.TIME),
+
     NULL(null);
 
     private AbstractStringSerializer<?> _serializer;

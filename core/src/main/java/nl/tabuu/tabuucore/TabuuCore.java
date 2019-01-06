@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore;
 
-import nl.tabuu.tabuucore.debug.ExampleCommand;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
@@ -30,9 +29,6 @@ public class TabuuCore extends TabuuCorePlugin {
         // Metrics.
         new Metrics(this);
         new MassiveStats(this);
-
-        // Debug purposes
-        getCommand("example").setExecutor(new ExampleCommand());
     }
 
     @Override

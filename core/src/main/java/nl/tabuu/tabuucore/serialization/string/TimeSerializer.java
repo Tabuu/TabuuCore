@@ -62,24 +62,26 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
 
         String[] args = string.split(" ");
 
+        LongSerializer serializer = Serializer.LONG;
+
         for(String arg : args) {
             if(arg.endsWith("ms"))
-                output += Long.parseLong(arg.replace("ms", ""));
+                output += serializer.deserialize(arg.replace("ms", ""));
 
             else if(arg.endsWith("s"))
-                output += Long.parseLong(arg.replace("s", "")) * 1000L;
+                output += serializer.deserialize(arg.replace("s", "")) * 1000L;
 
             else if(arg.endsWith("m"))
-                output += Long.parseLong(arg.replace("m", "")) * 60000L;
+                output += serializer.deserialize(arg.replace("m", "")) * 60000L;
 
             else if(arg.endsWith("h"))
-                output += Long.parseLong(arg.replace("h", "")) * 3600000L;
+                output += serializer.deserialize(arg.replace("h", "")) * 3600000L;
 
             else if(arg.endsWith("d"))
-                output += Long.parseLong(arg.replace("d", "")) * 86400000L;
+                output += serializer.deserialize(arg.replace("d", "")) * 86400000L;
 
             else if(arg.endsWith("y"))
-                output += Long.parseLong(arg.replace("y", "")) * 30758400000L;
+                output += serializer.deserialize(arg.replace("y", "")) * 30758400000L;
         }
 
         return output;

@@ -34,7 +34,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         List<Optional<?>> converted = new ArrayList<>();
 
         for(int i = 0; i < convertedArguments.length; i++){
-            if(_argumentSequence.size() <= i)
+            if(i > _argumentSequence.size())
                 break;
 
             ArgumentType type = _argumentSequence.get(i);
@@ -51,7 +51,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
             }
         }
 
-        if(convertedArguments.length > _argumentSequence.size()){
+        if(_parameterType != null && convertedArguments.length > _argumentSequence.size()){
             for(int i = _argumentSequence.size(); i < convertedArguments.length; i++){
                 converted.add(convertArgument(convertedArguments[i], _parameterType));
             }

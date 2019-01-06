@@ -34,9 +34,7 @@ public interface IAnvilUtil {
     static IAnvilUtil get(){
         try {
             return (IAnvilUtil) NMSUtil.getWrapperClass("AnvilUtil").getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         return null;
     }
