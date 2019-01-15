@@ -16,15 +16,6 @@ public class NBTTagCompound implements INBTTagCompound {
     @Override
     public org.bukkit.inventory.ItemStack apply(org.bukkit.inventory.ItemStack item) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(item);
-
-        net.minecraft.server.v1_13_R2.NBTTagCompound oldTagCompound = itemStack.getTag();
-//        if(oldTagCompound != null){
-//            for(String key : oldTagCompound.getKeys()){
-//                NBTBase base = oldTagCompound.get(key).clone();
-//                _tagCompound.set(key, base);
-//            }
-//        }
-
         itemStack.setTag(_tagCompound);
         item.setItemMeta(CraftItemStack.getItemMeta(itemStack));
 

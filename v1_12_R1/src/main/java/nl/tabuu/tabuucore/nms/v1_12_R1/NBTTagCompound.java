@@ -1,15 +1,15 @@
-package nl.tabuu.tabuucore.nms.v1_8_R3;
+package nl.tabuu.tabuucore.nms.v1_12_R1;
 
-import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_12_R1.ItemStack;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 
 public class NBTTagCompound implements INBTTagCompound {
 
-    private net.minecraft.server.v1_8_R3.NBTTagCompound _tagCompound;
+    private net.minecraft.server.v1_12_R1.NBTTagCompound _tagCompound;
 
     public NBTTagCompound(){
-        _tagCompound = new net.minecraft.server.v1_8_R3.NBTTagCompound();
+        _tagCompound = new net.minecraft.server.v1_12_R1.NBTTagCompound();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class NBTTagCompound implements INBTTagCompound {
     public INBTTagCompound copy(org.bukkit.inventory.ItemStack item) {
         _tagCompound = CraftItemStack.asNMSCopy(item).getTag();
         if(_tagCompound == null)
-            _tagCompound = new net.minecraft.server.v1_8_R3.NBTTagCompound();
+            _tagCompound = new net.minecraft.server.v1_12_R1.NBTTagCompound();
         return this;
     }
 

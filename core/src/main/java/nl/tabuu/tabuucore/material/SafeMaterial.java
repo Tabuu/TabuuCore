@@ -1,6 +1,7 @@
-package nl.tabuu.tabuucore.util;
+package nl.tabuu.tabuucore.material;
 
 import nl.tabuu.tabuucore.nms.wrapper.ISafeMaterialExtension;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 public enum SafeMaterial {

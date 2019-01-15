@@ -1,7 +1,7 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
 import nl.tabuu.tabuucore.nms.NMSUtil;
-import nl.tabuu.tabuucore.util.SafeMaterial;
+import nl.tabuu.tabuucore.material.SafeMaterial;
 import org.bukkit.inventory.ItemStack;
 
 public interface ISafeMaterialExtension {

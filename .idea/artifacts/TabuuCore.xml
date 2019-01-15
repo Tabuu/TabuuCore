@@ -1,10 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="TabuuCore">
-    <output-path>$PROJECT_DIR$/../../00_Plugin_Making/03_Test_Servers/1.13.2/plugins</output-path>
-    <root id="archive" name="TabuuCore.jar">
+    <output-path>$PROJECT_DIR$/../../00_Plugin_Making/01_APIs/TabuuCore</output-path>
+    <root id="archive" name="TabuuCore-Build.jar">
       <element id="module-output" name="distribution" />
       <element id="module-output" name="core" />
       <element id="module-output" name="v1_13_R2" />
+      <element id="module-output" name="v1_8_R3" />
+      <element id="module-output" name="v1_12_R1" />
     </root>
   </artifact>
 </component>
