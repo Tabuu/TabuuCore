@@ -1,14 +1,10 @@
 package nl.tabuu.tabuucore.nms.v1_12_R1;
 
 import nl.tabuu.tabuucore.TabuuCore;
-import nl.tabuu.tabuucore.nms.NMSUtil;
-import nl.tabuu.tabuucore.nms.wrapper.ISafeMaterialExtension;
 import nl.tabuu.tabuucore.material.SafeMaterial;
-import nl.tabuu.tabuucore.util.ItemBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
+import nl.tabuu.tabuucore.nms.wrapper.ISafeMaterialExtension;
+import nl.tabuu.tabuucore.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
@@ -142,6 +138,21 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
                 return new ItemStack(Material.LOG_2, 1, (byte) 1);
             //endregion
 
+            //region Saplings
+            case OAK_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 0);
+            case SPRUCE_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 1);
+            case BIRCH_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 2);
+            case JUNGLE_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 3);
+            case ACACIA_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 4);
+            case DARK_OAK_SAPLING:
+                return new ItemStack(Material.SAPLING, 1, (byte) 5);
+            //endregion
+
             case OAK_FENCE:
                 return new ItemStack(Material.FENCE);
             case OAK_FENCE_GATE:
@@ -272,7 +283,44 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             //endregion
 
             //region Slab Related
-            //TODO: Slab
+            //region Wooden slabs
+            case OAK_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 0);
+            case SPRUCE_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 1);
+            case BIRCH_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 2);
+            case JUNGLE_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 3);
+            case ACACIA_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 4);
+            case DARK_OAK_SLAB:
+                return new ItemStack(Material.WOOD_STEP, 1, (byte) 5);
+            //endregion
+
+            //region Stone slabs
+            case STONE_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 0);
+            case SANDSTONE_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 1);
+            case PETRIFIED_OAK_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 2);
+            case COBBLESTONE_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 3);
+            case BRICK_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 4);
+            case STONE_BRICK_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 5);
+            case QUARTZ_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 6);
+            case NETHER_BRICK_SLAB:
+                return new ItemStack(Material.STEP, 1, (byte) 7);
+            //endregion
+
+            //region Stone slabs2
+            case RED_SANDSTONE_SLAB:
+                return new ItemStack(Material.STONE_SLAB2, 1, (byte) 0);
+            //endregion
             //endregion
 
             //region Fish Related.
@@ -409,6 +457,10 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
                 return new ItemStack(Material.REDSTONE_TORCH_ON);
             case FARMLAND:
                 return new ItemStack(Material.SOIL);
+            case REDSTONE_LAMP:
+                return new ItemStack(Material.REDSTONE_LAMP_OFF);
+            case WHEAT_SEEDS:
+                return new ItemStack(Material.SEEDS);
 
             default:
                 try{

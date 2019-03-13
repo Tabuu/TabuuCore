@@ -9,6 +9,10 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public interface IConfiguration extends Configuration {
 
     void save();
@@ -20,6 +24,13 @@ public interface IConfiguration extends Configuration {
     }
     default void set(String path, Location value){
         set(path, Serializer.LOCATION.serialize(value));
+    }
+
+    default List<Location> getLocationList(String path){
+        return getStringList(path).stream().map(s -> Serializer.LOCATION.deserialize(s)).collect(Collectors.toList());
+    }
+    default void setLocationList(String path, List<Location> value){
+        set(path, value.stream().map(l -> Serializer.LOCATION.serialize(l)).collect(Collectors.toList()));
     }
 
     default OfflinePlayer getOfflinePlayer(String path){
@@ -36,11 +47,25 @@ public interface IConfiguration extends Configuration {
         set(path, Serializer.PLAYER.serialize(value));
     }
 
+    @Deprecated
     default Material getMaterial(String path){
         return Material.valueOf(getString(path));
     }
-    default void set(String path, Material value){
+
+    default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path){
+        return Enum.valueOf(enumClass, getString(path));
+    }
+    default void set(String path, Enum value){
         set(path, value.name());
+    }
+
+    default <T extends Enum<T>> List<T> getEnumList(Class<T> enumClass, String path){
+        List<T> enums = new ArrayList<>();
+        getStringList(path).forEach(s -> Enum.valueOf(enumClass, s));
+        return enums;
+    }
+    default void setEnumList(String path, List<Enum> values){
+        values.forEach(e -> set(path, e));
     }
 
     default Long getTime(String path){

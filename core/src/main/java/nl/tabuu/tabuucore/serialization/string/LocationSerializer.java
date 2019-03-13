@@ -26,7 +26,10 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
 
     @Override
     public Location deserialize(String string) {
-        DoubleSerializer doubleSerializer = new DoubleSerializer();
+        if(string == null)
+            return null;
+
+        DoubleSerializer doubleSerializer = Serializer.DOUBLE;
         String[] args = string.split(" ");
 
         if(args.length < 4)

@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore.util;
+package nl.tabuu.tabuucore.item;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

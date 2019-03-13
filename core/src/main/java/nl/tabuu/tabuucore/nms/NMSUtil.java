@@ -19,7 +19,7 @@ public class NMSUtil {
             return Class.forName("nl.tabuu.tabuucore.nms." + version.name() + "." + className);
         }
         catch (ClassNotFoundException e) {
-            Bukkit.getLogger().severe("Class with name '" + className + "' was not found for your Spigot version!");
+            Bukkit.getLogger().severe("Class with name '" + className + "' was not found for your NMS version!");
             e.printStackTrace();
         }
 

@@ -6,6 +6,7 @@
 package nl.tabuu.tabuucore.util;
 
 import nl.tabuu.tabuucore.nms.NMSUtil;
+import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.util.vector.Vector3f;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -77,8 +78,9 @@ public class BukkitUtils {
 	 * @param	player Target player.
 	 * @return	Returns the ItemStack a player is holding in his main hand.
 	 */
+	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInMainHand(Player player){
-		if(NMSUtil.getVersion().hasOldPvP())
+		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
 			return player.getInventory().getItemInHand();
 		else
 			return player.getInventory().getItemInMainHand();

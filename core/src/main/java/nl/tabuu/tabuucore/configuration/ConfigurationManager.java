@@ -17,20 +17,21 @@ public class ConfigurationManager {
         _configurations = new HashMap<>();
     }
 
-    public void addConfiguration(String name) {
-        addConfiguration(name, name + ".yml");
+    public IConfiguration addConfiguration(String name) {
+        return addConfiguration(name, name + ".yml");
     }
 
-    public void addConfiguration(String name, String fileName) {
-        addConfiguration(name, fileName, fileName);
+    public IConfiguration addConfiguration(String name, String fileName) {
+        return addConfiguration(name, fileName, fileName);
     }
 
-    public void addConfiguration(String name, String loadPath, String savePath) {
-        addConfiguration(name, new YamlConfiguration(new File(_plugin.getDataFolder(), loadPath), _plugin.getResource(savePath)));
+    public IConfiguration addConfiguration(String name, String loadPath, String savePath) {
+        return addConfiguration(name, new YamlConfiguration(new File(_plugin.getDataFolder(), loadPath), _plugin.getResource(savePath)));
     }
 
-    public void addConfiguration(String name, IConfiguration configuration){
+    public IConfiguration addConfiguration(String name, IConfiguration configuration){
         _configurations.put(name, configuration);
+        return getConfiguration(name);
     }
 
     public IConfiguration getConfiguration(String name) {

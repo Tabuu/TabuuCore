@@ -28,7 +28,7 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void onClickUI(Player player, InventoryUIClick click) {
         click.setCanceled(true);
 
-        Vector2f position = InventoryCanvas.vectorToSlot(click.getSlot());
+        Vector2f position = InventoryCanvas.slotToVector(click.getSlot());
         Element element = _elements.get(position);
 
         if(element instanceof IClickable && element.isEnabled()){

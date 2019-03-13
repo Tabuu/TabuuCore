@@ -5,9 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
-import java.lang.reflect.InvocationTargetException;
-
-public interface IAnvilUtil {
+public interface IInventoryUtil {
 
     int getNextContainerId(Player player);
 
@@ -31,9 +29,9 @@ public interface IAnvilUtil {
 
     String getRenameText(AnvilInventory inventory);
 
-    static IAnvilUtil get(){
+    static IInventoryUtil get(){
         try {
-            return (IAnvilUtil) NMSUtil.getWrapperClass("AnvilUtil").getConstructor().newInstance();
+            return (IInventoryUtil) NMSUtil.getWrapperClass("InventoryUtil").getConstructor().newInstance();
         } catch (Exception ignored) { }
 
         return null;

@@ -2,7 +2,7 @@ package nl.tabuu.tabuucore.util.vector;
 
 public class Vector3f extends Vector2f {
 
-    public Vector3f(float... values){
+    protected Vector3f(float... values){
         super(values);
     }
 

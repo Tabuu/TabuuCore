@@ -1,15 +1,14 @@
-package nl.tabuu.tabuucore.nms.v1_12_R1;
+package nl.tabuu.tabuucore.nms.v1_13_R2;
 
-
-import net.minecraft.server.v1_12_R1.*;
-import nl.tabuu.tabuucore.nms.wrapper.IAnvilUtil;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_12_R1.event.CraftEventFactory;
+import net.minecraft.server.v1_13_R2.*;
+import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.event.CraftEventFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
-public class AnvilUtil implements IAnvilUtil {
+public class InventoryUtil implements IInventoryUtil {
     @Override
     public int getNextContainerId(Player player) {
         return toNMS(player).nextContainerCounter();

@@ -89,7 +89,7 @@ public abstract class InventoryCanvas implements IInventoryUI {
         return (vector.getIntY() * 9) + vector.getIntX();
     }
 
-    public static Vector2f vectorToSlot(int slot){
+    public static Vector2f slotToVector(int slot){
         return new Vector2f(slot % 9, (float) Math.floor(slot / 9f));
     }
 }

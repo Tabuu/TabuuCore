@@ -4,7 +4,7 @@ import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
-import nl.tabuu.tabuucore.nms.wrapper.IAnvilUtil;
+import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
 
 public class TextInputUI extends InventoryFormUI{
 
-    private IAnvilUtil _anvilUtil;
+    private IInventoryUtil _anvilUtil;
     private int _containerId;
     private BiConsumer<Player, String> _onTextSubmit;
     private ItemStack _renameItem;
@@ -27,7 +27,7 @@ public class TextInputUI extends InventoryFormUI{
         super("", InventorySize.ONE_ROW);
         _onTextSubmit = onTextSubmit;
         _renameItem = renameItem;
-        _anvilUtil = IAnvilUtil.get();
+        _anvilUtil = IInventoryUtil.get();
         _defaultValue = defaultValue;
     }
 

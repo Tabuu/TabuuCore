@@ -2,8 +2,9 @@
 	All rights reserved.
 */
 
-package nl.tabuu.tabuucore.util;
+package nl.tabuu.tabuucore.item;
 
+import nl.tabuu.tabuucore.material.SafeMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -39,6 +40,14 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder(Material material) {
 		this(new ItemStack(material));
+	}
+
+	/**
+	 * Creates the ItemBuilder based on a SafeMaterial (item count will be set to 1).
+	 * @param material
+	 */
+	public ItemBuilder(SafeMaterial material) {
+		this(material.toItemStack());
 	}
 
 	/**

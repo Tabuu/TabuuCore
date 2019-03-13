@@ -1,20 +1,15 @@
-package nl.tabuu.tabuucore.nms.v1_8_R3;
+package nl.tabuu.tabuucore.nms.v1_12_R1;
 
-import nl.tabuu.tabuucore.nms.wrapper.IAnvilUtil;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryAnvil;
+
+import net.minecraft.server.v1_12_R1.*;
+import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.event.CraftEventFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-public class AnvilUtil implements IAnvilUtil {
+public class InventoryUtil implements IInventoryUtil {
     @Override
     public int getNextContainerId(Player player) {
         return toNMS(player).nextContainerCounter();
@@ -67,7 +62,7 @@ public class AnvilUtil implements IAnvilUtil {
 
     @Override
     public String getRenameText(AnvilInventory inventory) {
-        return inventory.getItem(2).getItemMeta().getDisplayName();
+        return inventory.getRenameText();
     }
 
     private EntityPlayer toNMS(Player player){
