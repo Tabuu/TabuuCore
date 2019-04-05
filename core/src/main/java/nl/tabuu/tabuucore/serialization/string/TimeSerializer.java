@@ -81,7 +81,7 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
                 output += serializer.deserialize(arg.replace("d", "")) * 86400000L;
 
             else if(arg.endsWith("y"))
-                output += serializer.deserialize(arg.replace("y", "")) * 30758400000L;
+                output += serializer.deserialize(arg.replace("y", "")) * 31536000000L;
         }
 
         return output;

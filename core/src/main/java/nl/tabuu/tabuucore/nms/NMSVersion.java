@@ -23,10 +23,12 @@ public enum NMSVersion {
         _materialType = materialType;
     }
 
+    @Deprecated
     public CombatType getCombatType(){
         return _combatType;
     }
 
+    @Deprecated
     public MaterialType getMaterialType(){
         return _materialType;
     }

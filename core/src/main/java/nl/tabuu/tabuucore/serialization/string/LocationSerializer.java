@@ -9,10 +9,12 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
     public String serialize(Location location) {
         String world = location.getWorld().getName().replace(" ", "|");
 
-        double
-                x = location.getX(),
-                y = location.getY(),
-                z = location.getZ();
+        DoubleSerializer doubleSerializer = Serializer.DOUBLE;
+
+        String
+                x = doubleSerializer.serialize(location.getX()),
+                y = doubleSerializer.serialize(location.getY()),
+                z = doubleSerializer.serialize(location.getZ());
 
         float
                 yaw = location.getYaw(),

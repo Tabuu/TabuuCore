@@ -14,6 +14,9 @@ public class Dictionary extends HashMap<String, String> {
 
         String translation = get(string);
 
+        if(translation == null)
+            return string;
+
         for(int i = 0; i < replacements.length; i += 2){
             // Not an even amount of replacements
             if(i == replacements.length - 1)

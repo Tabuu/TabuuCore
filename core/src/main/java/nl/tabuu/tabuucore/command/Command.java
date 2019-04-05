@@ -1,19 +1,20 @@
 package nl.tabuu.tabuucore.command;
 
 import nl.tabuu.tabuucore.TabuuCore;
+import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
+import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.command.defaults.BukkitCommand;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-public abstract class Command extends BukkitCommand implements CommandExecutor {
+public abstract class Command extends BukkitCommand implements CommandExecutor, TabCompleter {
 
     private Command _parent;
     private HashMap<String, Command> _subCommandMap;
@@ -42,6 +43,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor {
         this.setUsage(command.getUsage());
         this.setLabel(command.getLabel());
         this.setAliases(command.getAliases());
+        command.setTabCompleter(this);
 
         _parent = parent;
         _requiredSenderType = null;
@@ -102,6 +104,21 @@ public abstract class Command extends BukkitCommand implements CommandExecutor {
         return execute(sender, bukkitCommand.getLabel(), arguments);
     }
 
+    @Override
+    public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] arguments) {
+        List<String> completedArguments = new ArrayList<>();
+
+        completedArguments.addAll(_subCommandMap.keySet());
+        completedArguments.addAll(_argumentConverter.completeArgument(sender, arguments));
+
+        String lastArgument = arguments[arguments.length - 1];
+
+        completedArguments.removeIf(string -> !string.toLowerCase().startsWith(lastArgument.toLowerCase()));
+        Collections.sort(completedArguments);
+
+        return completedArguments;
+    }
+
     protected void setArgumentConverter(ArgumentConverter sequence){
         _argumentConverter = sequence;
     }
@@ -137,6 +154,4 @@ public abstract class Command extends BukkitCommand implements CommandExecutor {
     protected Command getSubCommand(String label){
         return _subCommandMap.get(label);
     }
-
-
 }

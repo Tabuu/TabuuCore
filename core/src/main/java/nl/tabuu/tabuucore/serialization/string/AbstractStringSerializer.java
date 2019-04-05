@@ -2,7 +2,6 @@ package nl.tabuu.tabuucore.serialization.string;
 
 import nl.tabuu.tabuucore.serialization.ISerializer;
 
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;

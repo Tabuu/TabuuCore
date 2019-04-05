@@ -4,7 +4,6 @@ import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
-import nl.tabuu.tabuucore.metrics.massivestats.MassiveStats;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
 
@@ -28,7 +27,8 @@ public class TabuuCore extends TabuuCorePlugin {
 
         // Metrics.
         new Metrics(this);
-        new MassiveStats(this);
+        // new MassiveStats(this); disabling MassiveStats, it only causes issues.
+        // TODO: Remove/Fix MassiveStats.
     }
 
     @Override

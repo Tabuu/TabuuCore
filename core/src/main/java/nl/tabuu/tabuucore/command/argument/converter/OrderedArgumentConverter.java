@@ -1,7 +1,9 @@
-package nl.tabuu.tabuucore.command;
+package nl.tabuu.tabuucore.command.argument.converter;
 
+import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
+import nl.tabuu.tabuucore.command.argument.ArgumentType;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -16,6 +18,17 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
     public OrderedArgumentConverter(){
         _argumentSequence = new ArrayList<>();
+    }
+
+    @Override
+    public List<String> completeArgument(CommandSender sender, String[] arguments) {
+        if(arguments.length <= 0 || (_parameterType == null && _argumentSequence.size() < arguments.length))
+            return new ArrayList<>();
+
+        String partialArgument = arguments[arguments.length - 1];
+        ArgumentType type = _argumentSequence.size() < arguments.length ? _parameterType : _argumentSequence.get(arguments.length - 1);
+
+        return type.complete(sender, partialArgument);
     }
 
     public OrderedArgumentConverter setSequence(ArgumentType... sequence){
