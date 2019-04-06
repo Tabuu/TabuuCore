@@ -1,13 +1,23 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
 import nl.tabuu.tabuucore.nms.NMSUtil;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+import java.util.Set;
 
 public interface INBTTagCompound {
 
     ItemStack apply(ItemStack item);
 
+    Entity apply(Entity entity);
+
     INBTTagCompound copy(ItemStack item);
+
+    INBTTagCompound copy(Entity entity);
+
+    INBTTagCompound copy(byte[] bytes);
 
     boolean hasKey(String key);
 
@@ -78,6 +88,12 @@ public interface INBTTagCompound {
 
     String getString(String key);
 
+    String getObjectToString(String key);
+
+    Set<String> getKeys();
+
+    byte[] toByteArray();
+
     static INBTTagCompound get(){
         try {
             return (INBTTagCompound) NMSUtil.getWrapperClass("NBTTagCompound").getConstructor().newInstance();
@@ -87,9 +103,23 @@ public interface INBTTagCompound {
         return null;
     }
 
+    static INBTTagCompound get(byte[] bytes){
+        INBTTagCompound tagCompound = get();
+        tagCompound.copy(bytes);
+
+        return tagCompound;
+    }
+
     static INBTTagCompound get(ItemStack item){
         INBTTagCompound tagCompound = get();
         tagCompound.copy(item);
+
+        return tagCompound;
+    }
+
+    static INBTTagCompound get(Entity entity){
+        INBTTagCompound tagCompound = get();
+        tagCompound.copy(entity);
 
         return tagCompound;
     }
