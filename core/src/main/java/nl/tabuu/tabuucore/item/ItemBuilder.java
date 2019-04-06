@@ -223,6 +223,7 @@ public class ItemBuilder {
 	 * @param durability New durability.
 	 * @return The item.
 	 */
+	@SuppressWarnings("deprecation")
 	public ItemBuilder setDurability(short durability) {
 		_itemStack.setDurability(durability);
 		return this;

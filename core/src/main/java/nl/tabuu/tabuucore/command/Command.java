@@ -77,7 +77,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
             return true;
         }
 
-        List<Optional<?>> convertedArguments = _argumentConverter.convert(sender, arguments);
+        List<Optional<?>> convertedArguments = _argumentConverter.convertArguments(sender, arguments);
 
         if(convertedArguments == null)
             return true;

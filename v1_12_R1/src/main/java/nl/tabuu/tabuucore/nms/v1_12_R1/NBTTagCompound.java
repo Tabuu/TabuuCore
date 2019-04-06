@@ -1,8 +1,16 @@
 package nl.tabuu.tabuucore.nms.v1_12_R1;
 
+import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.ItemStack;
+import net.minecraft.server.v1_12_R1.NBTCompressedStreamTools;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Set;
 
 public class NBTTagCompound implements INBTTagCompound {
 
@@ -22,10 +30,34 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public org.bukkit.entity.Entity apply(org.bukkit.entity.Entity entity) {
+        Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        nmsEntity.f(_tagCompound);
+        return nmsEntity.getBukkitEntity();
+    }
+
+    @Override
     public INBTTagCompound copy(org.bukkit.inventory.ItemStack item) {
         _tagCompound = CraftItemStack.asNMSCopy(item).getTag();
         if(_tagCompound == null)
             _tagCompound = new net.minecraft.server.v1_12_R1.NBTTagCompound();
+        return this;
+    }
+
+    @Override
+    public INBTTagCompound copy(org.bukkit.entity.Entity entity) {
+        Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        _tagCompound = nmsEntity.save(_tagCompound);
+        return this;
+    }
+
+    @Override
+    public INBTTagCompound copy(byte[] bytes) {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+        try {
+            _tagCompound = NBTCompressedStreamTools.a(inputStream);
+        } catch (IOException ignore) { }
+
         return this;
     }
 
@@ -137,5 +169,30 @@ public class NBTTagCompound implements INBTTagCompound {
     @Override
     public String getString(String key) {
         return _tagCompound.getString(key);
+    }
+
+    @Override
+    public String getObjectToString(String key) {
+        return _tagCompound.get(key).toString();
+    }
+
+    @Override
+    public Set<String> getKeys() {
+        return _tagCompound.c();
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        byte[] bytes = new byte[0];
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            NBTCompressedStreamTools.a(_tagCompound, outputStream);
+            bytes = outputStream.toByteArray();
+            outputStream.close();
+        } catch (IOException e) {
+            return bytes;
+        }
+
+        return bytes;
     }
 }
