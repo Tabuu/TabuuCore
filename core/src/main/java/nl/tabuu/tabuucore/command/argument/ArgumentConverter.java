@@ -21,7 +21,7 @@ public abstract class ArgumentConverter {
     public abstract List<Optional<?>> convert(CommandSender sender, String[] arguments);
 
     public List<Optional<?>> convertArguments(CommandSender sender, String[] arguments){
-        return convertArguments(sender, arguments);
+        return convert(sender, arguments);
     }
 
     protected Optional<?> convertArgument(String argument, ArgumentType type){

@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -150,7 +151,7 @@ public class ItemBuilder {
 		if(meta.hasLore())
 			return meta.getLore();
 		else
-			return new ArrayList<String>();
+			return Collections.emptyList();
 	}
 
 	/**
