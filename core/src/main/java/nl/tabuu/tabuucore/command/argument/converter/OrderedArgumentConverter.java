@@ -36,7 +36,16 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         return this;
     }
 
+    @Deprecated
+    /**
+     * @deprecated Name changed to setParameter, as it doesn't 'add' anything.
+     */
     public OrderedArgumentConverter addParameter(ArgumentType parameterType){
+        _parameterType = parameterType;
+        return this;
+    }
+
+    public OrderedArgumentConverter setParameter(ArgumentType parameterType){
         _parameterType = parameterType;
         return this;
     }
@@ -47,7 +56,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         List<Optional<?>> converted = new ArrayList<>();
 
         for(int i = 0; i < convertedArguments.length; i++){
-            if(i > _argumentSequence.size())
+            if(i >= _argumentSequence.size())
                 break;
 
             ArgumentType type = _argumentSequence.get(i);
