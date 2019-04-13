@@ -2,8 +2,8 @@ package nl.tabuu.tabuucore.command.argument.converter;
 
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.ArgumentType;
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -22,6 +22,9 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
     @Override
     public List<String> completeArgument(CommandSender sender, String[] arguments) {
+        //TODO: Make the converter function
+        String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
+
         if(arguments.length <= 0 || (_parameterType == null && _argumentSequence.size() < arguments.length))
             return new ArrayList<>();
 
@@ -86,4 +89,5 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
         return converted;
     }
+
 }

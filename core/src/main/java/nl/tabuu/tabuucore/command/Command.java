@@ -82,18 +82,20 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
             return true;
 
         CommandResult result = onCommand(sender, convertedArguments);
-
         switch (result){
             case NO_PERMISSION:
-                if(getPermissionMessage() != null || !getPermission().equals(""))
+                if(getPermissionMessage() != null && !getPermission().equals(""))
                     sender.sendMessage(getPermissionMessage());
                 else
                     sender.sendMessage(_local.translate("ERROR_INSUFFICIENT_PERMISSION", "{PERM}", getPermission()));
             case SUCCESS:
                 return true;
 
-            default:
             case WRONG_SYNTAX:
+                if(getUsage() != null && !getUsage().equals(""))
+                    sender.sendMessage(getUsage());
+                return true;
+            default:
                 return false;
         }
     }
@@ -105,12 +107,20 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
 
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] arguments) {
+        if(arguments.length > 1 && _subCommandMap.containsKey(arguments[0])){
+            Command command = _subCommandMap.get(arguments[0]);
+            return command.onTabComplete(sender, bukkitCommand, label,Arrays.copyOfRange(arguments, 1, arguments.length));
+        }
+        else if(arguments.length < 1)
+            return Collections.emptyList();
+
         List<String> completedArguments = new ArrayList<>();
 
-        completedArguments.addAll(_subCommandMap.keySet());
-        completedArguments.addAll(_argumentConverter.completeArgument(sender, arguments));
-
         String lastArgument = arguments[arguments.length - 1];
+
+        if(arguments.length == 1)
+            completedArguments.addAll(_subCommandMap.keySet());
+        completedArguments.addAll(_argumentConverter.completeArgument(sender, arguments));
 
         completedArguments.removeIf(string -> !string.toLowerCase().startsWith(lastArgument.toLowerCase()));
         Collections.sort(completedArguments);
