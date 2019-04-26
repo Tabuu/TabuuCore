@@ -82,7 +82,15 @@ public abstract class InventoryUI extends InventoryCanvas {
         TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
+    @Deprecated
+    /**
+     * @deprecated Spelling error.
+     */
     public void setTile(String title){
+        setTitle(title);
+    }
+
+    public void setTitle(String title){
         _title = title;
     }
 
