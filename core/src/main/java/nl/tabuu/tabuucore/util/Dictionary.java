@@ -6,10 +6,26 @@ import java.util.HashMap;
 
 public class Dictionary extends HashMap<String, String> {
 
+    /**
+     * Translates a configuration key to its value. The translation will be colored using the '&' character as prefix character.
+     * @param string the key.
+     * @param replacements replaces the fist string (index n) with the next string (index n + 1).
+     * @return translated string.
+     * @see ChatColor#translateAlternateColorCodes(char, String)
+     */
     public String translate(String string, String... replacements){
         return translate(string, true, '&', replacements);
     }
 
+    /**
+     * Translates a configuration key to its value.
+     * @param string the key.
+     * @param useColor whether or not the string should be colored.
+     * @param colorSymbol the prefix symbol used to define the color.
+     * @param replacements replaces the fist string (index n) with the next string (index n + 1).
+     * @return translated string.
+     * @see ChatColor#translateAlternateColorCodes(char, String)
+     */
     public String translate(String string, boolean useColor, char colorSymbol, String... replacements) {
 
         String translation = get(string);

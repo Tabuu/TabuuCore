@@ -1,6 +1,8 @@
 package nl.tabuu.tabuucore.util.vector;
 
-public abstract class Vectorf {
+import java.io.Serializable;
+
+public abstract class Vectorf implements Serializable {
 
     private float[] _values;
 

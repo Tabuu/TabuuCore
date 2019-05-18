@@ -179,6 +179,7 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             case GRAY_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 8);
             case CACTUS_GREEN:
+            case GREEN_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 2);
             case LIGHT_BLUE_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 12);
@@ -195,10 +196,12 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             case PURPLE_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 5);
             case ROSE_RED:
+            case RED_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 1);
             case BONE_MEAL:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 15);
             case DANDELION_YELLOW:
+            case YELLOW_DYE:
                 return new ItemStack(Material.INK_SACK, 1, (byte) 11);
             //endregion
             //endregion.

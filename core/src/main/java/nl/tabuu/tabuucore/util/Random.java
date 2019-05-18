@@ -1,6 +1,6 @@
 package nl.tabuu.tabuucore.util;
 
-public class Random {
+public class Random extends java.util.Random {
 
     /**
      * Returns a random double between the two values.
@@ -8,10 +8,8 @@ public class Random {
      * @param max Maximum value (excluded).
      */
     public static double range(double min, double max){
-        java.util.Random random = new java.util.Random();
-
+        Random random = new Random();
         return min + (max - min) * random.nextDouble();
     }
-
 
 }

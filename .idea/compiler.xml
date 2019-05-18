@@ -9,6 +9,7 @@
         <module name="core" />
         <module name="v1_12_R1" />
         <module name="v1_13_R2" />
+        <module name="v1_14_R1" />
         <module name="v1_8_R3" />
       </profile>
       <profile name="Annotation profile for TabuuCore" enabled="true">
@@ -26,6 +27,8 @@
       <module name="tabuucore-nms_1_8_R3" target="1.8" />
       <module name="v1_12_R1" target="1.8" />
       <module name="v1_13_R2" target="1.8" />
+      <module name="v1_14_R1" target="1.8" />
+      <module name="v1_14_R2" target="1.8" />
       <module name="v1_8_R3" target="1.8" />
     </bytecodeTargetLevel>
   </component>

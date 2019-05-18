@@ -1,7 +1,3 @@
-/** Copyright 2018, Rick van Sloten
-	All rights reserved.
-*/
-
 package nl.tabuu.tabuucore.item;
 
 import nl.tabuu.tabuucore.material.SafeMaterial;
@@ -18,9 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class is an easy item builder.
- *
- * @author Rick van Sloten (Tabuu)
+ * Represents an object to build an {@link ItemStack} with.
  */
 public class ItemBuilder {
 
@@ -28,32 +22,32 @@ public class ItemBuilder {
 	private INBTTagCompound _tagCompound;
 
 	/**
-	 * Creates the ItemBuilder based on a clone of an already existing itemstack.
-	 * @param itemStack
+	 * Creates a new ItemBuilder and copies the data from the given {@link ItemStack}.
+	 * @param itemStack the {@link ItemStack} to copy the data from.
 	 */
 	public ItemBuilder(ItemStack itemStack) {
 		_itemStack = itemStack.clone();
 	}
 
 	/**
-	 * Creates the ItemBuilder based on a material (item count will be set to 1).
-	 * @param material
+	 * Creates the ItemBuilder based on a {@link Material}, the item amount will be set to 1.
+	 * @param material the {@link Material}
 	 */
 	public ItemBuilder(Material material) {
 		this(new ItemStack(material));
 	}
 
 	/**
-	 * Creates the ItemBuilder based on a SafeMaterial (item count will be set to 1).
-	 * @param material
+	 * Creates the ItemBuilder based on a {@link SafeMaterial}, the item amount will be set to 1.
+	 * @param material the {@link SafeMaterial}
 	 */
 	public ItemBuilder(SafeMaterial material) {
 		this(material.toItemStack());
 	}
 
 	/**
-	 * Builds the item based on the item.
-	 * @return The item stack.
+	 * Builds the {@link ItemStack} and applies the {@link INBTTagCompound} if needed.
+	 * @return the build item.
 	 */
 	public ItemStack build() {
 		if(_tagCompound != null)
@@ -62,9 +56,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Sets the item count of the item stack
-	 * @param material New item type
-	 * @return The item.
+	 * Sets the item type to the given {@link Material}.
+	 * @param material new item type.
+	 * @return itself.
+	 * @see ItemStack#setType(Material)
 	 */
 	public ItemBuilder setMaterial(Material material){
 		_itemStack.setType(material);
@@ -72,9 +67,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Sets the item count of the item stack
-	 * @param amount New item count
-	 * @return The item.
+	 * Sets the item count to the given amount.
+	 * @param amount new item count.
+	 * @return itself.
+	 * @see ItemStack#setAmount(int)
 	 */
 	public ItemBuilder setAmount(int amount) {
 		_itemStack.setAmount(amount);
@@ -82,9 +78,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Sets the display name of the item.
-	 * @param name New display name.
-	 * @return The item.
+	 * Sets the display name to the given name.
+	 * @param name new display name.
+	 * @return itself.
+	 * @see ItemMeta#setDisplayName(String)
 	 */
 	public ItemBuilder setDisplayName(String name) {
 		ItemMeta meta = _itemStack.getItemMeta();
@@ -98,9 +95,10 @@ public class ItemBuilder {
 
 
 	/**
-	 * Sets the localized name of the item (ONLY WORKS FOR 1.12+).
-	 * @param name New localized name.
-	 * @return The item.
+	 * Sets the localized name of the item, THIS METHOD ONLY WORKS FOR 1.12+.
+	 * @param name new localized name.
+	 * @return itself.
+	 * @see ItemMeta#setLocalizedName(String)
 	 */
 	public ItemBuilder setLocalizedName(String name) {
 		ItemMeta meta = _itemStack.getItemMeta();
@@ -113,17 +111,40 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Adds lore to existing lore of the item.
-	 * @param lore String object containing the lore line(s) that will be added.
-	 * @return The item.
+	 * Adds lore to existing lore.
+	 * @param lore lore lines to be added to the existing lore.
+	 * @return itself.
+	 * @see ItemMeta#setLore(List)
 	 */
 	public ItemBuilder addLore(String... lore) {
 		ItemMeta meta = _itemStack.getItemMeta();
 		
 		List<String> oldLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 		oldLore.addAll(Arrays.asList(lore));
+
+		setLore(oldLore.stream().toArray(String[]::new));
 		
-		meta.setLore(oldLore);
+		return this;
+	}
+
+	/**
+	 * Sets the lore.
+	 * @param lore new lore lines to be set.
+	 * @return itself.
+	 * @see ItemMeta#setLore(List)
+	 */
+	public ItemBuilder setLore(String... lore) {
+		ItemMeta meta = _itemStack.getItemMeta();
+
+		ArrayList<String> newLore = new ArrayList<>();
+		for(String string : lore){
+			if(string.contains("\n"))
+				newLore.addAll(Arrays.asList(string.split("\n")));
+			else
+				newLore.add(string);
+		}
+
+		meta.setLore(newLore);
 		
 		_itemStack.setItemMeta(meta);
 		
@@ -131,20 +152,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Sets the lore of the item.
-	 * @param lore String object containing the new lore line(s).
-	 * @return The item.
+	 * Returns the lore of the ItemBuilder.
+	 * @return the lore of the ItemBuilder.
+	 * @see ItemMeta#getLore()
 	 */
-	public ItemBuilder setLore(String... lore) {
-		ItemMeta meta = _itemStack.getItemMeta();
-		
-		meta.setLore(Arrays.asList(lore));
-		
-		_itemStack.setItemMeta(meta);
-		
-		return this;
-	}
-
 	public List<String> getLore(){
 		ItemMeta meta = _itemStack.getItemMeta();
 
@@ -155,8 +166,9 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Removes all the lore of the item.
-	 * @return The item.
+	 * Removes all the lore.
+	 * @return itself.
+	 * @see ItemMeta#setLore(List)
 	 */
 	public ItemBuilder clearLore() {
 		ItemMeta meta = _itemStack.getItemMeta();
@@ -169,9 +181,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Adds item flags to the item.
-	 * @param flags object containing the item flags to be added.
+	 * Adds {@link ItemFlag}.
+	 * @param flags {@link ItemFlag} to be added.
 	 * @return The item.
+	 * @see ItemMeta#addItemFlags(ItemFlag...)
 	 */
 	public ItemBuilder addItemFlags(ItemFlag... flags) {
 		ItemMeta meta = _itemStack.getItemMeta();
@@ -184,9 +197,10 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Removes item flags of the item.
-	 * @param flags object containing the item flags to be removed.
+	 * Removes the given {@link ItemFlag}.
+	 * @param flags {@link ItemFlag} to be removed.
 	 * @return The item.
+	 * @see ItemMeta#removeItemFlags(ItemFlag...)
 	 */
 	public ItemBuilder removeFlags(ItemFlag... flags) {
 		ItemMeta meta = _itemStack.getItemMeta();
@@ -199,30 +213,33 @@ public class ItemBuilder {
 	}
 
 	/**
-	 * Adds an (unsafe) enchantment to the item.
-	 * @param ench Enchantment type
-	 * @param level Level of the enchantment
-	 * @return The item.
+	 * Adds an enchantment.
+	 * @param enchantment enchantment to be added.
+	 * @param level level of the enchantment to be added.
+	 * @return itself.
+	 * @see ItemStack#addUnsafeEnchantment(Enchantment, int)
 	 */
-	public ItemBuilder addEnchantment(Enchantment ench, int level) {
-		_itemStack.addUnsafeEnchantment(ench, level);
+	public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
+		_itemStack.addUnsafeEnchantment(enchantment, level);
 		return this;
 	}
 
 	/**
-	 * Removes an (unsafe) enchantment from the item.
-	 * @param ench Enchantment type
-	 * @return The item.
+	 * Removes an enchantment.
+	 * @param enchantment enchantment to be removed.
+	 * @return itself.
+	 * @see ItemStack#removeEnchantment(Enchantment)
 	 */
-	public ItemBuilder removeEnchantment(Enchantment ench) {
-		_itemStack.removeEnchantment(ench);
+	public ItemBuilder removeEnchantment(Enchantment enchantment) {
+		_itemStack.removeEnchantment(enchantment);
 		return this;
 	}
 
 	/**
-	 * Sets the durability of the item.
-	 * @param durability New durability.
-	 * @return The item.
+	 * Sets the durability.
+	 * @param durability new durability.
+	 * @return itself.
+	 * @see ItemStack#setDurability(short)
 	 */
 	@SuppressWarnings("deprecation")
 	public ItemBuilder setDurability(short durability) {
@@ -230,6 +247,10 @@ public class ItemBuilder {
 		return this;
 	}
 
+	/**
+	 * Returns the {@link INBTTagCompound}.
+	 * @return the {@link INBTTagCompound}.
+	 */
 	public INBTTagCompound getNBTTagCompound(){
 		if(_tagCompound != null)
 			_tagCompound.apply(_itemStack);

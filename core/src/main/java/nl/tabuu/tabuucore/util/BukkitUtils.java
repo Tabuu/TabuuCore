@@ -31,9 +31,9 @@ import java.util.*;
  */
 public class BukkitUtils {
 	/**
-	 * @param	location Center block.
-	 * @param	radius Radius of the blocks.
-	 * @return	A list of all blocks in that radius.
+	 * @param	location center block.
+	 * @param	radius radius of the blocks.
+	 * @return	a list of all blocks in that radius.
 	 */
 	public static List<Block> getBlocksInRadius(Location location, int radius) {
         List<Block> blocks = new ArrayList<>();
@@ -47,9 +47,9 @@ public class BukkitUtils {
     }
 
 	/**
-	 * @param	location Center block.
-	 * @param	radius Radius of the blocks.
-	 * @return	A list of all blocks in that radius.
+	 * @param	location center block.
+	 * @param	radius radius of the blocks.
+	 * @return	a list of all blocks in that radius.
 	 */
 	public static List<Block> getBlocksInRadius(Location location, Vector3f radius) {
 		List<Block> blocks = new ArrayList<>();
@@ -63,20 +63,20 @@ public class BukkitUtils {
 	}
 
 	/**
-	 * @param	location Center block.
-	 * @param	x Radius of the blocks on the x axis.
-	 * @param	y Radius of the blocks on the y axis.
-	 * @param	z Radius of the blocks on the z axis.
-	 * @return	A list of all blocks in that radius.
+	 * @param	location location of the center block.
+	 * @param	x radius of the blocks on the x axis.
+	 * @param	y radius of the blocks on the y axis.
+	 * @param	z radius of the blocks on the z axis.
+	 * @return	a list of all blocks in that radius.
 	 */
 	public static List<Block> getBlocksInRadius(Location location, int x, int y, int z) {
 		return getBlocksInRadius(location, new Vector3f(x, y, z));
 	}
 
 	/**
-	 * This method can be used to get the ItemStack in a players hand or main hand depending on the Bukkit version.
-	 * @param	player Target player.
-	 * @return	Returns the ItemStack a player is holding in his main hand.
+	 * This method can be used to get the {@link ItemStack} in a players hand or main hand depending on the Bukkit version.
+	 * @param player target player.
+	 * @return the {@link ItemStack} a player is holding in his main hand.
 	 */
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInMainHand(Player player){
@@ -87,8 +87,8 @@ public class BukkitUtils {
 	}
 
 	/**
-	 * @param	playerName Name of the player.
-	 * @return	Returns a OfflinePlayer with that name or null if no player with that name has ever joined the server.
+	 * @param	playerName name of the player.
+	 * @return	a {@link OfflinePlayer} with that name or null if no player with that name has ever joined the server.
 	 */
 	public static OfflinePlayer getOfflinePlayerByName(String playerName){
 		for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers())
@@ -101,7 +101,7 @@ public class BukkitUtils {
 	 * @param	player Target player.
 	 * @param 	range The maximum range the target block has to be in.
 	 * @param 	ignored Block types that will be ignored/transparent.
-	 * @return	Returns the block a player is looking at.
+	 * @return	the block a player is looking at.
 	 */
 	public static Block getTargetBlock(Player player, int range, Material... ignored){
 		Set<Material> transparent = new HashSet<>();
@@ -113,9 +113,9 @@ public class BukkitUtils {
 	}
 
 	/**
-	 * @param	player Target player.
-	 * @param 	range The maximum range the target block has to be in.
-	 * @return	Returns the block a player is looking at.
+	 * @param	player target player.
+	 * @param 	range the maximum range the target block has to be in.
+	 * @return	the block a player is looking at.
 	 */
 	public static Block getTargetBlock(Player player, int range){
 		Set<Material> transparent = new HashSet<>();
@@ -125,10 +125,10 @@ public class BukkitUtils {
 	}
 
 	/**
-	 * Registers a BukkitCommand with reflection (alternative for using the plugin.yml)
+	 * Registers a {@link BukkitCommand} with reflection (alternative for using the plugin.yml)
 	 * @param	commandLabel Command label.
-	 * @param	command BukkitCommand to be registered.
-	 * @return	Returns false if registration failed and true is registration succeeded.
+	 * @param	command {@link BukkitCommand} to be registered.
+	 * @return	false if registration failed and true is registration succeeded.
 	 */
 	public static boolean registerCommand(String commandLabel, BukkitCommand command){
 		try {

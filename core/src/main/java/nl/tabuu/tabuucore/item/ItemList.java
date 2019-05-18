@@ -8,8 +8,7 @@ import java.util.Collection;
 
 public class ItemList extends ArrayList<ItemStack>{
 
-    public ItemList(){
-    }
+    public ItemList(){}
 
     public ItemList(Collection<ItemStack> stacks){
         this();
@@ -36,10 +35,10 @@ public class ItemList extends ArrayList<ItemStack>{
     }
 
     /**
-     * This method will add the given ItemStack to the ItemList in an inventory stacking fashion.
-     * The method will first try to add all items to existing ItemStacks before adding new items to the list.
+     * This method will add the given {@link ItemStack} to the ItemList in an inventory stacking fashion.
+     * The method will first try to add all items to existing {@link ItemStack}s before adding new items to the list.
      * @param stack ItemStack to be added.
-     * @return      an ItemStack containing the stacks that the list had to create a new item for.
+     * @return      an ItemStack containing the items that the list had to create a new entry for, else null.
      *              If the amount of the ItemStack provided exceeds the maximum ItemStack size the ItemStack will NOT be spit up.
      */
     public ItemStack stack(ItemStack stack){

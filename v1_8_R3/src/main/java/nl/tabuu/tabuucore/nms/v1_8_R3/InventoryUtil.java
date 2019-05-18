@@ -2,78 +2,48 @@ package nl.tabuu.tabuucore.nms.v1_8_R3;
 
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import net.minecraft.server.v1_8_R3.*;
+import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.Inventory;
 
 public class InventoryUtil implements IInventoryUtil {
     @Override
     public int getNextContainerId(Player player) {
-        return toNMS(player).nextContainerCounter();
+        return playerToNMS(player).nextContainerCounter();
     }
 
     @Override
     public void handleInventoryCloseEvent(Player player) {
-        CraftEventFactory.handleInventoryCloseEvent(toNMS(player));
+        CraftEventFactory.handleInventoryCloseEvent(playerToNMS(player));
     }
 
     @Override
     public void sendPacketOpenWindow(Player player, int containerId) {
-        toNMS(player).playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerId, "minecraft:anvil", new ChatMessage(Blocks.ANVIL.a() + ".name")));
+        playerToNMS(player).playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerId, "minecraft:anvil", new ChatMessage(Blocks.ANVIL.a() + ".name")));
     }
 
     @Override
     public void sendPacketCloseWindow(Player player, int containerId) {
-        toNMS(player).playerConnection.sendPacket(new PacketPlayOutCloseWindow(containerId));
+        playerToNMS(player).playerConnection.sendPacket(new PacketPlayOutCloseWindow(containerId));
     }
 
     @Override
-    public void setActiveContainerDefault(Player player) {
-        toNMS(player).activeContainer = toNMS(player).defaultContainer;
+    public void setActiveContainerToDefault(Player player) {
+        playerToNMS(player).activeContainer = playerToNMS(player).defaultContainer;
     }
 
     @Override
-    public void setActiveContainer(Player player, Object container) {
-        toNMS(player).activeContainer = (Container) container;
+    public void setActiveContainer(Player player, IContainerWindow container) {
+        playerToNMS(player).activeContainer = (Container) container.getNMSContainer();
     }
 
     @Override
-    public void setActiveContainerId(Object container, int containerId) {
-        ((Container) container).windowId = containerId;
+    public void addActiveContainerSlotListener(Player player, IContainerWindow container) {
+        ((Container) container.getNMSContainer()).addSlotListener(playerToNMS(player));
     }
 
-    @Override
-    public void addActiveContainerSlotListener(Object container, Player player) {
-        ((Container) container).addSlotListener(toNMS(player));
-    }
-
-    @Override
-    public Inventory toBukkitInventory(Object container) {
-        return ((Container) container).getBukkitView().getTopInventory();
-    }
-
-    @Override
-    public Object newContainerAnvil(Player player) {
-        return new AnvilContainer(toNMS(player));
-    }
-
-    @Override
-    public String getRenameText(AnvilInventory inventory) {
-        return inventory.getItem(2).getItemMeta().getDisplayName();
-    }
-
-    private EntityPlayer toNMS(Player player){
+    private EntityPlayer playerToNMS(Player player){
         return ((CraftPlayer) player).getHandle();
-    }
-
-    private class AnvilContainer extends ContainerAnvil {
-
-        public AnvilContainer(EntityHuman entityhuman) {
-            super(entityhuman.inventory, entityhuman.world, new BlockPosition(0, 0, 0), entityhuman);
-            this.checkReachable = false;
-        }
-
     }
 }

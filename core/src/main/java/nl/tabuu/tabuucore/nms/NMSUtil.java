@@ -6,14 +6,29 @@ public class NMSUtil {
 
     private static NMSVersion _nmsVersion;
 
+    /**
+     * Returns the {@link NMSVersion} this server is running on, or {@link NMSVersion#UNKNOWN} if an unknown version was found.
+     * @return the {@link NMSVersion} this server is running on, or {@link NMSVersion#UNKNOWN} if an unknown version was found.
+     */
     public static NMSVersion getVersion(){
         if(_nmsVersion == null){
             String versionName = Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
-            _nmsVersion = NMSVersion.valueOf(versionName);
+            try {
+                _nmsVersion = NMSVersion.valueOf(versionName);
+            } catch (IllegalArgumentException exception){
+                _nmsVersion = NMSVersion.UNKNOWN;
+            }
         }
         return _nmsVersion;
     }
 
+    /**
+     * Returns a NMS wrapper class based on its name and {@link NMSVersion}.
+     * @param className the name of the NMS wrapper class.
+     * @param version the {@link NMSVersion} of the NMS wrapper class.
+     * @return a NMS wrapper class based on its name and {@link NMSVersion}.
+     * @see nl.tabuu.tabuucore.nms.wrapper
+     */
     public static Class<?> getWrapperClass(String className, NMSVersion version){
         try {
             return Class.forName("nl.tabuu.tabuucore.nms." + version.name() + "." + className);
@@ -26,10 +41,22 @@ public class NMSUtil {
         return null;
     }
 
+    /**
+     * Returns a NMS wrapper class based on its name and {@link NMSVersion} returned by {@link NMSUtil#getVersion()}.
+     * @param className the name of the NMS wrapper class.
+     * @return a NMS wrapper class based on its name and {@link NMSVersion} returned by {@link NMSUtil#getVersion()}.
+     * @see nl.tabuu.tabuucore.nms.wrapper
+     */
     public static Class<?> getWrapperClass(String className){
         return getWrapperClass(className, getVersion());
     }
 
+    /**
+     * Returns a NMS class based on its name and {@link NMSVersion}.
+     * @param className the name of the wrapper class.
+     * @param version the {@link NMSVersion} of the NMS class.
+     * @return a NMS class based on its name and {@link NMSVersion}.
+     */
     public static Class<?> getNMSClass(String className, NMSVersion version){
         try{
             return Class.forName("net.minecraft.server." + version.name() + "." + className);
@@ -39,9 +66,13 @@ public class NMSUtil {
         }
     }
 
+    /**
+     * Returns a NMS class based on its name and {@link NMSVersion} returned by {@link NMSUtil#getVersion()}.
+     * @param className the name of the NMS class.
+     * @return a NMS class based on its name and {@link NMSVersion} returned by {@link NMSUtil#getVersion()}.
+     */
     public static Class<?> getNMSClass(String className){
         return getNMSClass(className, getVersion());
     }
-
 
 }

@@ -63,6 +63,11 @@
             <artifactId>tabuucore-nms_1_13_R2</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>nl.tabuu</groupId>
+            <artifactId>tabuucore-nms_1_14_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

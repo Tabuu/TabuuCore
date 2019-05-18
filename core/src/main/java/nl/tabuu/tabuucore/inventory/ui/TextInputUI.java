@@ -5,11 +5,12 @@ import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
+import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
+import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,6 +20,7 @@ public class TextInputUI extends InventoryFormUI{
 
     private IInventoryUtil _anvilUtil;
     private int _containerId;
+    private IAnvilContainerWindow _window;
     private BiConsumer<Player, String> _onTextSubmit;
     private ItemStack _renameItem;
     private String _defaultValue;
@@ -50,29 +52,23 @@ public class TextInputUI extends InventoryFormUI{
     public void open(HumanEntity human){
         Player player = (Player) human;
 
-        _anvilUtil.handleInventoryCloseEvent(player);
-        _anvilUtil.setActiveContainerDefault(player);
+        _window = IContainerWindow.get(player, IAnvilContainerWindow.class);
 
-        Object container = _anvilUtil.newContainerAnvil(player);
-        setInventory(_anvilUtil.toBukkitInventory(container));
+        setInventory(_window.getInventory());
 
-        _containerId = _anvilUtil.getNextContainerId(player);
-        _anvilUtil.sendPacketOpenWindow(player, _containerId);
-        _anvilUtil.setActiveContainer(player, container);
-        _anvilUtil.setActiveContainerId(container, _containerId);
-        _anvilUtil.addActiveContainerSlotListener(container, player);
+        _window.open();
 
         TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
     @Override
     public void onClose(Player player){
-        _anvilUtil.setActiveContainerDefault(player);
+        _anvilUtil.setActiveContainerToDefault(player);
         _anvilUtil.sendPacketCloseWindow(player, _containerId);
     }
 
     private void submit(Player player){
-        String string = _anvilUtil.getRenameText((AnvilInventory) getInventory());
+        String string = _window.getRenameText();
         _onTextSubmit.accept(player, string);
         _anvilUtil.handleInventoryCloseEvent(player);
     }

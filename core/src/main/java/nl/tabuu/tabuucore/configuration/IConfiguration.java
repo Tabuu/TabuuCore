@@ -60,9 +60,9 @@ public interface IConfiguration extends Configuration {
     }
 
     default <T extends Enum<T>> List<T> getEnumList(Class<T> enumClass, String path){
-        List<T> enums = new ArrayList<>();
-        getStringList(path).forEach(s -> Enum.valueOf(enumClass, s));
-        return enums;
+        return getStringList(path).stream()
+                                    .map((string) -> Enum.valueOf(enumClass, string))
+                                    .collect(Collectors.toList());
     }
     default void setEnumList(String path, List<Enum> values){
         values.forEach(e -> set(path, e));
