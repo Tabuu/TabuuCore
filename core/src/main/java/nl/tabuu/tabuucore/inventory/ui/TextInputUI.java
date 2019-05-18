@@ -19,8 +19,7 @@ import java.util.function.BiConsumer;
 public class TextInputUI extends InventoryFormUI{
 
     private IInventoryUtil _anvilUtil;
-    private int _containerId;
-    private IAnvilContainerWindow _window;
+    private IAnvilContainerWindow _anvilWindow;
     private BiConsumer<Player, String> _onTextSubmit;
     private ItemStack _renameItem;
     private String _defaultValue;
@@ -52,11 +51,11 @@ public class TextInputUI extends InventoryFormUI{
     public void open(HumanEntity human){
         Player player = (Player) human;
 
-        _window = IContainerWindow.get(player, IAnvilContainerWindow.class);
+        _anvilWindow = IContainerWindow.get(player, IAnvilContainerWindow.class);
 
-        setInventory(_window.getInventory());
+        setInventory(_anvilWindow.getInventory());
 
-        _window.open();
+        _anvilWindow.open();
 
         TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
@@ -64,11 +63,11 @@ public class TextInputUI extends InventoryFormUI{
     @Override
     public void onClose(Player player){
         _anvilUtil.setActiveContainerToDefault(player);
-        _anvilUtil.sendPacketCloseWindow(player, _containerId);
+        _anvilUtil.sendPacketCloseWindow(player, _anvilWindow.getWindowId());
     }
 
     private void submit(Player player){
-        String string = _window.getRenameText();
+        String string = _anvilWindow.getRenameText();
         _onTextSubmit.accept(player, string);
         _anvilUtil.handleInventoryCloseEvent(player);
     }
