@@ -37,7 +37,7 @@ public enum NMSVersion {
     /** Latest used by Minecraft version 1.13.2*/
     v1_13_R2(true, CombatType.POST_1_8, MaterialType.POST_1_12),
 
-    /** Latest used by Minecraft version 1.14*/
+    /** Latest used by Minecraft version 1.14.1*/
     v1_14_R1(true, CombatType.POST_1_8, MaterialType.POST_1_12);
 
     private boolean _supported;

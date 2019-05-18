@@ -47,7 +47,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     public void closeAll(){
-        getInventory().getViewers().forEach(this::close);
+        new ArrayList<>(getInventory().getViewers()).forEach(this::close);
     }
 
     public void reload(){

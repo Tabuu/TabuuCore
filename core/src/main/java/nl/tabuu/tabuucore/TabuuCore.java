@@ -26,6 +26,7 @@ public class TabuuCore extends TabuuCorePlugin {
 
         getInstance().getLogger().info("Enabling TabuuCore...");
 
+        // Checking for support.
         NMSVersion version = NMSUtil.getVersion();
         if(!version.isSupported()){
             getInstance().getLogger().warning("UNSUPPORTED NMS VERSION! This version of TabuuCore does not support your NMS version.");
