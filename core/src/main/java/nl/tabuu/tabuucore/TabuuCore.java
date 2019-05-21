@@ -1,11 +1,14 @@
 package nl.tabuu.tabuucore;
 
+import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
+import nl.tabuu.tabuucore.nms.wrapper.hologram.HologramAPI;
+import nl.tabuu.tabuucore.nms.wrapper.hologram.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
 
@@ -45,6 +48,9 @@ public class TabuuCore extends TabuuCorePlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), getInstance());
         _inventoryUIManager = new InventoryUIManager();
 
+        // Hologram related.
+        Bukkit.getPluginManager().registerEvents(new HologramListener(), getInstance());
+
         // Metrics.
         new Metrics(this);
         // new MassiveStats(this); disabling MassiveStats, it only causes issues.
@@ -59,6 +65,9 @@ public class TabuuCore extends TabuuCorePlugin {
 
         // Closes all UIs managed by TabuuCore to prevent duplication of items.
         getInventoryUIManager().forEach(InventoryUI::closeAll);
+
+        // Destroy all holograms.
+        HologramAPI.getInstance().getHolograms().forEach(IHologram::destroy);
 
         getInstance().getLogger().info("TabuuCore disabled.");
     }

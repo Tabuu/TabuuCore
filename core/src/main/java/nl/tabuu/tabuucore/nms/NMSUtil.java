@@ -34,11 +34,8 @@ public class NMSUtil {
             return Class.forName("nl.tabuu.tabuucore.nms." + version.name() + "." + className);
         }
         catch (ClassNotFoundException e) {
-            Bukkit.getLogger().severe("Class with name '" + className + "' was not found for your NMS version!");
-            e.printStackTrace();
+            throw new UnsupportedOperationException("Class with name '" + className + "' was not found for your NMS version!");
         }
-
-        return null;
     }
 
     /**
@@ -62,7 +59,7 @@ public class NMSUtil {
             return Class.forName("net.minecraft.server." + version.name() + "." + className);
         }
         catch(ClassNotFoundException e){
-            return null;
+            throw new UnsupportedOperationException("Class with name '" + className + "' was not found for your NMS version!");
         }
     }
 
