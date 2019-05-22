@@ -7,8 +7,8 @@ import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
-import nl.tabuu.tabuucore.nms.wrapper.hologram.HologramAPI;
-import nl.tabuu.tabuucore.nms.wrapper.hologram.IHologram;
+import nl.tabuu.tabuucore.api.HologramAPI;
+import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
 

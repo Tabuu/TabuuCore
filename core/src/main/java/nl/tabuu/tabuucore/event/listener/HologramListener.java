@@ -1,7 +1,7 @@
 package nl.tabuu.tabuucore.event.listener;
 
-import nl.tabuu.tabuucore.nms.wrapper.hologram.HologramAPI;
-import nl.tabuu.tabuucore.nms.wrapper.hologram.IHologram;
+import nl.tabuu.tabuucore.api.HologramAPI;
+import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

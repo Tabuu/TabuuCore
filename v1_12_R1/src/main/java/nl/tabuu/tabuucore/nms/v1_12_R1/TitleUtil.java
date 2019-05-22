@@ -1,12 +1,12 @@
-package nl.tabuu.tabuucore.nms.v1_13_R2;
+package nl.tabuu.tabuucore.nms.v1_12_R1;
 
-import net.minecraft.server.v1_13_R2.IChatBaseComponent;
-import net.minecraft.server.v1_13_R2.PacketPlayOutTitle;
-import nl.tabuu.tabuucore.nms.wrapper.ITitleAPI;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.PacketPlayOutTitle;
+import nl.tabuu.tabuucore.nms.wrapper.ITitleUtil;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class TitleAPI implements ITitleAPI {
+public class TitleUtil implements ITitleUtil {
     public void sendSubTitle(Player player, String json, int fadeIn, int stay, int fadeOut) {
         send(player,PacketPlayOutTitle.EnumTitleAction.SUBTITLE, json, fadeIn, stay, fadeOut);
     }

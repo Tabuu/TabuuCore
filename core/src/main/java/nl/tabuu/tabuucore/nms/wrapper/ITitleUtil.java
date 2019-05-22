@@ -3,12 +3,10 @@ package nl.tabuu.tabuucore.nms.wrapper;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Represents an API used for sending title packets.
  */
-public interface ITitleAPI {
+public interface ITitleUtil {
 
     /**
      * Sends a subtitle packet to a player.
@@ -47,12 +45,12 @@ public interface ITitleAPI {
      * Returns the TitleAPI wrapper class of the server NMS version.
      * @return the TitleAPI wrapper class of the server NMS version.
      */
-    static ITitleAPI get(){
+    static ITitleUtil get(){
         try {
-            return (ITitleAPI) NMSUtil.getWrapperClass("TitleAPI").getConstructor().newInstance();
+            return (ITitleUtil) NMSUtil.getWrapperClass("TitleUtil").getConstructor().newInstance();
         }
-        catch (Exception ignored) {}
-
-        return null;
+        catch (ReflectiveOperationException ignored) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

@@ -1,6 +1,7 @@
-package nl.tabuu.tabuucore.nms.wrapper.hologram;
+package nl.tabuu.tabuucore.api;
 
 import nl.tabuu.tabuucore.nms.NMSUtil;
+import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -54,8 +55,7 @@ public class HologramAPI {
             _holograms.add(hologram);
             return hologram;
         }
-        catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
+        catch (ReflectiveOperationException e) {
             throw new UnsupportedOperationException();
         }
     }
