@@ -1,11 +1,11 @@
-package nl.tabuu.tabuucore.nms.v1_14_R1;
+package nl.tabuu.tabuucore.nms.v1_8_R3;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_8_R3.*;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -82,7 +82,7 @@ public class Hologram implements IHologram {
         }
 
         for(int i = 0; i < lines.length; i++)
-            _entities.get(i).setCustomName(new ChatComponentText(lines[i]));
+            _entities.get(i).setCustomName(lines[i]);
 
         _lines = Arrays.asList(lines);
         viewers.stream().map(Bukkit::getPlayer).forEach(this::show);
@@ -123,7 +123,7 @@ public class Hologram implements IHologram {
 
         entity.setCustomNameVisible(true);
         entity.setInvisible(true);
-        entity.setNoGravity(true);
+        entity.setGravity(false);
 
         return entity;
     }
