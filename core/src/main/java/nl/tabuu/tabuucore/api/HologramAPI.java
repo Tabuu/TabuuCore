@@ -23,34 +23,16 @@ public class HologramAPI {
     }
 
     /**
-     * Creates a new hologram visible to the specified player.
-     * @param player the player the hologram is visible to.
+     * Creates a new hologram, not visible until shown.
      * @param location the location the hologram should be in.
      * @param lines the text lines of the hologram.
      * @return the created hologram.
      */
-    public IHologram create(Player player, Location location, String... lines){
-        IHologram hologram = create(location, false, lines);
-        hologram.show(player);
-
-        return hologram;
-    }
-
-    /**
-     * Creates a new hologram.
-     * @param location the location the hologram should be in.
-     * @param display when set to true the created hologram will be displayed to everyone, else to no one.
-     * @param lines the text lines of the hologram.
-     * @return the created hologram.
-     */
-    public IHologram create(Location location, boolean display, String... lines){
+    public IHologram create(Location location, String... lines){
         try {
             IHologram hologram =  (IHologram) NMSUtil.getWrapperClass("Hologram")
                     .getConstructor(Location.class, String[].class)
                     .newInstance(location, lines);
-
-            if(display)
-                Bukkit.getOnlinePlayers().forEach(hologram::show);
 
             _holograms.add(hologram);
             return hologram;
