@@ -54,7 +54,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
     }
 
     @Override
-    public List<Optional<?>> convert(CommandSender feedBackReceiver, String[] arguments){
+    public List<Optional<?>> convertArguments(CommandSender feedBackReceiver, String[] arguments){
         String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
         List<Optional<?>> converted = new ArrayList<>();
 

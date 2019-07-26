@@ -3,6 +3,8 @@ package nl.tabuu.tabuucore.nms;
 import nl.tabuu.tabuucore.combat.CombatType;
 import nl.tabuu.tabuucore.material.MaterialType;
 
+@SuppressWarnings("deprecation")
+// TODO: Remove deprecated enums.
 public enum NMSVersion {
     /** Used to indicate a NMS version not supported by this enum.*/
     UNKNOWN(false, null, null),
