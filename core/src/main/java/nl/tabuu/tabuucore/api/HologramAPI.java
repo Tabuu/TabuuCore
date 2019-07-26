@@ -2,11 +2,9 @@ package nl.tabuu.tabuucore.api;
 
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,9 +15,16 @@ public class HologramAPI {
     private static HologramAPI INSTANCE;
 
     private List<IHologram> _holograms;
+    private Constructor<?> _hologramConstructor;
 
     protected HologramAPI(){
         _holograms = new ArrayList<>();
+
+        try {
+            _hologramConstructor = NMSUtil.getWrapperClass("Hologram").getConstructor(Location.class, String[].class);
+        } catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -30,10 +35,7 @@ public class HologramAPI {
      */
     public IHologram create(Location location, String... lines){
         try {
-            IHologram hologram =  (IHologram) NMSUtil.getWrapperClass("Hologram")
-                    .getConstructor(Location.class, String[].class)
-                    .newInstance(location, lines);
-
+            IHologram hologram =  (IHologram) _hologramConstructor.newInstance(location, lines);
             _holograms.add(hologram);
             return hologram;
         }

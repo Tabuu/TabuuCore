@@ -48,7 +48,8 @@ public class NBTTagCompound implements INBTTagCompound {
     @Override
     public INBTTagCompound copy(org.bukkit.entity.Entity entity) {
         Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        _tagCompound = nmsEntity.getNBTTag();
+        nmsEntity.c(_tagCompound);
+
         return this;
     }
 

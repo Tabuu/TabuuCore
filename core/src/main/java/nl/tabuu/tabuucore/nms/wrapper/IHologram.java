@@ -44,7 +44,7 @@ public interface IHologram {
 
     /**
      * Sets the location of this hologram.
-     * @param location
+     * @param location new location of this hologram.
      */
     void setLocation(Location location);
 

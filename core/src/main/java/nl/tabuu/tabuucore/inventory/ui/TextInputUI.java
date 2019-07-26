@@ -13,6 +13,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 import java.util.function.BiConsumer;
 
@@ -37,6 +38,7 @@ public class TextInputUI extends InventoryFormUI{
         ItemStack renameItem = _renameItem;
         ItemMeta itemMeta = renameItem.getItemMeta();
         itemMeta.setDisplayName(_defaultValue);
+
         renameItem.setItemMeta(itemMeta);
 
         Style submitButtonStyle = new Style(renameItem, new ItemStack(Material.AIR));
@@ -68,7 +70,7 @@ public class TextInputUI extends InventoryFormUI{
 
     private void submit(Player player){
         String string = _anvilWindow.getRenameText();
-        _onTextSubmit.accept(player, string);
         _anvilUtil.handleInventoryCloseEvent(player);
+        _onTextSubmit.accept(player, string);
     }
 }

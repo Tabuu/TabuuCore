@@ -465,6 +465,8 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             case WHEAT_SEEDS:
                 return new ItemStack(Material.SEEDS);
 
+            case IRON_BARS:
+                return new ItemStack(Material.IRON_FENCE);
             default:
                 try{
                     return new ItemStack(Material.valueOf(material.name()));

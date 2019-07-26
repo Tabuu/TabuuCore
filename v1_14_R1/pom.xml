@@ -11,14 +11,14 @@
     <parent>
         <artifactId>tabuucore-parent</artifactId>
         <groupId>nl.tabuu</groupId>
-        <version>2019.2.2</version>
+        <version>2019.2.3</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.14-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

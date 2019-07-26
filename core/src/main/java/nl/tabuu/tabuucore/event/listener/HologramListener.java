@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class HologramListener implements Listener {
-
     private HologramAPI _api;
 
     public HologramListener(){
@@ -24,5 +23,4 @@ public class HologramListener implements Listener {
                 hologram.show(player);
         }
     }
-
 }
