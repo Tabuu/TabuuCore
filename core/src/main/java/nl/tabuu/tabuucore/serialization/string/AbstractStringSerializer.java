@@ -39,10 +39,11 @@ public abstract class AbstractStringSerializer<T> implements ISerializer<T, Stri
 
     /***
      * This function is used to convert a generic list to a generic array.
-     * The function is pretty nasty an instable but it seems like it is the only way.
+     * The function is pretty nasty an insatiable but it seems like it is the only way.
      * @param list Generic list.
      * @return Generic array with the same type as the given list.
      */
+    @SuppressWarnings("unchecked")
     private T[] bruteForceToArray(List<T> list){
         T[] array = (T[]) Array.newInstance(list.get(0).getClass(), list.size());
 

@@ -18,11 +18,11 @@ public abstract class ArgumentConverter {
     public abstract List<String> completeArgument(CommandSender sender, String[] arguments);
 
     @Deprecated
-    public abstract List<Optional<?>> convert(CommandSender sender, String[] arguments);
-
-    public List<Optional<?>> convertArguments(CommandSender sender, String[] arguments){
-        return convert(sender, arguments);
+    public List<Optional<?>> convert(CommandSender sender, String[] arguments){
+        return convertArguments(sender, arguments);
     }
+
+    public abstract List<Optional<?>> convertArguments(CommandSender sender, String[] arguments);
 
     protected Optional<?> convertArgument(String argument, ArgumentType type){
         Object value = type.convert(argument);
