@@ -65,7 +65,7 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             //region Wood Type Related.
             //region Doors
             case OAK_DOOR:
-                return new ItemStack(Material.WOOD_DOOR);
+                return new ItemStack(Material.WOODEN_DOOR);
             case SPRUCE_DOOR:
                 return new ItemStack(Material.SPRUCE_DOOR_ITEM);
             case BIRCH_DOOR:
@@ -76,6 +76,11 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
                 return new ItemStack(Material.ACACIA_DOOR_ITEM);
             case DARK_OAK_DOOR:
                 return new ItemStack(Material.DARK_OAK_DOOR_ITEM);
+            //endregion
+
+            //region Trapdoors
+            case OAK_TRAPDOOR:
+                return new ItemStack(Material.TRAP_DOOR);
             //endregion
 
             //region Stairs
@@ -467,6 +472,9 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
 
             case IRON_BARS:
                 return new ItemStack(Material.IRON_FENCE);
+
+            case WRITABLE_BOOK:
+                return new ItemStack(Material.BOOK_AND_QUILL);
             default:
                 try{
                     return new ItemStack(Material.valueOf(material.name()));

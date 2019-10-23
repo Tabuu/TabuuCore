@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: nl.tabuu:tabuucore-nms_1_12_R1:2019.2.4-pre">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/nl/tabuu/tabuucore-nms_1_12_R1/2019.2.4-pre/tabuucore-nms_1_12_R1-2019.2.4-pre.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/nl/tabuu/tabuucore-nms_1_12_R1/2019.2.4-pre/tabuucore-nms_1_12_R1-2019.2.4-pre-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/nl/tabuu/tabuucore-nms_1_12_R1/2019.2.4-pre/tabuucore-nms_1_12_R1-2019.2.4-pre-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

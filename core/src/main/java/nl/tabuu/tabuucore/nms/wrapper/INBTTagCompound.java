@@ -239,6 +239,13 @@ public interface INBTTagCompound {
     String getObjectToString(String key);
 
     /**
+     * Returns the {@link INBTTagCompound} of the value associated with the given key.
+     * @param key key of the value to return the string {@link INBTTagCompound} of.
+     * @return the {@link INBTTagCompound} of the value associated with the given key.
+     */
+    INBTTagCompound getTagCompound(String key);
+
+    /**
      * Returns all keys stored in this NBTTagCompound.
      * @return all keys stored in this NBTTagCompound.
      */
