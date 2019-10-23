@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 public class NBTTagCompound implements INBTTagCompound {
@@ -19,6 +18,10 @@ public class NBTTagCompound implements INBTTagCompound {
 
     public NBTTagCompound(){
         _tagCompound = new net.minecraft.server.v1_8_R3.NBTTagCompound();
+    }
+
+    public NBTTagCompound(net.minecraft.server.v1_8_R3.NBTTagCompound tagCompound){
+        _tagCompound = tagCompound;
     }
 
     @Override
@@ -174,8 +177,14 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public INBTTagCompound getTagCompound(String key){
+        return new NBTTagCompound(_tagCompound.getCompound(key));
+    }
+
+    @Override
     public String getObjectToString(String key) {
-        return _tagCompound.get(key).toString();
+        Object object = _tagCompound.get(key);
+        return object == null ? "null" : object.toString();
     }
 
     @Override

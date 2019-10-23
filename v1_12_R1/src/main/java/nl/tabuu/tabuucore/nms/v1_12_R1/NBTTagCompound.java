@@ -20,6 +20,10 @@ public class NBTTagCompound implements INBTTagCompound {
         _tagCompound = new net.minecraft.server.v1_12_R1.NBTTagCompound();
     }
 
+    public NBTTagCompound(net.minecraft.server.v1_12_R1.NBTTagCompound tagCompound){
+        _tagCompound = tagCompound;
+    }
+
     @Override
     public org.bukkit.inventory.ItemStack apply(org.bukkit.inventory.ItemStack item) {
         ItemStack itemStack = CraftItemStack.asNMSCopy(item);
@@ -172,8 +176,14 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public INBTTagCompound getTagCompound(String key){
+        return new NBTTagCompound(_tagCompound.getCompound(key));
+    }
+
+    @Override
     public String getObjectToString(String key) {
-        return _tagCompound.get(key).toString();
+        Object object = _tagCompound.get(key);
+        return object == null ? "null" : object.toString();
     }
 
     @Override
