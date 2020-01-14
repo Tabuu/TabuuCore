@@ -1,5 +1,7 @@
 package nl.tabuu.tabuucore;
 
+import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
@@ -12,6 +14,7 @@ import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -53,9 +56,15 @@ public class TabuuCore extends TabuuCorePlugin {
 
         // Metrics.
         new Metrics(this);
-        // new MassiveStats(this); disabling MassiveStats, it only causes issues.
-        // TODO: Remove/Fix MassiveStats.
 
+        // Message for conflicting API versions.
+        if(version.isPostOrEquals(NMSVersion.v1_13_R1)) {
+            String apiVersion = getDescription().getAPIVersion();
+            if (!version.getSpigotAPIVersion().equals(apiVersion)) {
+                getInstance().getLogger().severe("The API version of this TabuuCore file has been set to: " + apiVersion + ", while your server is running: " + version.name());
+                getInstance().getLogger().severe("Please download a version specific TabuuCore file, or edit the plugin.yml file inside the TabuuCore plugin jar (only if you have a multi version copy of TabuuCore).");
+            }
+        }
         getInstance().getLogger().info("TabuuCore enabled.");
     }
 

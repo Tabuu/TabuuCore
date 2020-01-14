@@ -6,29 +6,34 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="core" />
-        <module name="v1_12_R1" />
-        <module name="v1_13_R2" />
         <module name="v1_14_R1" />
+        <module name="v1_15_R1" />
+        <module name="v1_13_R2" />
+        <module name="core" />
         <module name="v1_8_R3" />
+        <module name="v1_12_R1" />
       </profile>
       <profile name="Annotation profile for TabuuCore" enabled="true">
         <sourceOutputDir name="../target/generated-sources/annotations" />
         <sourceTestOutputDir name="../target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="distribution" />
+        <module name="tabuucore-distribution" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
       <module name="distribution" target="1.8" />
       <module name="TabuuCore 2019" target="1.8" />
+      <module name="tabuucore-distribution" target="1.8" />
       <module name="tabuucore-nms" target="1.5" />
       <module name="tabuucore-nms_1_8_R3" target="1.8" />
+      <module name="tabuucore-parent" target="1.8" />
       <module name="v1_12_R1" target="1.8" />
       <module name="v1_13_R2" target="1.8" />
       <module name="v1_14_R1" target="1.8" />
       <module name="v1_14_R2" target="1.8" />
+      <module name="v1_15_R1" target="1.8" />
       <module name="v1_8_R3" target="1.8" />
     </bytecodeTargetLevel>
   </component>

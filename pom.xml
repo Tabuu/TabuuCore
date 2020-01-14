@@ -9,7 +9,7 @@
     <version>2019.2.4-pre</version>
     <name>TabuuCore</name>
     <url>http://www.tabuu.nl</url>
-    <description>TabuuCore plugin.</description>
+    <description>Tabuu's core plugin.</description>
 
     <packaging>pom</packaging>
 
@@ -20,6 +20,7 @@
         <module>v1_12_R1</module>
         <module>v1_13_R2</module>
         <module>v1_14_R1</module>
+        <module>v1_15_R1</module>
     </modules>
 
     <build>

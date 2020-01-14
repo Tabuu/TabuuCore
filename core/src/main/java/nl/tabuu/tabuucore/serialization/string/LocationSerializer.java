@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.serialization.string;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -28,14 +29,20 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
 
     @Override
     public Location deserialize(String string) {
-        if(string == null)
+        if(string == null){
+            Debug.log("Returning null 0");
             return null;
+        }
+
 
         DoubleSerializer doubleSerializer = Serializer.DOUBLE;
         String[] args = string.split(" ");
 
-        if(args.length < 4)
+        if(args.length < 4){
+            Debug.log("Returning null 1");
             return null;
+        }
+
 
         World world = Bukkit.getWorld(args[0].replace("|", " "));
         Double

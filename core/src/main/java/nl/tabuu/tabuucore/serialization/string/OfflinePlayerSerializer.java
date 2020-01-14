@@ -13,9 +13,16 @@ public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePla
 
     @Override
     public OfflinePlayer deserialize(String string) {
-        return Arrays
-                .stream(Bukkit.getOfflinePlayers())
-                .filter(p -> p.getName().equalsIgnoreCase(string))
-                .findAny().orElse(null);
+
+        if(string.length() > 16)
+            return Arrays
+                    .stream(Bukkit.getOfflinePlayers())
+                    .filter(p -> p.getUniqueId().toString().equalsIgnoreCase(string))
+                    .findAny().orElse(null);
+        else
+            return Arrays
+                    .stream(Bukkit.getOfflinePlayers())
+                    .filter(p -> p.getName().equalsIgnoreCase(string))
+                    .findAny().orElse(null);
     }
 }
