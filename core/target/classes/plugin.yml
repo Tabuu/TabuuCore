@@ -1,0 +1,8 @@
+name: TabuuCore
+version: 2019.2.4-pre
+main: nl.tabuu.tabuucore.TabuuCore
+description: Tabuu's core plugin.
+author: Tabuu
+authors: [Tabuu]
+website: http://www.tabuu.nl
+api-version: 1.15
