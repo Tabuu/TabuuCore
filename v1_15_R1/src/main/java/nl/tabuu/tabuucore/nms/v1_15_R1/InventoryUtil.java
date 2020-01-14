@@ -1,11 +1,12 @@
-package nl.tabuu.tabuucore.nms.v1_12_R1;
+package nl.tabuu.tabuucore.nms.v1_15_R1;
 
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_15_R1.*;
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_12_R1.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.event.CraftEventFactory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 
 public class InventoryUtil implements IInventoryUtil {
     @Override
@@ -20,7 +21,7 @@ public class InventoryUtil implements IInventoryUtil {
 
     @Override
     public void sendPacketOpenWindow(Player player, int containerId) {
-        playerToNMS(player).playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerId, "minecraft:anvil", new ChatMessage(Blocks.ANVIL.a() + ".name")));
+        playerToNMS(player).playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerId, Containers.ANVIL, new ChatComponentText(InventoryType.ANVIL.getDefaultTitle())));
     }
 
     @Override
@@ -46,5 +47,4 @@ public class InventoryUtil implements IInventoryUtil {
     private EntityPlayer playerToNMS(Player player){
         return ((CraftPlayer) player).getHandle();
     }
-
 }

@@ -5,3 +5,4 @@ description: ${project.description}
 author: Tabuu
 authors: [Tabuu]
 website: http://www.tabuu.nl
+api-version: 1.15

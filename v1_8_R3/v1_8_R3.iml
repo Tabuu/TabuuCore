@@ -14,17 +14,10 @@
     <content url="file://$MODULE_DIR$/src/test/java" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../00_Plugin_Making/02_Spigot/spigot-1.8.8 R3.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../../../00_Plugin_Making/02_Spigot/spigot-1.8.8 R3.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:craftbukkit:1.8.8-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="core" />
+    <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
   </component>
 </module>

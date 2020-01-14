@@ -1,6 +1,6 @@
-package nl.tabuu.tabuucore.nms.v1_8_R3;
+package nl.tabuu.tabuucore.nms.v1_15_R1;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_15_R1.MinecraftServer;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.nms.wrapper.ITicksPerSecond;
 

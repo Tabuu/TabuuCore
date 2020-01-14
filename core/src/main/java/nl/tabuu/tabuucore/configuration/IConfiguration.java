@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.configuration;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Location;
@@ -13,16 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface IConfiguration extends Configuration {
+public interface IConfiguration extends Configuration, ConfigurationSection {
 
     void save();
     void delete(String path);
     void reload();
 
+    @Override
     default Location getLocation(String path){
+        String string = getString(path);
+        Location location = Serializer.LOCATION.deserialize(getString(path));
+
+        Debug.log(string + " turned into " + location);
+
         return Serializer.LOCATION.deserialize(getString(path));
     }
     default void set(String path, Location value){
+        Debug.log(path);
+
         set(path, Serializer.LOCATION.serialize(value));
     }
 
@@ -49,7 +58,7 @@ public interface IConfiguration extends Configuration {
 
     @Deprecated
     default Material getMaterial(String path){
-        return Material.valueOf(getString(path));
+        return getEnum(Material.class, path);
     }
 
     default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path){
