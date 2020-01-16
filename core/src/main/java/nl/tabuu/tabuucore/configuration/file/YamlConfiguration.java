@@ -1,8 +1,6 @@
 package nl.tabuu.tabuucore.configuration.file;
 
 import nl.tabuu.tabuucore.configuration.IConfiguration;
-import nl.tabuu.tabuucore.debug.Debug;
-import nl.tabuu.tabuucore.serialization.string.Serializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePlayer> {
     @Override
@@ -13,14 +14,15 @@ public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePla
 
     @Override
     public OfflinePlayer deserialize(String string) {
-
-        if(string.length() > 16)
-            return Arrays
-                    .stream(Bukkit.getOfflinePlayers())
-                    .filter(p -> p.getUniqueId().toString().equalsIgnoreCase(string))
-                    .findAny().orElse(null);
-        else
-            return Arrays
+        if(string.length() > 16){
+            try{
+                UUID uuid = UUID.fromString(string);
+                return Bukkit.getOfflinePlayer(uuid);
+            } catch (IllegalArgumentException e){
+                return null;
+            }
+        }
+        else return Arrays
                     .stream(Bukkit.getOfflinePlayers())
                     .filter(p -> p.getName().equalsIgnoreCase(string))
                     .findAny().orElse(null);

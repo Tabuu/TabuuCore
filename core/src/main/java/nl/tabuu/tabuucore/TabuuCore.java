@@ -1,7 +1,5 @@
 package nl.tabuu.tabuucore;
 
-import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
@@ -14,7 +12,6 @@ import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import org.bukkit.Bukkit;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
