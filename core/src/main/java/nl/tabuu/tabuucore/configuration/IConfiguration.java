@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore.configuration;
 
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Location;
@@ -10,7 +9,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +20,9 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
 
     @Override
     default Location getLocation(String path){
-        String string = getString(path);
-        Location location = Serializer.LOCATION.deserialize(getString(path));
-
-        Debug.log(string + " turned into " + location);
-
         return Serializer.LOCATION.deserialize(getString(path));
     }
     default void set(String path, Location value){
-        Debug.log(path);
-
         set(path, Serializer.LOCATION.serialize(value));
     }
 

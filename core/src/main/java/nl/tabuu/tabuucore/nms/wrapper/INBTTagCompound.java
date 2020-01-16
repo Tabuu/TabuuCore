@@ -62,6 +62,13 @@ public interface INBTTagCompound {
     // Setters
 
     /**
+     * Sets the specified key to a new INBTTagCompound.
+     * @param key key of the new INBTTagCompound.
+     * @return the new INBTagCompound.
+     */
+    INBTTagCompound setTagCompound(String key);
+
+    /**
      * Sets the specified key to the specified boolean.
      * @param key key of the boolean to set.
      * @param value new boolean to set the key to.
