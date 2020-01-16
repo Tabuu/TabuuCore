@@ -76,8 +76,13 @@ public class NBTTagCompound implements INBTTagCompound {
     @Override
     public INBTTagCompound setTagCompound(String key) {
         NBTTagCompound tagCompound = new NBTTagCompound();
-        set(key, tagCompound._tagCompound);
+        _tagCompound.set(key, tagCompound._tagCompound);
         return tagCompound;
+    }
+
+    @Override
+    public void setTagCompound(String key, INBTTagCompound value) {
+        _tagCompound.set(key, ((NBTTagCompound) value)._tagCompound);
     }
 
     @Override

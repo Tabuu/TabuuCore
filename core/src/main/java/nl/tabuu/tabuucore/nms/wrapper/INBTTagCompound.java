@@ -69,6 +69,13 @@ public interface INBTTagCompound {
     INBTTagCompound setTagCompound(String key);
 
     /**
+     * Sets the specified key to the specified INBTTagCompound.
+     * @param key key of the INBTTagCompound to set.
+     * @param value new INBTTagCompound to set the key to.
+     */
+    void setTagCompound(String key, INBTTagCompound value);
+
+    /**
      * Sets the specified key to the specified boolean.
      * @param key key of the boolean to set.
      * @param value new boolean to set the key to.
@@ -164,6 +171,8 @@ public interface INBTTagCompound {
             setShort(key, (short) value);
         else if(value instanceof String)
             setString(key, (String) value);
+        else if(value instanceof INBTTagCompound)
+            setTagCompound(key, (INBTTagCompound) value);
     }
 
     // Getters
