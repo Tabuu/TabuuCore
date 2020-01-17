@@ -39,13 +39,12 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         return this;
     }
 
-    @Deprecated
     /**
      * @deprecated Name changed to setParameter, as it doesn't 'add' anything.
      */
+    @Deprecated
     public OrderedArgumentConverter addParameter(ArgumentType parameterType){
-        _parameterType = parameterType;
-        return this;
+        return setParameter(parameterType);
     }
 
     public OrderedArgumentConverter setParameter(ArgumentType parameterType){
@@ -77,14 +76,12 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         }
 
         if(_parameterType != null && convertedArguments.length > _argumentSequence.size()){
-            for(int i = _argumentSequence.size(); i < convertedArguments.length; i++){
+            for(int i = _argumentSequence.size(); i < convertedArguments.length; i++)
                 converted.add(convertArgument(convertedArguments[i], _parameterType));
-            }
         }
         else if(convertedArguments.length < _argumentSequence.size()){
-            for(int i = convertedArguments.length; i < _argumentSequence.size(); i++){
+            for(int i = convertedArguments.length; i < _argumentSequence.size(); i++)
                 converted.add(Optional.empty());
-            }
         }
 
         return converted;
