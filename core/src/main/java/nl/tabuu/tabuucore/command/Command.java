@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.command;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -157,6 +158,11 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
     }
 
     protected void addSubCommand(String label, Command command){
+        PluginCommand pluginCommand = Bukkit.getPluginCommand(getLabel() + " " + label);
+
+        if(pluginCommand != null)
+            pluginCommand.setExecutor(command);
+
         _subCommandMap.put(label, command);
     }
 
