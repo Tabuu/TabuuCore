@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * An {@link ArgumentConverter} that converts arguments in the order of the provided String array.
+ */
 public class OrderedArgumentConverter extends ArgumentConverter {
 
     private List<ArgumentType> _argumentSequence;
