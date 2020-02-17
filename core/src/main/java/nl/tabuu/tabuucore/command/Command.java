@@ -129,34 +129,67 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         return completedArguments;
     }
 
-    protected void setArgumentConverter(ArgumentConverter sequence){
-        _argumentConverter = sequence;
+    /**
+     * Sets the {@link ArgumentConverter}.
+     * @param converter The {@link ArgumentConverter} to be set.
+     */
+    protected void setArgumentConverter(ArgumentConverter converter){
+        _argumentConverter = converter;
     }
 
+    /**
+     * Returns the current {@link ArgumentConverter}.
+     * @return the current {@link ArgumentConverter}.
+     */
     protected ArgumentConverter getArgumentConverter(){
         return _argumentConverter;
     }
 
+    /**
+     * Returns true if the command is limited to a specific {@link SenderType}.
+     * @return true if the command is limited to a specific {@link SenderType}.
+     */
     protected boolean hasRequiredSenderType(){
         return _requiredSenderType != null;
     }
 
+    /**
+     * Limits the command to a specified {@link SenderType}. Use null for no {@link SenderType} limitations.
+     * @param type The type the command is limited to. Or null for no limitations.
+     */
     protected void setRequiredSenderType(SenderType type){
         _requiredSenderType = type;
     }
 
+    /**
+     * Returns the required {@link SenderType} for this command, or null if none.
+     * @return the required {@link SenderType} for this command, or null if none.
+     */
     protected SenderType getRequiredSenderType(){
         return _requiredSenderType;
     }
 
+    /**
+     * Returns true if the command has a parent command.
+     * @return true if the command has a parent command.
+     */
     protected boolean hasParent(){
         return _parent != null;
     }
 
+    /**
+     * Returns the parent of this command, or null if none.
+     * @return the parent of this command, or null if none.
+     */
     protected Command getParent(){
         return _parent;
     }
 
+    /**
+     * Adds a sub-command to the current command.
+     * @param label The sub-command label. E.g. "give" in the theoretical "economy give" command.
+     * @param command The sub-command to be set.
+     */
     protected void addSubCommand(String label, Command command){
         PluginCommand pluginCommand = Bukkit.getPluginCommand(getLabel() + " " + label);
 
