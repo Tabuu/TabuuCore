@@ -33,13 +33,16 @@ public interface ITicksPerSecond {
     }
 
     /**
-     * An time enum used to get the average TPS over that time period.
+     * An enum representing the different time based TPS sample groups.
      */
     enum TPSTime{
         ONE_MINUTE,
         FIVE_MINUTES,
         FIFTEEN_MINUTES;
 
+        /**
+         * @deprecated Deprecated in favor of {@link #ordinal()}
+         */
         @Deprecated
         public int getIndex(){
             return ordinal();
