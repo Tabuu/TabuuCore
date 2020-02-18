@@ -149,8 +149,8 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
      * @param path The path to set the enum list to.
      * @param values The enum list to set.
      */
-    default void setEnumList(String path, List<Enum> values){
-        values.forEach(e -> set(path, e)); //BUG: Does this even work?!?
+    default <T extends Enum<T>> void setEnumList(String path, List<T> values){
+        set(path, values.stream().map(Enum::name).collect(Collectors.toList()));
     }
 
     /**
