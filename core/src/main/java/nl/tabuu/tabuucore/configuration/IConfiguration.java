@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.configuration;
 
+import nl.tabuu.tabuucore.serialization.string.AbstractStringSerializer;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Location;
@@ -9,7 +10,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public interface IConfiguration extends Configuration, ConfigurationSection {
@@ -178,11 +179,73 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
      */
     default Dictionary getDictionary(String path) {
         Dictionary dictionary = new Dictionary();
-        ConfigurationSection configurationSection = getConfigurationSection(path);
-
-        for (String key : configurationSection.getKeys(false))
-            dictionary.put(key, getString(path + "." + key));
+        getMap(path).forEach(dictionary::put);
 
         return dictionary;
+    }
+
+    /**
+     * Returns a {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
+     * @param path The path to get the {@link Map} from.
+     * @return A {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
+     */
+    default Map<String, String> getMap(String path){
+        return getMap(String.class, Serializer.STRING, path);
+    }
+
+    /**
+     * Returns the same as {@link #getMap(String map)}, but converts the value with a (de)serializer.
+     * @param valueClass The class to which to convert the value.
+     * @param valueSerializer The serializer to deserialize the value from string.
+     * @param path The path to get the {@link Map} from.
+     * @param <V> The type to convert the value to.
+     * @return The same as {@link #getMap(String map)}, but converts the value with a (de)serializer.
+     */
+    default <V> Map<String, V> getMap(Class<V> valueClass, AbstractStringSerializer<V> valueSerializer, String path){
+        return getMap(String.class, valueClass, Serializer.STRING, valueSerializer, path);
+    }
+
+    /**
+     * Returns the same as {@link #getMap(String path)} and {@link #getMap(Class valueClass, AbstractStringSerializer valueSerializer, String path)}, but converts the key with a (de)serializer.
+     * @param keyClass The class to which to convert the key.
+     * @param valueClass The class to which to convert the value.
+     * @param keySerializer The serializer to deserialize the key from string.
+     * @param valueSerializer The serializer to deserialize the value from string.
+     * @param path The path to get the {@link Map} from.
+     * @param <K> The type to convert the key to.
+     * @param <V> The type to convert the value to.
+     * @return The same as {@link #getMap(String path)} and {@link #getMap(Class valueClass, AbstractStringSerializer valueSerializer, String path)}, but converts the key with a (de)serializer.
+     */
+    default <K, V> Map<K, V> getMap(Class<K> keyClass, Class<V> valueClass, AbstractStringSerializer<K> keySerializer, AbstractStringSerializer<V> valueSerializer, String path){
+        HashMap<K, V> map = new HashMap<>();
+        ConfigurationSection section = getConfigurationSection(path);
+
+        if(section == null) return map;
+        Set<String> keys = section.getKeys(false);
+
+        for(String key : keys){
+            String value = getString(path + "." + key);
+            map.put(keySerializer.deserialize(key), valueSerializer.deserialize(value));
+        }
+        return map;
+    }
+
+    default void setMap(String path, Map<String, String> values){
+        setMap(String.class, Serializer.STRING, path, values);
+    }
+
+    default <V> void setMap(Class<V> valueClass, AbstractStringSerializer<V> valueSerializer, String path, Map<String, V> values){
+        setMap(String.class, valueClass, Serializer.STRING, valueSerializer, path, values);
+    }
+
+    default <K, V> void setMap(Class<K> keyClass, Class<V> valueClass, AbstractStringSerializer<K> keySerializer, AbstractStringSerializer<V> valueSerializer, String path, Map<K, V> values){
+        delete(path);
+
+        for(Map.Entry<K, V> entry : values.entrySet()){
+            String key = keySerializer.serialize(entry.getKey());
+            String value = valueSerializer.serialize(entry.getValue());
+
+            set(path + "." + key, value);
+        }
     }
 }

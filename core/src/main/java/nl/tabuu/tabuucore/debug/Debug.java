@@ -5,12 +5,11 @@ import org.bukkit.Bukkit;
 public class Debug {
 
     public static void log(Object object){
-        int length = Thread.currentThread().getStackTrace().length;
-        StackTraceElement element = Thread.currentThread().getStackTrace()[2];
-
-        String prefix = "[" + element.getFileName() + ":" + element.getLineNumber() +"]";
-
-        Bukkit.broadcastMessage(prefix + " " + object);
+        Bukkit.broadcastMessage(getPrefix() + object.toString());
     }
 
+    private static String getPrefix(){
+        StackTraceElement element = Thread.currentThread().getStackTrace()[3];
+        return String.format("[%s:%s] ", element.getFileName(), element.getLineNumber());
+    }
 }
