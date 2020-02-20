@@ -20,12 +20,19 @@ public class ItemList extends ArrayList<ItemStack>{
             add(stack);
     }
 
+    /**
+     * Re-stacks all items of this list using {@link #stackAll(Collection this)}
+     */
     public void squash(){
         ItemList clone = this.clone();
         this.clear();
         this.stackAll(clone);
     }
 
+    /**
+     * Returns the product of all {@link ItemStack#getAmount()}.
+     * @return
+     */
     public int itemCount(){
         int count = 0;
         for(ItemStack itemStack : this)
@@ -81,6 +88,11 @@ public class ItemList extends ArrayList<ItemStack>{
         return null;
     }
 
+    /**
+     * Stacks all provided items with {@link #stack(ItemStack itemStack)}
+     * @param stacks ItemStacks to be stacked.
+     * @return Self.
+     */
     public ItemList stackAll(ItemStack... stacks){
         ItemList itemList = new ItemList();
         for (ItemStack stack : stacks)
@@ -88,10 +100,20 @@ public class ItemList extends ArrayList<ItemStack>{
         return itemList;
     }
 
+    /**
+     * Stacks all provided items with {@link #stack(ItemStack itemStack)}
+     * @param stacks ItemStacks to be stacked.
+     * @return Self.
+     */
     public ItemList stackAll(Collection<ItemStack> stacks){
         return stackAll(stacks.stream().toArray(ItemStack[]::new));
     }
 
+    /**
+     * Removes ItemStacks for which {@link ItemStack#isSimilar(ItemStack providedItemStack)} is true. The maximum amount of items to be removed is the specified ItemStacks {@link ItemStack#getAmount()}.
+     * @param stack The ItemStack to be removed.
+     * @return The residue of the ItemStack that could not have been removed.
+     */
     public ItemStack remove(ItemStack stack){
         if(stack == null || stack.getType().equals(Material.AIR))
             return null;
@@ -121,6 +143,11 @@ public class ItemList extends ArrayList<ItemStack>{
         return itemToRemove;
     }
 
+    /**
+     * Removes all provided items with {@link #stack(ItemStack itemStack)}
+     * @param stacks ItemStacks to be removed.
+     * @return Self.
+     */
     public ItemList remove(ItemStack... stacks){
         ItemList nonRemovedStacks = new ItemList();
         for(int i = 0; i < stacks.length; i++)
@@ -128,6 +155,11 @@ public class ItemList extends ArrayList<ItemStack>{
         return nonRemovedStacks;
     }
 
+    /**
+     * Removes all provided items with {@link #stack(ItemStack itemStack)}
+     * @param stacks ItemStacks to be removed.
+     * @return Self.
+     */
     public ItemList remove(Collection<ItemStack> stacks){
         return remove(stacks.stream().toArray(ItemStack[]::new));
     }

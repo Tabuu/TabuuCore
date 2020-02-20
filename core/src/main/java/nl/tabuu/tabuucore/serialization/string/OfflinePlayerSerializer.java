@@ -9,7 +9,7 @@ import java.util.UUID;
 public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePlayer> {
     @Override
     public String serialize(OfflinePlayer object) {
-        return object.getName();
+        return object.getUniqueId().toString();
     }
 
     @Override

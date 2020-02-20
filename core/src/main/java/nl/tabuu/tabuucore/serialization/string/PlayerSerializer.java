@@ -3,11 +3,11 @@ package nl.tabuu.tabuucore.serialization.string;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class PlayerSerializer extends OfflinePlayerSerializer {
+public class PlayerSerializer extends AbstractStringSerializer<Player> {
 
     @Override
-    public String serialize(OfflinePlayer object) {
-        return object.getName();
+    public String serialize(Player object) {
+        return object.getUniqueId().toString();
     }
 
     @Override
