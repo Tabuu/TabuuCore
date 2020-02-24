@@ -8,5 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractByteSerializer<T> implements IObjectSerializer<T, byte[]> {
+    @Override
+    public abstract byte[] serialize(T object);
 
+    @Override
+    public abstract T deserialize(byte[] value);
 }

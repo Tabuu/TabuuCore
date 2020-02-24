@@ -1,15 +1,16 @@
 package nl.tabuu.tabuucore.nms.v1_14_R1;
 
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.ItemStack;
-import net.minecraft.server.v1_14_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_14_R1.*;
+import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class NBTTagCompound implements INBTTagCompound {
@@ -64,6 +65,12 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public INBTTagCompound copyRawByteArray(byte[] bytes) {
+        _tagCompound = (net.minecraft.server.v1_14_R1.NBTTagCompound) baseFromByteArray(NBTTagType.COMPOUND, bytes);
+        return this;
+    }
+
+    @Override
     public boolean hasKey(String key) {
         return _tagCompound.hasKey(key);
     }
@@ -78,6 +85,25 @@ public class NBTTagCompound implements INBTTagCompound {
         NBTTagCompound tagCompound = new NBTTagCompound();
         _tagCompound.set(key, tagCompound._tagCompound);
         return tagCompound;
+    }
+
+    @Override
+    public <T> void setList(String key, List<T> list) {
+        if(list.isEmpty())
+            return;
+
+        NBTTagList tagList = new NBTTagList();
+        T sample = list.get(0);
+
+        NBTTagType type = NBTTagType.valueOf(sample.getClass());
+
+        for(T item : list){
+            byte[] bytes = type.toByteArray(item);
+            NBTBase base = baseFromByteArray(type, bytes);
+
+            tagList.add(base);
+        }
+        _tagCompound.set(key, tagList);
     }
 
     @Override
@@ -191,6 +217,20 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public <T> List<T> getList(NBTTagType type, Class<T> clazz, String key) {
+        List<T> list = new ArrayList<>();
+
+        for(NBTBase base : _tagCompound.getList(key, type.ordinal())) {
+            byte[] bytes = baseToByteArray(base);
+            T object = (T) type.fromBytes(bytes);
+
+            list.add(object);
+        }
+
+        return list;
+    }
+
+    @Override
     public String getObjectToString(String key) {
         Object object = _tagCompound.get(key);
         return object == null ? "null" : object.toString();
@@ -214,5 +254,50 @@ public class NBTTagCompound implements INBTTagCompound {
         }
 
         return bytes;
+    }
+
+    @Override
+    public byte[] toRawByteArray() {
+        return baseToByteArray(_tagCompound);
+    }
+
+    protected byte[] baseToByteArray(NBTBase base){
+        try{
+            ByteArrayOutputStream byteOStream = new ByteArrayOutputStream();
+            DataOutputStream dataOStream = new DataOutputStream(byteOStream);
+
+            Method writeMethod = net.minecraft.server.v1_14_R1.NBTTagCompound.class.getDeclaredMethod("write", DataOutput.class);
+            writeMethod.setAccessible(true);
+            writeMethod.invoke(base, dataOStream);
+
+            byte[] bytes = byteOStream.toByteArray();
+            dataOStream.close();
+
+            return bytes;
+        }
+        catch (IOException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignore) { }
+
+        return new byte[0];
+    }
+
+    protected NBTBase baseFromByteArray(NBTTagType type, byte[] bytes){
+        try{
+            ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
+            DataInputStream dataStream = new DataInputStream(byteStream);
+
+            Method createMethod = NBTBase.class.getDeclaredMethod("createTag", byte.class);
+            Method loadMethod = NBTBase.class.getDeclaredMethod("load", DataInput.class, int.class, NBTReadLimiter.class);
+
+            createMethod.setAccessible(true);
+            loadMethod.setAccessible(true);
+
+            NBTBase base = (NBTBase) createMethod.invoke(null, (byte) type.ordinal());
+            loadMethod.invoke(base, dataStream, 0, NBTReadLimiter.a);
+
+            return base;
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignore) { }
+
+        return null;
     }
 }

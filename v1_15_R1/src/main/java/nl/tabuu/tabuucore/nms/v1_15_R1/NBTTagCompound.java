@@ -1,15 +1,14 @@
 package nl.tabuu.tabuucore.nms.v1_15_R1;
 
-import net.minecraft.server.v1_15_R1.Entity;
-import net.minecraft.server.v1_15_R1.ItemStack;
-import net.minecraft.server.v1_15_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_15_R1.*;
+import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class NBTTagCompound implements INBTTagCompound {
@@ -64,6 +63,12 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public INBTTagCompound copyRawByteArray(byte[] bytes) {
+        _tagCompound = (net.minecraft.server.v1_15_R1.NBTTagCompound) baseFromByteArray(NBTTagType.COMPOUND, bytes);
+        return this;
+    }
+
+    @Override
     public boolean hasKey(String key) {
         return _tagCompound.hasKey(key);
     }
@@ -83,6 +88,25 @@ public class NBTTagCompound implements INBTTagCompound {
     @Override
     public void setTagCompound(String key, INBTTagCompound value) {
         _tagCompound.set(key, ((NBTTagCompound) value)._tagCompound);
+    }
+
+    @Override
+    public <T> void setList(String key, List<T> list) {
+        if(list.isEmpty())
+            return;
+
+        NBTTagList tagList = new NBTTagList();
+        T sample = list.get(0);
+
+        NBTTagType type = NBTTagType.valueOf(sample.getClass());
+
+        for(T item : list){
+            byte[] bytes = type.toByteArray(item);
+            NBTBase base = baseFromByteArray(type, bytes);
+
+            tagList.b(0, base);
+        }
+        _tagCompound.set(key, tagList);
     }
 
     @Override
@@ -191,6 +215,20 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public <T> List<T> getList(NBTTagType type, Class<T> clazz, String key) {
+        List<T> list = new ArrayList<>();
+
+        for(NBTBase base : _tagCompound.getList(key, type.ordinal())){
+            byte[] bytes = baseToByteArray(base);
+            T object = (T) type.fromBytes(bytes);
+
+            list.add(object);
+        }
+
+        return list;
+    }
+
+    @Override
     public String getObjectToString(String key) {
         Object object = _tagCompound.get(key);
         return object == null ? "null" : object.toString();
@@ -209,10 +247,38 @@ public class NBTTagCompound implements INBTTagCompound {
             NBTCompressedStreamTools.a(_tagCompound, outputStream);
             bytes = outputStream.toByteArray();
             outputStream.close();
-        } catch (IOException e) {
-            return bytes;
-        }
+        } catch (IOException ignore) { }
 
         return bytes;
+    }
+
+    @Override
+    public byte[] toRawByteArray() {
+        return baseToByteArray(_tagCompound);
+    }
+
+    protected byte[] baseToByteArray(NBTBase base){
+        byte[] bytes = new byte[0];
+        ByteArrayOutputStream byteOStream = new ByteArrayOutputStream();
+        DataOutputStream dataOStream = new DataOutputStream(byteOStream);
+
+        try {
+            base.write(dataOStream);
+            bytes = byteOStream.toByteArray();
+            dataOStream.close();
+        } catch (IOException ignore) { }
+
+        return bytes;
+    }
+
+    protected NBTBase baseFromByteArray(NBTTagType type, byte[] bytes){
+        ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
+        DataInputStream dataStream = new DataInputStream(byteStream);
+
+        try {
+            return NBTTagTypes.a(type.ordinal()).b(dataStream, 0, NBTReadLimiter.a);
+        } catch (IOException ignore) { }
+
+        return null;
     }
 }
