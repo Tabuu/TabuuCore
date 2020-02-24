@@ -1,9 +1,11 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
+import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,6 +49,13 @@ public interface INBTTagCompound {
     INBTTagCompound copy(byte[] bytes);
 
     /**
+     * Copies the NBTTagCompound from the given raw-bytes to this NBTTagCompound and returns itself.
+     * @param bytes the raw-bytes of the NBTTagCompound.
+     * @return itself.
+     */
+    INBTTagCompound copyRawByteArray(byte[] bytes);
+
+    /**
      * Returns whether or not a value has been set for the given key.
      * @param key key to check for value.
      * @return whether or not a value has been set for the given key.
@@ -67,6 +76,8 @@ public interface INBTTagCompound {
      * @return the new INBTagCompound.
      */
     INBTTagCompound setTagCompound(String key);
+
+    <T> void setList(String key, List<T> list);
 
     /**
      * Sets the specified key to the specified INBTTagCompound.
@@ -155,7 +166,7 @@ public interface INBTTagCompound {
             setBoolean(key, (boolean) value);
         else if(value instanceof Byte)
             setByte(key, (byte) value);
-        else if(value instanceof Byte[])
+        else if(value instanceof byte[])
             setByteArray(key, (byte[]) value);
         else if(value instanceof Double)
             setDouble(key, (double) value);
@@ -163,7 +174,7 @@ public interface INBTTagCompound {
             setFloat(key, (float) value);
         else if(value instanceof Integer)
             setInt(key, (int) value);
-        else if(value instanceof Integer[])
+        else if(value instanceof int[])
             setIntArray(key, (int[]) value);
         else if(value instanceof Long)
             setLong(key, (long) value);
@@ -261,6 +272,12 @@ public interface INBTTagCompound {
      */
     INBTTagCompound getTagCompound(String key);
 
+    <T> List<T> getList(NBTTagType type, Class<T> clazz, String key);
+
+    default <T> List<T> getList(Class<T> clazz, String key){
+        return getList(NBTTagType.valueOf(clazz), clazz, key);
+    }
+
     /**
      * Returns all keys stored in this NBTTagCompound.
      * @return all keys stored in this NBTTagCompound.
@@ -273,6 +290,12 @@ public interface INBTTagCompound {
      * @see #get(byte[])
      */
     byte[] toByteArray();
+
+    /**
+     * Converts this NBTTagCompound to bytes. These bytes cannot be used with {@link #get(byte[])} or {@link #copy(byte[])}, for this you can use {@link #toByteArray()}.
+     * @return this NBTTagCompound's raw bytes.
+     */
+    byte[] toRawByteArray();
 
     /**
      * Returns a new empty NBTTagCompound.
