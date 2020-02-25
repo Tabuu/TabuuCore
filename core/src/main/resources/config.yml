@@ -1,0 +1,10 @@
+# DESCRIPTION:  Settings regarding the dependencies of TabuuCore.
+Dependencies:
+
+  # DESCRIPTION:  Settings regarding the PlaceholderAPI plugin dependency.
+  # DOWNLOAD:     https://www.spigotmc.org/resources/6245/
+  PlaceholderAPI:
+
+    # DESCRIPTION:  Should the PlaceholderAPI functionality be enabled?
+    # FORMAT:       Boolean
+    Enabled: false

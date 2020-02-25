@@ -5,4 +5,5 @@ description: ${project.description}
 author: Tabuu
 authors: [Tabuu]
 website: http://www.tabuu.nl
+softdepend: [PlaceholderAPI, Vault]
 api-version: 1.15

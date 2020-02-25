@@ -43,6 +43,7 @@ public class TabuuCore extends TabuuCorePlugin {
 
         // Registering configuration.
         getConfigurationManager().addConfiguration("lang");
+        getConfigurationManager().addConfiguration("config");
 
         // Inventory user interface related.
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), getInstance());
