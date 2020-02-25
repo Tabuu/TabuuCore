@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.serialization.string;
 public class Serializer {
 
     public static final CharacterSerializer       CHARACTER       = new CharacterSerializer();
+    public static final BooleanSerializer         BOOLEAN         = new BooleanSerializer();
     public static final DoubleSerializer          DOUBLE          = new DoubleSerializer();
     public static final IntegerSerializer         INTEGER         = new IntegerSerializer();
     public static final LocationSerializer        LOCATION        = new LocationSerializer();

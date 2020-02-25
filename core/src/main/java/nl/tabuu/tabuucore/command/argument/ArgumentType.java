@@ -49,6 +49,11 @@ public enum ArgumentType {
     CHARACTER(Serializer.CHARACTER, null),
 
     /**
+     * Represents a {@link Boolean} object-type deserialized by the {@link nl.tabuu.tabuucore.serialization.string.BooleanSerializer} class.
+     */
+    BOOLEAN(Serializer.BOOLEAN, new BooleanArgumentCompleter()),
+
+    /**
      * Represents a {@link org.bukkit.Location} object-type deserialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
      */
     LOCATION(Serializer.LOCATION, new LocationArgumentCompleter()),
