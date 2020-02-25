@@ -11,8 +11,6 @@ import java.util.List;
 public class LocationArgumentCompleter implements IArgumentCompleter {
     @Override
     public List<String> complete(CommandSender sender, String partialArgument) {
-
-
         String completedArgument = "\"world 0 0 0\"";
 
         if(sender instanceof Entity){

@@ -25,7 +25,7 @@ public enum NBTTagType{
 
     SHORT(Short.class, Serializer.SHORT),
 
-    INT(Integer.class, Serializer.INTEGER),
+    INTEGER(Integer.class, Serializer.INTEGER),
 
     LONG(Long.class, Serializer.LONG),
 
@@ -49,7 +49,7 @@ public enum NBTTagType{
     },
 
     STRING(String.class, Serializer.STRING),
-    
+
     /**
      * @deprecated Cannot be used to get a list from a list.
      */
@@ -69,7 +69,7 @@ public enum NBTTagType{
         }
     },
 
-    INT_ARRAY(int[].class, Serializer.INTEGER_ARRAY){
+    INTEGER_ARRAY(int[].class, Serializer.INTEGER_ARRAY){
         @Override
         public byte[] toByteArray(Object object) {
             byte[] data = Serializer.INTEGER_ARRAY.serialize((int[])object);
