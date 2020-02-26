@@ -6,14 +6,12 @@ import nl.tabuu.tabuucore.serialization.string.Serializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * An {@link ArgumentConverter} that converts arguments in the order of the provided String array.
  */
+// TODO: Recode for more readability.
 public class OrderedArgumentConverter extends ArgumentConverter {
 
     private List<ArgumentType> _argumentSequence;
@@ -24,8 +22,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
     }
 
     @Override
-    public List<String> completeArgument(CommandSender sender, String[] arguments) {
-        //TODO: Make the converter function
+    public List<String> completeArgument(CommandSender sender, String... arguments) {
         String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
 
         if(arguments.length <= 0 || (_parameterType == null && _argumentSequence.size() < arguments.length))
@@ -55,8 +52,15 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         return this;
     }
 
+    /**
+     * Converts the provided arguments based on the {@link ArgumentType}s.
+     * If an argument from the {@link #setSequence(ArgumentType...) is missing the optional will be empty.}
+     * @param feedBackReceiver The sender of the arguments.
+     * @param arguments The arguments to be converted/deserialized.
+     * @return A list of all converted arguments, wrapped in an {@link Optional}, if an argument is missing a {@link Optional#empty()} is given.
+     */
     @Override
-    public List<Optional<?>> convertArguments(CommandSender feedBackReceiver, String[] arguments){
+    public List<Optional<?>> convertArguments(CommandSender feedBackReceiver, String... arguments){
         String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
         List<Optional<?>> converted = new ArrayList<>();
 
@@ -74,7 +78,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
                 if(!_local.containsKey(errorMessage))
                     errorMessage = "ERROR_PARSING_UNKNOWN";
                 feedBackReceiver.sendMessage(_local.translate(errorMessage, "{ARG}", convertedArguments[i]));
-                return null;
+                return Collections.emptyList();
             }
         }
 

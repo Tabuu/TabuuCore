@@ -3,7 +3,6 @@ package nl.tabuu.tabuucore.command;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -15,11 +14,10 @@ import org.bukkit.command.defaults.BukkitCommand;
 import java.util.*;
 
 public abstract class Command extends BukkitCommand implements CommandExecutor, TabCompleter {
-
     private Command _parent;
-    private HashMap<String, Command> _subCommandMap;
     private SenderType _requiredSenderType;
     private ArgumentConverter _argumentConverter;
+    private HashMap<String, Command> _subCommandMap;
 
     private Dictionary _local;
 
@@ -28,7 +26,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
     }
 
     protected Command(String name, Command parent) {
-        this(Bukkit.getPluginCommand(name), parent);
+        this(Objects.requireNonNull(Bukkit.getPluginCommand(name)), parent);
     }
 
     protected Command(PluginCommand command){
@@ -45,57 +43,74 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         this.setAliases(command.getAliases());
         command.setTabCompleter(this);
 
-        _parent = parent;
-        _requiredSenderType = null;
-        _subCommandMap = new HashMap<>();
-        _argumentConverter = new OrderedArgumentConverter();
+        setRequiredSenderType(SenderType.ANY);
+        setArgumentConverter(new OrderedArgumentConverter());
 
-        _local = TabuuCore.getInstance().getConfigurationManager().getConfiguration("lang").getDictionary("");
+        _parent = parent;
+        _subCommandMap = new HashMap<>();
+        _local = TabuuCore.getInstance()
+                .getConfigurationManager()
+                .getConfiguration("lang")
+                .getDictionary("");
     }
 
+    /**
+     * Handles the execution of the command.
+     * @param sender The {@link CommandSender} who executed the command.
+     * @param arguments The arguments converted based on the return of {@link #getArgumentConverter()}.
+     * @return The result of the command.
+     */
     protected abstract CommandResult onCommand(CommandSender sender, List<Optional<?>> arguments);
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] arguments) {
-        if(arguments.length > 0 && _subCommandMap.containsKey(arguments[0])){
-            Command command = _subCommandMap.get(arguments[0]);
+        boolean hasArguments = arguments.length > 0;
+        boolean isSubCommandRedirect = hasArguments && _subCommandMap.containsKey(arguments[0]);
+
+        if(isSubCommandRedirect){
+            Command command = getSubCommand(arguments[0]);
             command.execute(sender, label, Arrays.copyOfRange(arguments, 1, arguments.length));
             return true;
         }
 
-        if(_requiredSenderType != null && !_requiredSenderType.getClassType().isInstance(sender)){
-            sender.sendMessage(_local.translate("ERROR_COMMAND_INVALID_SENDER_TYPE", "{TYPE}", _requiredSenderType.name()));
+        boolean isCorrectSenderType = !hasRequiredSenderType() || getRequiredSenderType().getClassType().isInstance(sender);
+        String senderTypeMessage = _local.translate("ERROR_COMMAND_INVALID_SENDER_TYPE",
+                "{TYPE}", getRequiredSenderType().name());
+
+        if(!isCorrectSenderType){
+            sender.sendMessage(senderTypeMessage);
             return true;
         }
 
-        if(getPermission() != null && !getPermission().equals("") && !sender.hasPermission(getPermission())){
-            if(getPermissionMessage() != null && !getPermissionMessage().equals(""))
-                sender.sendMessage(getPermissionMessage());
-            else
-                sender.sendMessage(_local.translate("ERROR_INSUFFICIENT_PERMISSION", "{PERM}", getPermission()));
+        boolean needsPermission = getPermission() != null;
+        boolean hasPermission = !needsPermission || sender.hasPermission(getPermission());
+        String permissionMessage = getPermissionMessage() != null ? getPermissionMessage() :
+                _local.translate("ERROR_INSUFFICIENT_PERMISSION",
+                        "{PERM}", getPermission());
 
+        if(!hasPermission){
+            sender.sendMessage(permissionMessage);
             return true;
         }
 
-        List<Optional<?>> convertedArguments = _argumentConverter.convertArguments(sender, arguments);
+        List<Optional<?>> convertedArguments = getArgumentConverter().convertArguments(sender, arguments);
 
-        if(convertedArguments == null)
+        if(convertedArguments.isEmpty())
             return true;
 
         CommandResult result = onCommand(sender, convertedArguments);
         switch (result){
             case NO_PERMISSION:
-                if(getPermissionMessage() != null && !getPermission().equals(""))
-                    sender.sendMessage(getPermissionMessage());
-                else
-                    sender.sendMessage(_local.translate("ERROR_INSUFFICIENT_PERMISSION", "{PERM}", getPermission()));
-            case SUCCESS:
+                sender.sendMessage(permissionMessage);
                 return true;
 
             case WRONG_SYNTAX:
-                if(getUsage() != null && !getUsage().equals(""))
-                    sender.sendMessage(getUsage());
+                sender.sendMessage(getUsage());
                 return true;
+
+            case SUCCESS:
+                return true;
+
             default:
                 return false;
         }
@@ -106,32 +121,55 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         return execute(sender, bukkitCommand.getLabel(), arguments);
     }
 
+    /**
+     * Returns a list of suggestions for the argument that is being typed.
+     * @param arguments A list of arguments in front of the partial argument.
+     * @param partial The partial argument.
+     * @param sender The sender of the suggest request.
+     * @param suggestions Suggestions generated by TabuuCore.
+     * @return A list of suggestions for the partial argument.
+     */
+    protected List<String> onTabSuggest(CommandSender sender, List<String> arguments, String partial, List<String> suggestions){
+        return suggestions;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command bukkitCommand, String label, String[] arguments) {
-        if(arguments.length > 1 && _subCommandMap.containsKey(arguments[0])){
-            Command command = _subCommandMap.get(arguments[0]);
-            return command.onTabComplete(sender, bukkitCommand, label,Arrays.copyOfRange(arguments, 1, arguments.length));
-        }
-        else if(arguments.length < 1)
+        boolean hasPartialArgument = arguments.length > 0;
+        boolean hasWholeArgument = arguments.length > 1;
+
+        if(!hasPartialArgument)
             return Collections.emptyList();
 
-        List<String> completedArguments = new ArrayList<>();
+        boolean isSubCommandRedirect = hasWholeArgument && _subCommandMap.containsKey(arguments[0]);
 
-        String lastArgument = arguments[arguments.length - 1];
+        if(isSubCommandRedirect){
+            Command command = getSubCommand(arguments[0]);
+            return command.onTabComplete(sender, bukkitCommand, label, Arrays.copyOfRange(arguments, 1, arguments.length));
+        }
 
-        if(arguments.length == 1)
-            completedArguments.addAll(_subCommandMap.keySet());
-        completedArguments.addAll(_argumentConverter.completeArgument(sender, arguments));
+        boolean isSubCommandComplete = arguments.length == 1;
+        List<String> suggestions = new ArrayList<>();
+        List<String> previousArguments = Arrays.asList(Arrays.copyOfRange(arguments, 0, arguments.length - 1));
+        String currentArgument = arguments[arguments.length - 1];
 
-        completedArguments.removeIf(string -> !string.toLowerCase().startsWith(lastArgument.toLowerCase()));
-        Collections.sort(completedArguments);
+        if(isSubCommandComplete)
+            suggestions.addAll(_subCommandMap.keySet());
 
-        return completedArguments;
+        suggestions.addAll(_argumentConverter.completeArgument(sender, arguments));
+
+        suggestions = onTabSuggest(sender, previousArguments, currentArgument, suggestions);
+
+        suggestions.removeIf(string -> !string.toLowerCase().startsWith(currentArgument.toLowerCase()));
+        Collections.sort(suggestions);
+
+        return suggestions;
     }
 
     /**
      * Sets the {@link ArgumentConverter}.
      * @param converter The {@link ArgumentConverter} to be set.
+     * @see OrderedArgumentConverter
      */
     protected void setArgumentConverter(ArgumentConverter converter){
         _argumentConverter = converter;
@@ -146,19 +184,19 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
     }
 
     /**
-     * Returns true if the command is limited to a specific {@link SenderType}.
-     * @return true if the command is limited to a specific {@link SenderType}.
+     * Returns true if the command is limited to a specific {@link SenderType} (any SenderType but {@link SenderType#ANY}).
+     * @return true if the command is limited to a specific {@link SenderType} (any SenderType but {@link SenderType#ANY}).
      */
     protected boolean hasRequiredSenderType(){
-        return _requiredSenderType != null;
+        return !getRequiredSenderType().equals(SenderType.ANY);
     }
 
     /**
-     * Limits the command to a specified {@link SenderType}. Use null for no {@link SenderType} limitations.
-     * @param type The type the command is limited to. Or null for no limitations.
+     * Limits the command to a specified {@link SenderType}. Use {@link SenderType#ANY} for no {@link SenderType} limitations.
+     * @param type The type the command is limited to. Or {@link SenderType#ANY} for no limitations.
      */
     protected void setRequiredSenderType(SenderType type){
-        _requiredSenderType = type;
+        _requiredSenderType = type == null ? SenderType.ANY : type;
     }
 
     /**
@@ -166,7 +204,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
      * @return the required {@link SenderType} for this command, or null if none.
      */
     protected SenderType getRequiredSenderType(){
-        return _requiredSenderType;
+        return _requiredSenderType == null ? SenderType.ANY : _requiredSenderType;
     }
 
     /**

@@ -16,7 +16,12 @@ public enum SenderType {
     /**
      * Represents a {@link ConsoleCommandSender} type.
      */
-    CONSOLE(ConsoleCommandSender.class);
+    CONSOLE(ConsoleCommandSender.class),
+
+    /**
+     * Represents any sender type.
+     */
+    ANY(CommandSender.class);
 
     private Class _classType;
 
