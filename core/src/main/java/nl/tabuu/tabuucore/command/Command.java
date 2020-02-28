@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.command;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -94,11 +95,8 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         }
 
         List<Optional<?>> convertedArguments = getArgumentConverter().convertArguments(sender, arguments);
-
-        if(convertedArguments.isEmpty())
-            return true;
-
         CommandResult result = onCommand(sender, convertedArguments);
+
         switch (result){
             case NO_PERMISSION:
                 sender.sendMessage(permissionMessage);
