@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.configuration.file;
 
 import nl.tabuu.tabuucore.configuration.IConfiguration;
+import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -31,6 +32,8 @@ public class YamlConfiguration extends org.bukkit.configuration.file.YamlConfigu
 
     @Override
     public void delete(String path) {
+        if(path.isEmpty())
+            throw new IllegalArgumentException("Cannot set to an empty path!");
         super.set(path, null);
     }
 
