@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.configuration;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.serialization.string.AbstractStringSerializer;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.Dictionary;
@@ -239,12 +240,14 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     }
 
     default <K, V> void setMap(Class<K> keyClass, Class<V> valueClass, AbstractStringSerializer<K> keySerializer, AbstractStringSerializer<V> valueSerializer, String path, Map<K, V> values){
+        if(path.isEmpty())
+            throw new IllegalArgumentException("Cannot set to an empty path!");
+
         delete(path);
 
         for(Map.Entry<K, V> entry : values.entrySet()){
             String key = keySerializer.serialize(entry.getKey());
             String value = valueSerializer.serialize(entry.getValue());
-
             set(path + "." + key, value);
         }
     }
