@@ -146,12 +146,12 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
             return command.onTabComplete(sender, bukkitCommand, label, Arrays.copyOfRange(arguments, 1, arguments.length));
         }
 
-        boolean isSubCommandComplete = arguments.length == 1;
+        boolean isFirstArgument = arguments.length == 1;
         List<String> suggestions = new ArrayList<>();
         List<String> previousArguments = Arrays.asList(Arrays.copyOfRange(arguments, 0, arguments.length - 1));
         String currentArgument = arguments[arguments.length - 1];
 
-        if(isSubCommandComplete)
+        if(isFirstArgument)
             suggestions.addAll(_subCommandMap.keySet());
 
         suggestions.addAll(_argumentConverter.completeArgument(sender, arguments));
