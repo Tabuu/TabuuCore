@@ -29,9 +29,12 @@ public abstract class InventoryUI extends InventoryCanvas {
         _title = title;
         _size = size;
         _blockedActions = new ArrayList<>();
-        _reloading = false;
+        _reloading = true;
         createInventory();
-        Bukkit.getScheduler().runTask(TabuuCore.getInstance(), this::draw);
+        Bukkit.getScheduler().runTask(TabuuCore.getInstance(), ()->{
+            this.draw();
+            _reloading = false;
+        });
     }
 
     public void open(HumanEntity player){
@@ -42,7 +45,7 @@ public abstract class InventoryUI extends InventoryCanvas {
         InventoryView view = player.getOpenInventory();
         Inventory topInventory = view.getTopInventory();
 
-        if(topInventory != null && topInventory.equals(getInventory()))
+        if(topInventory.equals(getInventory()))
             player.closeInventory();
     }
 
@@ -80,14 +83,6 @@ public abstract class InventoryUI extends InventoryCanvas {
         }
 
         TabuuCore.getInstance().getInventoryUIManager().register(this);
-    }
-
-    /**
-     * @deprecated Spelling error.
-     */
-    @Deprecated
-    public void setTile(String title){
-        setTitle(title);
     }
 
     public void setTitle(String title){
@@ -146,7 +141,7 @@ public abstract class InventoryUI extends InventoryCanvas {
 
     @Override
     public void onClose(Player player){
-        if(player.getItemOnCursor() != null && !player.getItemOnCursor().getType().equals(Material.AIR)){
+        if(!player.getItemOnCursor().getType().equals(Material.AIR)){
             player.getWorld().dropItemNaturally(player.getLocation(), player.getItemOnCursor());
             player.setItemOnCursor(null);
         }
