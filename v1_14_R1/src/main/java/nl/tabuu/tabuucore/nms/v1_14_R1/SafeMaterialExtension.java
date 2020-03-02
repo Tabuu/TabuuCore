@@ -35,5 +35,4 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
         Material bukkitMaterial = Material.valueOf(material.name());
         return new ItemStack(bukkitMaterial);
     }
-
 }
