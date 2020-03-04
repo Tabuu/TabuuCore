@@ -324,7 +324,7 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
             case TNT_MINECART:
                 return new ItemStack(Material.EXPLOSIVE_MINECART);
             case FURNACE_MINECART:
-                return new ItemStack(Material.BURNING_FURNACE);
+                return new ItemStack(Material.POWERED_MINECART);
             case COMMAND_BLOCK_MINECART:
                 return new ItemStack(Material.COMMAND_MINECART);
             case CHEST_MINECART:
