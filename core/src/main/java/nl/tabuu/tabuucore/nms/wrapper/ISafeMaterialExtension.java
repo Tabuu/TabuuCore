@@ -8,11 +8,18 @@ import org.bukkit.inventory.ItemStack;
 public interface ISafeMaterialExtension {
 
     /**
-     * Converts a {@link SafeMaterial} to an {@link ItemStack}
+     * Converts a {@link SafeMaterial} to an {@link ItemStack}.
      * @param material the {@link SafeMaterial} to be converted.
-     * @return an {@link ItemStack} based on a {@link SafeMaterial}.
+     * @return an item based on a {@link SafeMaterial}.
      */
     ItemStack toItemStack(SafeMaterial material);
+
+    /**
+     * Converts an {@link ItemStack} to a {@link SafeMaterial}.
+     * @param item the item to be converted.
+     * @return a material based on an {@link ItemStack}.
+     */
+    SafeMaterial fromItemStack(ItemStack item);
 
     /**
      * Returns the SafeMaterialExtension wrapper class of the server NMS version.
@@ -25,8 +32,8 @@ public interface ISafeMaterialExtension {
             else
                 return (ISafeMaterialExtension) NMSUtil.getWrapperClass("SafeMaterialExtension").getConstructor().newInstance();
         }
-        catch (Exception ignored) {}
-
-        return null;
+        catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
+        }
     }
 }

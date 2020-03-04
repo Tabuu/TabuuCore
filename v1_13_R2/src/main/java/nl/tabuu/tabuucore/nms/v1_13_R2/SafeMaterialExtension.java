@@ -13,4 +13,12 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
         return new ItemStack(bukkitMaterial);
     }
 
+    @Override
+    public SafeMaterial fromItemStack(ItemStack item) {
+        try {
+            return SafeMaterial.valueOf(item.getType().name());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Could not find material.");
+        }
+    }
 }

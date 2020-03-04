@@ -34,7 +34,8 @@ public class NMSUtil {
             return Class.forName("nl.tabuu.tabuucore.nms." + version.name() + "." + className);
         }
         catch (ClassNotFoundException e) {
-            throw new UnsupportedOperationException("Class with name '" + className + "' was not found for your NMS version!");
+            throw new IllegalArgumentException(
+                    String.format("Class with name %s was not found for NMS version '%s'!", className, version.name()));
         }
     }
 
@@ -45,7 +46,13 @@ public class NMSUtil {
      * @see nl.tabuu.tabuucore.nms.wrapper
      */
     public static Class<?> getWrapperClass(String className){
-        return getWrapperClass(className, getVersion());
+        try {
+            return getWrapperClass(className, getVersion());
+        }
+        catch (IllegalArgumentException e) {
+            throw new UnsupportedOperationException(
+                    String.format("Class with name %s was not found for NMS version '%s'!", className, getVersion().name()));
+        }
     }
 
     /**

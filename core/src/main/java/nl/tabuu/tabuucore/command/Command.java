@@ -85,9 +85,10 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
 
         boolean needsPermission = getPermission() != null;
         boolean hasPermission = !needsPermission || sender.hasPermission(getPermission());
+        String permissionNode = needsPermission ? getPermission() : "null";
         String permissionMessage = getPermissionMessage() != null ? getPermissionMessage() :
                 _local.translate("ERROR_INSUFFICIENT_PERMISSION",
-                        "{PERM}", getPermission());
+                        "{PERM}", permissionNode);
 
         if(!hasPermission){
             sender.sendMessage(permissionMessage);

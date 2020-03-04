@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * An enum of all material IDs that can be safely used across NMS version supported by TabuuCore.
+ *
  * @see NMSVersion#isSupported()
  */
 public enum SafeMaterial {
@@ -144,7 +145,9 @@ public enum SafeMaterial {
     BUBBLE_CORAL_WALL_FAN,
     BUCKET,
     CACTUS,
-    /** @deprecated Changed to {@link #GREEN_DYE} in 1.14*/
+    /**
+     * @deprecated Changed to {@link #GREEN_DYE} in 1.14
+     */
     @Deprecated
     CACTUS_GREEN,
     CAKE,
@@ -235,7 +238,9 @@ public enum SafeMaterial {
     CYAN_WOOL,
     DAMAGED_ANVIL,
     DANDELION,
-    /** @deprecated Changed to {@link #YELLOW_DYE} in 1.14*/
+    /**
+     * @deprecated Changed to {@link #YELLOW_DYE} in 1.14
+     */
     @Deprecated
     DANDELION_YELLOW,
     DARK_OAK_BOAT,
@@ -800,7 +805,9 @@ public enum SafeMaterial {
     REPEATER,
     REPEATING_COMMAND_BLOCK,
     ROSE_BUSH,
-    /** @deprecated Changed to {@link #RED_DYE} in 1.14*/
+    /**
+     * @deprecated Changed to {@link #RED_DYE} in 1.14
+     */
     @Deprecated
     ROSE_RED,
     ROTTEN_FLESH,
@@ -824,7 +831,9 @@ public enum SafeMaterial {
     SHULKER_BOX,
     SHULKER_SHELL,
     SHULKER_SPAWN_EGG,
-    /** @deprecated Changed to {@link #OAK_SIGN} in 1.14*/
+    /**
+     * @deprecated Changed to {@link #OAK_SIGN} in 1.14
+     */
     @Deprecated
     SIGN,
     SILVERFISH_SPAWN_EGG,
@@ -943,7 +952,9 @@ public enum SafeMaterial {
     VINDICATOR_SPAWN_EGG,
     VINE,
     VOID_AIR,
-    /** @deprecated Changed to {@link #OAK_WALL_SIGN} in 1.14*/
+    /**
+     * @deprecated Changed to {@link #OAK_WALL_SIGN} in 1.14
+     */
     @Deprecated
     WALL_SIGN,
     WALL_TORCH,
@@ -1000,7 +1011,19 @@ public enum SafeMaterial {
     ZOMBIE_VILLAGER_SPAWN_EGG,
     ZOMBIE_WALL_HEAD;
 
-    public ItemStack toItemStack(){
-        return ISafeMaterialExtension.get().toItemStack(this).clone();
+    public ItemStack toItemStack() {
+        try {
+            return ISafeMaterialExtension.get().toItemStack(this).clone();
+        } catch (IllegalArgumentException exception) {
+            throw new UnsupportedOperationException(exception.getMessage());
+        }
+    }
+
+    public static SafeMaterial fromItemStack(ItemStack item) {
+        try {
+            return ISafeMaterialExtension.get().fromItemStack(item);
+        } catch (IllegalArgumentException exception) {
+            throw new IllegalArgumentException(exception.getMessage());
+        }
     }
 }

@@ -27,9 +27,9 @@ public interface ITicksPerSecond {
         try {
             return (ITicksPerSecond) NMSUtil.getWrapperClass("TicksPerSecond").getConstructor().newInstance();
         }
-        catch (Exception ignored) {}
-
-        return null;
+        catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
+        }
     }
 
     /**
