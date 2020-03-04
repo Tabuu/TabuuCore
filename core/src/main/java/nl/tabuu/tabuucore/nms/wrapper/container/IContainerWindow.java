@@ -31,8 +31,9 @@ public interface IContainerWindow {
             return (T) constructor.newInstance(player);
 
             // return (T) NMSUtil.getWrapperClass("container." + className).getConstructor(Player.class).newInstance(player);
-        } catch (Exception ignored) { ignored.printStackTrace();}
-
-        return null;
+        }
+        catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
+        }
     }
 }

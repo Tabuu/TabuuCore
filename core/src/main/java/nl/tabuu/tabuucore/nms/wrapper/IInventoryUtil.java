@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Represents a util class for NMS inventory methods. Be warned, these methods can crash the server if not used properly.
  */
@@ -58,8 +60,8 @@ public interface IInventoryUtil {
     static IInventoryUtil get(){
         try {
             return (IInventoryUtil) NMSUtil.getWrapperClass("InventoryUtil").getConstructor().newInstance();
-        } catch (Exception ignored) { }
-
-        return null;
+        } catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
+        }
     }
 }

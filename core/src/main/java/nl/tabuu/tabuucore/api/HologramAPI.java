@@ -40,7 +40,7 @@ public class HologramAPI {
             return hologram;
         }
         catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Could not create wrapper class!");
         }
     }
 

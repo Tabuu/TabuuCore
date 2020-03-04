@@ -49,8 +49,8 @@ public interface ITitleUtil {
         try {
             return (ITitleUtil) NMSUtil.getWrapperClass("TitleUtil").getConstructor().newInstance();
         }
-        catch (ReflectiveOperationException ignored) {
-            throw new UnsupportedOperationException();
+        catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
         }
     }
 }

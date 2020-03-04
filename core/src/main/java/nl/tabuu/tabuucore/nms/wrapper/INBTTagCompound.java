@@ -305,9 +305,9 @@ public interface INBTTagCompound {
         try {
             return (INBTTagCompound) NMSUtil.getWrapperClass("NBTTagCompound").getConstructor().newInstance();
         }
-        catch (Exception ignored) {}
-
-        return null;
+        catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!");
+        }
     }
 
     /**

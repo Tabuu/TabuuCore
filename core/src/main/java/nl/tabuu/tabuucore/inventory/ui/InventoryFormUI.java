@@ -54,9 +54,9 @@ public abstract class InventoryFormUI extends InventoryUI {
         Element element = _elements.get(position);
 
         if(element instanceof StylableElement){
-            StylableElement stylable = (StylableElement) element;
-            stylable.updateStyle();
-            setItemAt(position, stylable.getDisplayItem());
+            StylableElement styleable = (StylableElement) element;
+            styleable.updateStyle();
+            setItemAt(position, styleable.getDisplayItem());
         }
     }
 
