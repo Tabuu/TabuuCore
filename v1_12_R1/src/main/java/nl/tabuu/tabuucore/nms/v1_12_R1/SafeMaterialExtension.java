@@ -11,7 +11,6 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
 
     @Override
     public ItemStack toItemStack(SafeMaterial material) {
-
         // Try translating material with custom dictionary.
         switch (material) {
             //region Building Blocks
@@ -764,11 +763,11 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
 
         for (SafeMaterial material : SafeMaterial.values()) {
             try {
-                if (item.isSimilar(material.toItemStack())) return material;
-            } catch (UnsupportedOperationException ignore) {
-                continue;
-            }
+                if (item.isSimilar(material.toItemStack()))
+                    return material;
+            } catch (UnsupportedOperationException ignore) { }
         }
+
         throw new IllegalArgumentException("Could not find material.");
     }
 

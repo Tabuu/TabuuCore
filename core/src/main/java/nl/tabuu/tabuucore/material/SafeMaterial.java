@@ -24,6 +24,10 @@ public enum SafeMaterial {
     ACACIA_SLAB,
     ACACIA_STAIRS,
     ACACIA_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     ACACIA_WALL_SIGN,
     ACACIA_WOOD,
     ACTIVATOR_RAIL,
@@ -37,11 +41,23 @@ public enum SafeMaterial {
     APPLE,
     ARMOR_STAND,
     ARROW,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     ATTACHED_MELON_STEM,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     ATTACHED_PUMPKIN_STEM,
     AZURE_BLUET,
     BAKED_POTATO,
     BAMBOO,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BAMBOO_SAPLING,
     BARREL,
     BARRIER,
@@ -52,6 +68,10 @@ public enum SafeMaterial {
     BEE_SPAWN_EGG,
     BEEF,
     BEEHIVE,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BEETROOT,
     BEETROOT_SEEDS,
     BEETROOT_SOUP,
@@ -71,6 +91,10 @@ public enum SafeMaterial {
     BIRCH_SLAB,
     BIRCH_STAIRS,
     BIRCH_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BIRCH_WALL_SIGN,
     BIRCH_WOOD,
     BLACK_BANNER,
@@ -84,6 +108,10 @@ public enum SafeMaterial {
     BLACK_STAINED_GLASS,
     BLACK_STAINED_GLASS_PANE,
     BLACK_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BLACK_WALL_BANNER,
     BLACK_WOOL,
     BLAST_FURNACE,
@@ -115,6 +143,10 @@ public enum SafeMaterial {
     BRAIN_CORAL,
     BRAIN_CORAL_BLOCK,
     BRAIN_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BRAIN_CORAL_WALL_FAN,
     BREAD,
     BREWING_STAND,
@@ -142,6 +174,10 @@ public enum SafeMaterial {
     BUBBLE_CORAL,
     BUBBLE_CORAL_BLOCK,
     BUBBLE_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     BUBBLE_CORAL_WALL_FAN,
     BUCKET,
     CACTUS,
@@ -217,6 +253,10 @@ public enum SafeMaterial {
     CREEPER_BANNER_PATTERN,
     CREEPER_HEAD,
     CREEPER_SPAWN_EGG,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     CREEPER_WALL_HEAD,
     CROSSBOW,
     CUT_RED_SANDSTONE,
@@ -234,6 +274,10 @@ public enum SafeMaterial {
     CYAN_STAINED_GLASS,
     CYAN_STAINED_GLASS_PANE,
     CYAN_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     CYAN_WALL_BANNER,
     CYAN_WOOL,
     DAMAGED_ANVIL,
@@ -257,6 +301,10 @@ public enum SafeMaterial {
     DARK_OAK_SLAB,
     DARK_OAK_STAIRS,
     DARK_OAK_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DARK_OAK_WALL_SIGN,
     DARK_OAK_WOOD,
     DARK_PRISMARINE,
@@ -266,23 +314,43 @@ public enum SafeMaterial {
     DEAD_BRAIN_CORAL,
     DEAD_BRAIN_CORAL_BLOCK,
     DEAD_BRAIN_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DEAD_BRAIN_CORAL_WALL_FAN,
     DEAD_BUBBLE_CORAL,
     DEAD_BUBBLE_CORAL_BLOCK,
     DEAD_BUBBLE_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DEAD_BUBBLE_CORAL_WALL_FAN,
     DEAD_BUSH,
     DEAD_FIRE_CORAL,
     DEAD_FIRE_CORAL_BLOCK,
     DEAD_FIRE_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DEAD_FIRE_CORAL_WALL_FAN,
     DEAD_HORN_CORAL,
     DEAD_HORN_CORAL_BLOCK,
     DEAD_HORN_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DEAD_HORN_CORAL_WALL_FAN,
     DEAD_TUBE_CORAL,
     DEAD_TUBE_CORAL_BLOCK,
     DEAD_TUBE_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DEAD_TUBE_CORAL_WALL_FAN,
     DEBUG_STICK,
     DETECTOR_RAIL,
@@ -310,6 +378,10 @@ public enum SafeMaterial {
     DRAGON_BREATH,
     DRAGON_EGG,
     DRAGON_HEAD,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     DRAGON_WALL_HEAD,
     DRIED_KELP,
     DRIED_KELP_BLOCK,
@@ -351,6 +423,10 @@ public enum SafeMaterial {
     FIRE_CORAL,
     FIRE_CORAL_BLOCK,
     FIRE_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     FIRE_CORAL_WALL_FAN,
     FIREWORK_ROCKET,
     FIREWORK_STAR,
@@ -438,6 +514,10 @@ public enum SafeMaterial {
     HORN_CORAL,
     HORN_CORAL_BLOCK,
     HORN_CORAL_FAN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     HORN_CORAL_WALL_FAN,
     HORSE_SPAWN_EGG,
     HUSK_SPAWN_EGG,
@@ -484,9 +564,17 @@ public enum SafeMaterial {
     JUNGLE_SLAB,
     JUNGLE_STAIRS,
     JUNGLE_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     JUNGLE_WALL_SIGN,
     JUNGLE_WOOD,
     KELP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     KELP_PLANT,
     KNOWLEDGE_BOOK,
     LADDER,
@@ -495,6 +583,10 @@ public enum SafeMaterial {
     LAPIS_LAZULI,
     LAPIS_ORE,
     LARGE_FERN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     LAVA,
     LAVA_BUCKET,
     LEAD,
@@ -517,6 +609,10 @@ public enum SafeMaterial {
     LIGHT_BLUE_STAINED_GLASS,
     LIGHT_BLUE_STAINED_GLASS_PANE,
     LIGHT_BLUE_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     LIGHT_BLUE_WALL_BANNER,
     LIGHT_BLUE_WOOL,
     LIGHT_GRAY_BANNER,
@@ -530,6 +626,10 @@ public enum SafeMaterial {
     LIGHT_GRAY_STAINED_GLASS,
     LIGHT_GRAY_STAINED_GLASS_PANE,
     LIGHT_GRAY_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     LIGHT_GRAY_WALL_BANNER,
     LIGHT_GRAY_WOOL,
     LIGHT_WEIGHTED_PRESSURE_PLATE,
@@ -547,6 +647,10 @@ public enum SafeMaterial {
     LIME_STAINED_GLASS,
     LIME_STAINED_GLASS_PANE,
     LIME_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     LIME_WALL_BANNER,
     LIME_WOOL,
     LINGERING_POTION,
@@ -563,6 +667,10 @@ public enum SafeMaterial {
     MAGENTA_STAINED_GLASS,
     MAGENTA_STAINED_GLASS_PANE,
     MAGENTA_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     MAGENTA_WALL_BANNER,
     MAGENTA_WOOL,
     MAGMA_BLOCK,
@@ -572,6 +680,10 @@ public enum SafeMaterial {
     MELON,
     MELON_SEEDS,
     MELON_SLICE,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     MELON_STEM,
     MILK_BUCKET,
     MINECART,
@@ -585,8 +697,16 @@ public enum SafeMaterial {
     MOSSY_STONE_BRICK_STAIRS,
     MOSSY_STONE_BRICK_WALL,
     MOSSY_STONE_BRICKS,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     MOVING_PISTON,
     MULE_SPAWN_EGG,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     MUSHROOM_STEM,
     MUSHROOM_STEW,
     MUSIC_DISC_11,
@@ -632,6 +752,10 @@ public enum SafeMaterial {
     OAK_SLAB,
     OAK_STAIRS,
     OAK_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     OAK_WALL_SIGN,
     OAK_WOOD,
     OBSERVER,
@@ -649,6 +773,10 @@ public enum SafeMaterial {
     ORANGE_STAINED_GLASS_PANE,
     ORANGE_TERRACOTTA,
     ORANGE_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     ORANGE_WALL_BANNER,
     ORANGE_WOOL,
     OXEYE_DAISY,
@@ -675,11 +803,27 @@ public enum SafeMaterial {
     PINK_STAINED_GLASS_PANE,
     PINK_TERRACOTTA,
     PINK_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PINK_WALL_BANNER,
     PINK_WOOL,
     PISTON,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PISTON_HEAD,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PLAYER_HEAD,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PLAYER_WALL_HEAD,
     PODZOL,
     POISONOUS_POTATO,
@@ -696,33 +840,137 @@ public enum SafeMaterial {
     POPPED_CHORUS_FRUIT,
     POPPY,
     PORKCHOP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTATO,
     POTATOES,
     POTION,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_ACACIA_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_ALLIUM,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_AZURE_BLUET,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_BAMBOO,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_BIRCH_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_BLUE_ORCHID,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_BROWN_MUSHROOM,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_CACTUS,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_CORNFLOWER,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_DANDELION,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_DARK_OAK_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_DEAD_BUSH,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_FERN,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_JUNGLE_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_LILY_OF_THE_VALLEY,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_OAK_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_ORANGE_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_OXEYE_DAISY,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_PINK_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_POPPY,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_RED_MUSHROOM,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_RED_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_SPRUCE_SAPLING,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_WHITE_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     POTTED_WITHER_ROSE,
     POWERED_RAIL,
     PRISMARINE,
@@ -740,6 +988,10 @@ public enum SafeMaterial {
     PUMPKIN,
     PUMPKIN_PIE,
     PUMPKIN_SEEDS,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PUMPKIN_STEM,
     PURPLE_BANNER,
     PURPLE_BED,
@@ -752,6 +1004,10 @@ public enum SafeMaterial {
     PURPLE_STAINED_GLASS,
     PURPLE_STAINED_GLASS_PANE,
     PURPLE_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     PURPLE_WALL_BANNER,
     PURPLE_WOOL,
     PURPUR_BLOCK,
@@ -800,6 +1056,10 @@ public enum SafeMaterial {
     REDSTONE_LAMP,
     REDSTONE_ORE,
     REDSTONE_TORCH,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     REDSTONE_WALL_TORCH,
     REDSTONE_WIRE,
     REPEATER,
@@ -882,6 +1142,10 @@ public enum SafeMaterial {
     SPRUCE_SLAB,
     SPRUCE_STAIRS,
     SPRUCE_TRAPDOOR,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     SPRUCE_WALL_SIGN,
     SPRUCE_WOOD,
     SQUID_SPAWN_EGG,
@@ -976,12 +1240,20 @@ public enum SafeMaterial {
     WHITE_STAINED_GLASS_PANE,
     WHITE_TERRACOTTA,
     WHITE_TULIP,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     WHITE_WALL_BANNER,
     WHITE_WOOL,
     WITCH_SPAWN_EGG,
     WITHER_ROSE,
     WITHER_SKELETON_SKULL,
     WITHER_SKELETON_SPAWN_EGG,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     WITHER_SKELETON_WALL_SKULL,
     WOLF_SPAWN_EGG,
     WOODEN_AXE,
@@ -1002,6 +1274,10 @@ public enum SafeMaterial {
     YELLOW_STAINED_GLASS,
     YELLOW_STAINED_GLASS_PANE,
     YELLOW_TERRACOTTA,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     YELLOW_WALL_BANNER,
     YELLOW_WOOL,
     ZOMBIE_HEAD,
@@ -1009,6 +1285,10 @@ public enum SafeMaterial {
     ZOMBIE_PIGMAN_SPAWN_EGG,
     ZOMBIE_SPAWN_EGG,
     ZOMBIE_VILLAGER_SPAWN_EGG,
+    /**
+     * @deprecated Not an item.
+     */
+    @Deprecated
     ZOMBIE_WALL_HEAD;
 
     public ItemStack toItemStack() {
