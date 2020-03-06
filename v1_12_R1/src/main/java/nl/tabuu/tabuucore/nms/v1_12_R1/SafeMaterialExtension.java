@@ -759,7 +759,7 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
     @Override
     public SafeMaterial fromItemStack(ItemStack item) {
         if (item.hasItemMeta() && !(item.getItemMeta() instanceof SpawnEggMeta))
-            item = stripItemMeta(item);
+            item = new ItemStack(item.getType(), 1, (byte) item.getDurability());;
 
         for (SafeMaterial material : SafeMaterial.values()) {
             try {
@@ -769,10 +769,6 @@ public class SafeMaterialExtension implements ISafeMaterialExtension {
         }
 
         throw new IllegalArgumentException("Could not find material.");
-    }
-
-    private ItemStack stripItemMeta(ItemStack item) {
-        return new ItemStack(item.getType(), 1, (byte) item.getDurability());
     }
 
     private byte getColorData(SafeMaterial material) {
