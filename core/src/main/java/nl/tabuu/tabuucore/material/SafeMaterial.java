@@ -2,6 +2,7 @@ package nl.tabuu.tabuucore.material;
 
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.nms.wrapper.ISafeMaterialExtension;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -1302,6 +1303,14 @@ public enum SafeMaterial {
     public static SafeMaterial fromItemStack(ItemStack item) {
         try {
             return ISafeMaterialExtension.get().fromItemStack(item);
+        } catch (IllegalArgumentException exception) {
+            throw new IllegalArgumentException(exception.getMessage());
+        }
+    }
+
+    public static SafeMaterial fromMaterial(Material material) {
+        try {
+            return ISafeMaterialExtension.get().fromMaterial(material);
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException(exception.getMessage());
         }
