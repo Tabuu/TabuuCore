@@ -3,7 +3,7 @@ version: ${project.version}
 main: nl.tabuu.tabuucore.TabuuCore
 description: ${project.description}
 author: Tabuu
-authors: [Tabuu]
+authors: [Tabuu, CryptoMorin]
 website: http://www.tabuu.nl
 softdepend: [PlaceholderAPI, Vault]
 api-version: 1.15

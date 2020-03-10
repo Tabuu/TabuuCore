@@ -5,6 +5,9 @@
       <element id="module-output" name="distribution" />
       <element id="module-output" name="core" />
       <element id="module-output" name="v1_8_R3" />
+      <element id="library" level="project" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" />
+      <element id="library" level="project" name="Maven: junit:junit:4.10" />
+      <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.1" />
     </root>
   </artifact>
 </component>
