@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.nms;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.Bukkit;
 
 public class NMSUtil {

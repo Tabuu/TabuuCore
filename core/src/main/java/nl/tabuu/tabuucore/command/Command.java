@@ -4,6 +4,7 @@ import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
 import nl.tabuu.tabuucore.debug.Debug;
+import nl.tabuu.tabuucore.util.BukkitUtils;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -66,7 +67,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
     @Override
     public boolean execute(CommandSender sender, String label, String[] arguments) {
         boolean hasArguments = arguments.length > 0;
-        boolean isSubCommandRedirect = hasArguments && _subCommandMap.containsKey(arguments[0]);
+        boolean isSubCommandRedirect = (hasArguments && _subCommandMap.containsKey(arguments[0]));
 
         if(isSubCommandRedirect){
             Command command = getSubCommand(arguments[0]);

@@ -71,14 +71,13 @@ public class OrderedArgumentConverter extends ArgumentConverter {
             ArgumentType type = _argumentSequence.get(i);
             Optional<?> value = convertArgument(convertedArguments[i], type);
 
-            if(value.isPresent())
-                converted.add(value);
-            else{
+            converted.add(value);
+
+            if(!value.isPresent()) {
                 String errorMessage = "ERROR_PARSING_" + type.name();
                 if(!_local.containsKey(errorMessage))
                     errorMessage = "ERROR_PARSING_UNKNOWN";
                 feedBackReceiver.sendMessage(_local.translate(errorMessage, "{ARG}", convertedArguments[i]));
-                return Collections.emptyList();
             }
         }
 

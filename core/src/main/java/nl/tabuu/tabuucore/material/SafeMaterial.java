@@ -1,15 +1,15 @@
 package nl.tabuu.tabuucore.material;
 
 import nl.tabuu.tabuucore.nms.NMSVersion;
-import nl.tabuu.tabuucore.nms.wrapper.ISafeMaterialExtension;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * An enum of all material IDs that can be safely used across NMS version supported by TabuuCore.
- *
+ * @deprecated In favor of XMaterials
  * @see NMSVersion#isSupported()
  */
+@Deprecated
 public enum SafeMaterial {
     ACACIA_BOAT,
     ACACIA_BUTTON,
@@ -1293,26 +1293,14 @@ public enum SafeMaterial {
     ZOMBIE_WALL_HEAD;
 
     public ItemStack toItemStack() {
-        try {
-            return ISafeMaterialExtension.get().toItemStack(this).clone();
-        } catch (IllegalArgumentException exception) {
-            throw new UnsupportedOperationException(exception.getMessage());
-        }
+        return XMaterial.valueOf(this.name()).parseItem();
     }
 
     public static SafeMaterial fromItemStack(ItemStack item) {
-        try {
-            return ISafeMaterialExtension.get().fromItemStack(item);
-        } catch (IllegalArgumentException exception) {
-            throw new IllegalArgumentException(exception.getMessage());
-        }
+        return SafeMaterial.valueOf(XMaterial.matchXMaterial(item).name());
     }
 
     public static SafeMaterial fromMaterial(Material material) {
-        try {
-            return ISafeMaterialExtension.get().fromMaterial(material);
-        } catch (IllegalArgumentException exception) {
-            throw new IllegalArgumentException(exception.getMessage());
-        }
+        return SafeMaterial.valueOf(XMaterial.matchXMaterial(material).name());
     }
 }

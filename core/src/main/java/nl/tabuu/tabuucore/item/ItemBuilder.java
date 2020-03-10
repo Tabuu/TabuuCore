@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.item;
 
 import nl.tabuu.tabuucore.material.SafeMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -43,6 +44,14 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder(SafeMaterial material) {
 		this(material.toItemStack());
+	}
+
+	/**
+	 * Creates the ItemBuilder based on a {@link XMaterial}, the item amount will be set to 1.
+	 * @param material the {@link XMaterial}
+	 */
+	public ItemBuilder(XMaterial material) {
+		this(material.parseItem());
 	}
 
 	/**
