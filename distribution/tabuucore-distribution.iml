@@ -10,15 +10,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="core" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-core:2020.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.bukkit:craftbukkit:1.15.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="module" module-name="v1_8_R3" />
-    <orderEntry type="module" module-name="v1_12_R1" />
-    <orderEntry type="module" module-name="v1_13_R2" />
-    <orderEntry type="module" module-name="v1_14_R1" />
-    <orderEntry type="module" module-name="v1_15_R1" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-nms_1_8_R3:2020.2.1" level="project" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-nms_1_12_R1:2020.2.1" level="project" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-nms_1_13_R2:2020.2.1" level="project" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-nms_1_14_R1:2020.2.1" level="project" />
+    <orderEntry type="library" name="Maven: nl.tabuu:tabuucore-nms_1_15_R1:2020.2.1" level="project" />
   </component>
 </module>
