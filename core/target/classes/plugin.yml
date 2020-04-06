@@ -1,9 +1,9 @@
 name: TabuuCore
-version: 2020.2.1
+version: 2020.3.0
 main: nl.tabuu.tabuucore.TabuuCore
 description: Tabuu's core plugin.
 author: Tabuu
 authors: [Tabuu, CryptoMorin]
 website: http://www.tabuu.nl
 softdepend: [PlaceholderAPI, Vault]
-api-version: 1.15
+api-version: 1.13

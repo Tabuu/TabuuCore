@@ -72,9 +72,12 @@ public abstract class InventoryUI extends InventoryCanvas {
     private void createInventory(){
         switch (_size){
 
-            case HOPPER:
+            case ONE_BY_FIVE:
                 _inventory = Bukkit.createInventory(null, InventoryType.HOPPER, _title);
                 break;
+
+            case THREE_BY_THREE:
+                _inventory = Bukkit.createInventory(null, InventoryType.DROPPER, _title);
 
             default:
                 _inventory = Bukkit.createInventory(null, _size.getSize(), _title);
@@ -112,6 +115,10 @@ public abstract class InventoryUI extends InventoryCanvas {
 
     public void removeBlockedAction(InventoryAction... actions){
         _blockedActions.removeAll(Arrays.asList(actions));
+    }
+
+    public InventorySize getSize() {
+        return _size;
     }
 
     @Override

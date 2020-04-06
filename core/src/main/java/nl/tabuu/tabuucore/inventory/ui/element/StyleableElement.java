@@ -3,12 +3,12 @@ package nl.tabuu.tabuucore.inventory.ui.element;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class StylableElement<S extends Style> extends Element {
+public abstract class StyleableElement<S extends Style> extends Element {
 
     private S _style;
     private ItemStack _currentDisplayItem;
 
-    public StylableElement(S style){
+    public StyleableElement(S style){
         _style = style;
         _currentDisplayItem = _style.getEnabled();
     }

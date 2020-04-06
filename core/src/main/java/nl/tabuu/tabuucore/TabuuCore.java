@@ -55,14 +55,6 @@ public class TabuuCore extends TabuuCorePlugin {
         // Metrics.
         new Metrics(this);
 
-        // Message for conflicting API versions.
-        if(version.isPostOrEquals(NMSVersion.v1_13_R1)) {
-            String apiVersion = getDescription().getAPIVersion();
-            if (!version.getSpigotAPIVersion().equals(apiVersion)) {
-                getInstance().getLogger().severe("The API version of this TabuuCore file has been set to: " + apiVersion + ", while your server is running: " + version.name());
-                getInstance().getLogger().severe("Please download a version specific TabuuCore file, or edit the plugin.yml file inside the TabuuCore plugin jar (only if you have a multi version copy of TabuuCore).");
-            }
-        }
         getInstance().getLogger().info("TabuuCore enabled.");
     }
 
