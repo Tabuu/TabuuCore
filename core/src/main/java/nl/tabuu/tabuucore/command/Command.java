@@ -206,9 +206,9 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
     }
 
     /**
-     * Returns the required {@link SenderType} for this command, or null if none.
+     * Returns the required {@link SenderType} for this command.
      *
-     * @return the required {@link SenderType} for this command, or null if none.
+     * @return the required {@link SenderType} for this command.
      */
     protected SenderType getRequiredSenderType() {
         return _requiredSenderType == null ? SenderType.ANY : _requiredSenderType;

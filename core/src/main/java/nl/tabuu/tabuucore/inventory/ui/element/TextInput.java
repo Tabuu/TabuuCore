@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.BiConsumer;
 
-public class TextInput extends StylableElement<TextInputStyle> implements IClickable, IValuable<String>{
+public class TextInput extends StyleableElement<TextInputStyle> implements IClickable, IValuable<String>{
 
     private String _value;
     private BiConsumer<Player, String> _consumer;

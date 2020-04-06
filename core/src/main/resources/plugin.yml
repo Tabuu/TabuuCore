@@ -6,4 +6,4 @@ author: Tabuu
 authors: [Tabuu, CryptoMorin]
 website: http://www.tabuu.nl
 softdepend: [PlaceholderAPI, Vault]
-api-version: 1.15
+api-version: 1.13

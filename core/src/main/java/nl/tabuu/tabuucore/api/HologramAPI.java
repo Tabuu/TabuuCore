@@ -6,7 +6,6 @@ import org.bukkit.Location;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,57 +16,60 @@ public class HologramAPI {
     private List<IHologram> _holograms;
     private Constructor<?> _hologramConstructor;
 
-    protected HologramAPI(){
+    protected HologramAPI() {
         _holograms = new ArrayList<>();
 
         try {
             _hologramConstructor = NMSUtil.getWrapperClass("Hologram").getConstructor(Location.class, String[].class);
         } catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Could not find wrapper class!", e);
         }
     }
 
     /**
      * Creates a new hologram, not visible until shown.
+     *
      * @param location the location the hologram should be in.
-     * @param lines the text lines of the hologram.
+     * @param lines    the text lines of the hologram.
      * @return the created hologram.
      */
-    public IHologram create(Location location, String... lines){
+    public IHologram create(Location location, String... lines) {
         try {
-            IHologram hologram =  (IHologram) _hologramConstructor.newInstance(location, lines);
+            IHologram hologram = (IHologram) _hologramConstructor.newInstance(location, lines);
             _holograms.add(hologram);
             return hologram;
-        }
-        catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException("Could not create wrapper class!");
+        } catch (ReflectiveOperationException e) {
+            throw new UnsupportedOperationException("Could not create wrapper class!", e);
         }
     }
 
     /**
-     * Purges the destroyed holograms and returns an unmodifiable collection of all active holograms.
-     * @return an unmodifiable collection of all active holograms.
+     * Returns a list of all active holograms.
+     *
+     * @return a list of all active holograms.
      */
-    public Collection<IHologram> getHolograms(){
+    public List<IHologram> getHolograms() {
         _holograms.removeIf(IHologram::isDestroyed);
-        return Collections.unmodifiableCollection(_holograms);
+        return Collections.unmodifiableList(_holograms);
     }
 
     /**
      * Destroys the specified hologram.
+     *
      * @param hologram hologram to destroy.
      */
-    public void destroy(IHologram hologram){
+    public void destroy(IHologram hologram) {
         hologram.destroy();
         _holograms.remove(hologram);
     }
 
     /**
      * Returns the HologramAPI instance.
+     *
      * @return the HologramAPI instance.
      */
-    public static HologramAPI getInstance(){
-        if(INSTANCE == null)
+    public static HologramAPI getInstance() {
+        if (INSTANCE == null)
             INSTANCE = new HologramAPI();
 
         return INSTANCE;

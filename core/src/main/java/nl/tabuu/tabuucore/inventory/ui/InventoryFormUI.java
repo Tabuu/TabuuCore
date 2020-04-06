@@ -3,10 +3,8 @@ package nl.tabuu.tabuucore.inventory.ui;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Element;
 import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
-import nl.tabuu.tabuucore.inventory.ui.element.StylableElement;
-import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
+import nl.tabuu.tabuucore.inventory.ui.element.StyleableElement;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 
@@ -28,7 +26,7 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void onClickUI(Player player, InventoryUIClick click) {
         click.setCanceled(true);
 
-        Vector2f position = InventoryCanvas.slotToVector(click.getSlot());
+        Vector2f position = getSize().slotToVector(click.getSlot());
         Element element = _elements.get(position);
 
         if(element instanceof IClickable && element.isEnabled()){
@@ -53,8 +51,8 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void updateElement(Vector2f position){
         Element element = _elements.get(position);
 
-        if(element instanceof StylableElement){
-            StylableElement styleable = (StylableElement) element;
+        if(element instanceof StyleableElement){
+            StyleableElement styleable = (StyleableElement) element;
             styleable.updateStyle();
             setItemAt(position, styleable.getDisplayItem());
         }

@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -21,14 +22,53 @@ public interface IHologram {
     /**
      * Hides this hologram for the specified player.
      * @param player the player this hologram will be hidden from.
+     * @deprecated deprecated in favor of {@link #removePlayer(OfflinePlayer player)}
      */
-    void hide(Player player);
+    @Deprecated /*6th of april 2020*/
+    default void hide(Player player) {
+        removePlayer(player);
+    }
+
+    /**
+     * Un-subscribes a player from this hologram, making it no longer visible to that player.
+     * @param player the player that will be un-subscribed from the hologram.
+     */
+    void removePlayer(OfflinePlayer player);
+
+    /**
+     * Un-subscribes all players from this hologram, making it no longer visible.
+     */
+    default void removeAll() {
+        getPlayers().forEach(this::removePlayer);
+    }
 
     /**
      * Shows this hologram to the specified player.
      * @param player the player this hologram will be showed to.
+     * @deprecated deprecated in favor of {@link #addPlayer(OfflinePlayer player)}
      */
-    void show(Player player);
+    @Deprecated /*6th of april 2020*/
+    default void show(Player player) {
+        addPlayer(player);
+    }
+
+    /**
+     * Subscribes a player to this hologram, making it visible to that player.
+     * @param player the player that will be subscribed to the hologram.
+     */
+    void addPlayer(OfflinePlayer player);
+
+    /**
+     * Set if the hologram is visible to its subscribers.
+     * @param visible visible status.
+     */
+    void setVisible(boolean visible);
+
+    /**
+     * Checks if the hologram is visible to its subscribers.
+     * @return true if the hologram is visible to its subscribers, else false.
+     */
+    boolean isVisible();
 
     /**
      * Sets the lines of the hologram.
@@ -58,6 +98,16 @@ public interface IHologram {
      * Returns whether or not this hologram is visible to the specified player.
      * @param player the player to check.
      * @return whether or not this hologram is visible to the specified player.
+     * @deprecated in favor of {@link #getPlayers()}
      */
-    boolean isVisible(Player player);
+    @Deprecated /*6th of april 2020*/
+    default boolean isVisible(Player player) {
+        return getPlayers().contains(player);
+    }
+
+    /**
+     * Returns a list of players that are subscribed to this hologram.
+     * @return A list of players that are subscribed to this hologram.
+     */
+    List<OfflinePlayer> getPlayers();
 }

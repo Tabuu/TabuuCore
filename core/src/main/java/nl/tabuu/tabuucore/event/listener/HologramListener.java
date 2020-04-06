@@ -10,16 +10,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class HologramListener implements Listener {
     private HologramAPI _api;
 
-    public HologramListener(){
+    public HologramListener() {
         _api = HologramAPI.getInstance();
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        for(IHologram hologram : _api.getHolograms()){
-            if(hologram.isVisible(player))
+        for (IHologram hologram : _api.getHolograms()) {
+            if (hologram.getPlayers().contains(player))
                 hologram.show(player);
         }
     }

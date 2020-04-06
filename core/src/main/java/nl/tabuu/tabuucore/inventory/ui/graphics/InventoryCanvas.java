@@ -23,12 +23,6 @@ public abstract class InventoryCanvas implements IInventoryUI {
     }
 
     protected void drawLine(Vector2f from, Vector2f to) {
-//        if(from.length() > to.length()){
-//            Vector2f t = new Vector2f(0, 0).copy(to);
-//            to = from;
-//            from = t;
-//        }
-
         Vector2f delta = to.subtract(from);
 
         double deltaError = Math.abs(delta.getY() / delta.getX());
@@ -85,10 +79,12 @@ public abstract class InventoryCanvas implements IInventoryUI {
         setItemAt(position, brush.get(position));
     }
 
+    @Deprecated
     public static int vectorToSlot(Vector2f vector){
         return (vector.getIntY() * 9) + vector.getIntX();
     }
 
+    @Deprecated
     public static Vector2f slotToVector(int slot){
         return new Vector2f(slot % 9, (float) Math.floor(slot / 9f));
     }

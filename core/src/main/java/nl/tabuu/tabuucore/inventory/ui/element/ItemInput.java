@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.function.BiConsumer;
 
-public class ItemInput extends StylableElement<Style> implements IClickable, IValuable<ItemStack> {
+public class ItemInput extends StyleableElement<Style> implements IClickable, IValuable<ItemStack> {
 
     private ItemStack _value;
     private boolean _clone;

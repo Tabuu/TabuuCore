@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.BiConsumer;
 
-public abstract class ToggleableElement extends StylableElement<ToggleableStyle> implements IClickable, IValuable<Boolean> {
+public abstract class ToggleableElement extends StyleableElement<ToggleableStyle> implements IClickable, IValuable<Boolean> {
 
     private boolean _value;
     private BiConsumer<Player, Boolean> _consumer;

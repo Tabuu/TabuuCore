@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element.style;
 
+import nl.tabuu.tabuucore.material.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -7,28 +8,44 @@ public class Style {
 
     private ItemStack _enabled, _disabled;
 
-    public Style(Material enabled, Material disabled){
-        this(new ItemStack(enabled), new ItemStack(disabled));
-    }
-
-    public Style(ItemStack enabled, ItemStack disabled){
+    public Style(ItemStack enabled, ItemStack disabled) {
         _enabled = enabled;
         _disabled = disabled;
     }
 
-    public ItemStack getEnabled(){
+    public Style(ItemStack display) {
+        this(display, display);
+    }
+
+    public Style(Material enabled, Material disabled) {
+        this(new ItemStack(enabled), new ItemStack(disabled));
+    }
+
+    public Style(Material display) {
+        this(display, display);
+    }
+
+    public Style(XMaterial enabled, XMaterial disabled) {
+        this(enabled.parseItem(), disabled.parseItem());
+    }
+
+    public Style(XMaterial display) {
+        this(display, display);
+    }
+
+    public ItemStack getEnabled() {
         return _enabled;
     }
 
-    public void setEnabled(ItemStack itemStack){
+    public void setEnabled(ItemStack itemStack) {
         _enabled = itemStack;
     }
 
-    public ItemStack getDisabled(){
+    public ItemStack getDisabled() {
         return _disabled;
     }
 
-    public void setDisabled(ItemStack itemStack){
+    public void setDisabled(ItemStack itemStack) {
         _disabled = itemStack;
     }
 }
