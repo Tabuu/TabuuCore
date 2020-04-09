@@ -5,7 +5,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public interface IInventoryUI {
-
     void onDragUI(Player player, InventoryUIDrag drag);
     void onDrag(Player player, InventoryUIDrag drag);
 
@@ -17,5 +16,4 @@ public interface IInventoryUI {
 
     void setInventory(Inventory inventory);
     Inventory getInventory();
-
 }

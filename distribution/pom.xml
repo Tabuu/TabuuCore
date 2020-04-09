@@ -12,7 +12,7 @@
     <parent>
         <artifactId>tabuucore-parent</artifactId>
         <groupId>nl.tabuu</groupId>
-        <version>2020.4.0</version>
+        <version>2020.4.1-pre</version>
     </parent>
 
     <build>

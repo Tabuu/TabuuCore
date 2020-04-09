@@ -89,6 +89,16 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     }
 
     /**
+     * Sets a {@link Location} to the specified path. Serialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
+     *
+     * @param path  The path to set the {@link Location} to.
+     * @param value The {@link Location} to set.
+     */
+    default void set(String path, Location value) {
+        set(path, Serializer.LOCATION.serialize(value));
+    }
+
+    /**
      * Returns a {@link Location} from the specified path. Deserialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
      *
      * @param path The path to get the {@link Location} from.
@@ -100,15 +110,153 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     }
 
     /**
-     * Sets a {@link Location} to the specified path. Serialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
+     * Returns an enum from the specified path.
      *
-     * @param path  The path to set the {@link Location} to.
-     * @param value The {@link Location} to set.
+     * @param enumClass The enum's class.
+     * @param path      The path to get the enum from.
+     * @param <T>       The enum's class.
+     * @return An enum from the specified path.
      */
-    default void set(String path, Location value) {
-        set(path, Serializer.LOCATION.serialize(value));
+    default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path) {
+        return get(path, (string) -> Enum.valueOf(enumClass, path));
     }
 
+    /**
+     * Sets an enum to the specified path.
+     *
+     * @param path  The path to set the enum to.
+     * @param value The enum to set.
+     */
+    default void set(String path, Enum value) {
+        set(path, value.name());
+    }
+
+    /**
+     * Returns an enum list from the specified path.
+     *
+     * @param enumClass The enum's class.
+     * @param path      The path to get the enum list from.
+     * @param <T>       The enum's class.
+     * @return An enum list from the specified path.
+     */
+    default <T extends Enum<T>> List<T> getEnumList(Class<T> enumClass, String path) {
+        return getList(path, (string) -> Enum.valueOf(enumClass, string));
+    }
+
+    /**
+     * Sets an enum list to the specified path.
+     *
+     * @param path   The path to set the enum list to.
+     * @param values The enum list to set.
+     */
+    default <T extends Enum<T>> void setEnumList(String path, List<T> values) {
+        setList(path, values, Enum::name);
+    }
+
+    /**
+     * Returns a {@link Dictionary} from the specified path.
+     *
+     * @param path The path to get the {@link Dictionary} from.
+     * @return A {@link Dictionary} from the specified path.
+     */
+    default Dictionary getDictionary(String path) {
+        Dictionary dictionary = new Dictionary();
+        getMap(path).forEach(dictionary::put);
+
+        return dictionary;
+    }
+
+    /**
+     * Returns a {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
+     *
+     * @param path The path to get the {@link Map} from.
+     * @return A {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
+     */
+    default Map<String, String> getMap(String path) {
+        return getMap(path, Serializer.STRING);
+    }
+
+    /**
+     * Returns the same as {@link #getMap(String map)}, but converts the value with a (de)serializer.
+     *
+     * @param valueDeserializer The deserializer to deserialize the value from string.
+     * @param path              The path to get the {@link Map} from.
+     * @param <V>               The type to convert the value to.
+     * @return The same as {@link #getMap(String map)}, but converts the value with a deserializer.
+     */
+    default <V> Map<String, V> getMap(String path, IObjectDeserializer<String, V> valueDeserializer) {
+        return getMap(path, Serializer.STRING, valueDeserializer);
+    }
+
+    /**
+     * Returns the same as {@link #getMap(String path)} and {@link #getMap(String, IObjectDeserializer)}, but converts the key with a deserializer.
+     *
+     * @param keyDeserializer   The deserializer to deserialize the key from string.
+     * @param valueDeserializer The deserializer to deserialize the value from string.
+     * @param path              The path to get the {@link Map} from.
+     * @param <K>               The type to convert the key to.
+     * @param <V>               The type to convert the value to.
+     * @return The same as {@link #getMap(String path)} and {@link #getMap(Class valueClass, AbstractStringSerializer valueSerializer, String path)}, but converts the key with a (de)serializer.
+     */
+    default <K, V> Map<K, V> getMap(String path, IObjectDeserializer<String, K> keyDeserializer, IObjectDeserializer<String, V> valueDeserializer) {
+        HashMap<K, V> map = new HashMap<>();
+        ConfigurationSection section = getConfigurationSection(path);
+
+        if (section == null) return map;
+        Set<String> keys = section.getKeys(false);
+
+        for (String key : keys) {
+            String value = getString(path + "." + key);
+            map.put(keyDeserializer.deserialize(key), valueDeserializer.deserialize(value));
+        }
+        return map;
+    }
+
+    /**
+     * Sets a map to the specified path, and uses the serializers to convert the key and value.
+     *
+     * @param path Path to set the map to.
+     */
+    default void setMap(String path, Map<String, String> values) {
+        setMap(path, values, Serializer.STRING);
+    }
+
+    /**
+     * Sets a map to the specified path, and uses the serializers to convert the key and value.
+     *
+     * @param path            Path to set the map to.
+     * @param map             Map to be set to the path.
+     * @param valueSerializer Serializer used to serialize the value.
+     * @param <V>             Type of the value.
+     */
+    default <V> void setMap(String path, Map<String, V> map, IObjectSerializer<V, String> valueSerializer) {
+        setMap(path, map, Serializer.STRING, valueSerializer);
+    }
+
+    /**
+     * Sets a map to the specified path, and uses the serializers to convert the key and value.
+     *
+     * @param path            Path to set the map to.
+     * @param map             Map to be set to the path.
+     * @param keySerializer   Serializer used to serialize the key.
+     * @param valueSerializer Serializer used to serialize the value.
+     * @param <K>             Type of the key.
+     * @param <V>             Type of the value.
+     */
+    default <K, V> void setMap(String path, Map<K, V> map, IObjectSerializer<K, String> keySerializer, IObjectSerializer<V, String> valueSerializer) {
+        if (path.isEmpty())
+            throw new IllegalArgumentException("Cannot set to an empty path!");
+
+        delete(path);
+
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            String key = keySerializer.serialize(entry.getKey());
+            String value = valueSerializer.serialize(entry.getValue());
+            set(path + "." + key, value);
+        }
+    }
+
+    // region Deprecated
     /**
      * Returns a {@link Location} list from the specified path. Deserialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
      *
@@ -190,50 +338,6 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     }
 
     /**
-     * Returns an enum from the specified path.
-     *
-     * @param enumClass The enum's class.
-     * @param path      The path to get the enum from.
-     * @param <T>       The enum's class.
-     * @return An enum from the specified path.
-     */
-    default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path) {
-        return get(path, (string) -> Enum.valueOf(enumClass, path));
-    }
-
-    /**
-     * Sets an enum to the specified path.
-     *
-     * @param path  The path to set the enum to.
-     * @param value The enum to set.
-     */
-    default void set(String path, Enum value) {
-        set(path, value.name());
-    }
-
-    /**
-     * Returns an enum list from the specified path.
-     *
-     * @param enumClass The enum's class.
-     * @param path      The path to get the enum list from.
-     * @param <T>       The enum's class.
-     * @return An enum list from the specified path.
-     */
-    default <T extends Enum<T>> List<T> getEnumList(Class<T> enumClass, String path) {
-        return getList(path, (string) -> Enum.valueOf(enumClass, string));
-    }
-
-    /**
-     * Sets an enum list to the specified path.
-     *
-     * @param path   The path to set the enum list to.
-     * @param values The enum list to set.
-     */
-    default <T extends Enum<T>> void setEnumList(String path, List<T> values) {
-        setList(path, values, Enum::name);
-    }
-
-    /**
      * Returns a {@link Long} from the specified path. Deserialized by the {@link nl.tabuu.tabuucore.serialization.string.TimeSerializer} class.
      *
      * @param path The path to get the {@link Long} from.
@@ -255,41 +359,6 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     @Deprecated /*6th of april 2020*/
     default void setTime(String path, Long value) {
         set(path, Serializer.TIME.serialize(value));
-    }
-
-    /**
-     * Returns a {@link Dictionary} from the specified path.
-     *
-     * @param path The path to get the {@link Dictionary} from.
-     * @return A {@link Dictionary} from the specified path.
-     */
-    default Dictionary getDictionary(String path) {
-        Dictionary dictionary = new Dictionary();
-        getMap(path).forEach(dictionary::put);
-
-        return dictionary;
-    }
-
-    /**
-     * Returns a {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
-     *
-     * @param path The path to get the {@link Map} from.
-     * @return A {@link Map} containing the keys and values, in string format, of a {@link ConfigurationSection} at the specified path.
-     */
-    default Map<String, String> getMap(String path) {
-        return getMap(path, Serializer.STRING);
-    }
-
-    /**
-     * Returns the same as {@link #getMap(String map)}, but converts the value with a (de)serializer.
-     *
-     * @param valueDeserializer The deserializer to deserialize the value from string.
-     * @param path              The path to get the {@link Map} from.
-     * @param <V>               The type to convert the value to.
-     * @return The same as {@link #getMap(String map)}, but converts the value with a deserializer.
-     */
-    default <V> Map<String, V> getMap(String path, IObjectDeserializer<String, V> valueDeserializer) {
-        return getMap(path, Serializer.STRING, valueDeserializer);
     }
 
     /**
@@ -326,56 +395,11 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     }
 
     /**
-     * Returns the same as {@link #getMap(String path)} and {@link #getMap(String, IObjectDeserializer)}, but converts the key with a deserializer.
-     *
-     * @param keyDeserializer   The deserializer to deserialize the key from string.
-     * @param valueDeserializer The deserializer to deserialize the value from string.
-     * @param path              The path to get the {@link Map} from.
-     * @param <K>               The type to convert the key to.
-     * @param <V>               The type to convert the value to.
-     * @return The same as {@link #getMap(String path)} and {@link #getMap(Class valueClass, AbstractStringSerializer valueSerializer, String path)}, but converts the key with a (de)serializer.
-     */
-    default <K, V> Map<K, V> getMap(String path, IObjectDeserializer<String, K> keyDeserializer, IObjectDeserializer<String, V> valueDeserializer) {
-        HashMap<K, V> map = new HashMap<>();
-        ConfigurationSection section = getConfigurationSection(path);
-
-        if (section == null) return map;
-        Set<String> keys = section.getKeys(false);
-
-        for (String key : keys) {
-            String value = getString(path + "." + key);
-            map.put(keyDeserializer.deserialize(key), valueDeserializer.deserialize(value));
-        }
-        return map;
-    }
-
-    /**
-     * Sets a map to the specified path, and uses the serializers to convert the key and value.
-     *
-     * @param path Path to set the map to.
-     */
-    default void setMap(String path, Map<String, String> values) {
-        setMap(path, values, Serializer.STRING);
-    }
-
-    /**
      * @deprecated Deprecated in favor of {@link #setMap(String, Map, IObjectSerializer)}
      */
     @Deprecated
     default <V> void setMap(Class<V> valueClass, AbstractStringSerializer<V> valueSerializer, String path, Map<String, V> values) {
         setMap(String.class, valueClass, Serializer.STRING, valueSerializer, path, values);
-    }
-
-    /**
-     * Sets a map to the specified path, and uses the serializers to convert the key and value.
-     *
-     * @param path            Path to set the map to.
-     * @param map             Map to be set to the path.
-     * @param valueSerializer Serializer used to serialize the value.
-     * @param <V>             Type of the value.
-     */
-    default <V> void setMap(String path, Map<String, V> map, IObjectSerializer<V, String> valueSerializer) {
-        setMap(path, map, Serializer.STRING, valueSerializer);
     }
 
     /**
@@ -385,27 +409,5 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     default <K, V> void setMap(Class<K> keyClass, Class<V> valueClass, AbstractStringSerializer<K> keySerializer, AbstractStringSerializer<V> valueSerializer, String path, Map<K, V> values) {
         setMap(path, values, keySerializer, valueSerializer);
     }
-
-    /**
-     * Sets a map to the specified path, and uses the serializers to convert the key and value.
-     *
-     * @param path            Path to set the map to.
-     * @param map             Map to be set to the path.
-     * @param keySerializer   Serializer used to serialize the key.
-     * @param valueSerializer Serializer used to serialize the value.
-     * @param <K>             Type of the key.
-     * @param <V>             Type of the value.
-     */
-    default <K, V> void setMap(String path, Map<K, V> map, IObjectSerializer<K, String> keySerializer, IObjectSerializer<V, String> valueSerializer) {
-        if (path.isEmpty())
-            throw new IllegalArgumentException("Cannot set to an empty path!");
-
-        delete(path);
-
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            String key = keySerializer.serialize(entry.getKey());
-            String value = valueSerializer.serialize(entry.getValue());
-            set(path + "." + key, value);
-        }
-    }
+    // endregion
 }
