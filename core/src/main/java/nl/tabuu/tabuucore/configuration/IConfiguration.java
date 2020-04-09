@@ -118,7 +118,7 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
      * @return An enum from the specified path.
      */
     default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path) {
-        return get(path, (string) -> Enum.valueOf(enumClass, path));
+        return get(path, (string) -> Enum.valueOf(enumClass, string));
     }
 
     /**
