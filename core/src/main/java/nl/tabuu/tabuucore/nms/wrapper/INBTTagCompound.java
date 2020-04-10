@@ -21,7 +21,7 @@ public interface INBTTagCompound {
     ItemStack apply(ItemStack item);
 
     /**
-     * Returns an {@link Entity} with the NBTTagCompound applied.
+     * Returns an {@link Entity} with the NBTTagCompound applied. This does not work for custom NBTTags.
      * @param entity the {@link Entity} the NBTTagCompound will be applied to.
      * @return an {@link Entity} with the NBTTagCompound applied.
      */
