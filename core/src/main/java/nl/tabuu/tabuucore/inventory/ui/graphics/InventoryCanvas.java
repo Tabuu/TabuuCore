@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.graphics;
 
+import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.IInventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.graphics.brush.Brush;
 import nl.tabuu.tabuucore.inventory.ui.graphics.brush.IBrush;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class InventoryCanvas implements IInventoryUI {
 
     private IBrush _currentBrush;
+    private InventorySize _size;
 
     protected InventoryCanvas(){
         _currentBrush = new Brush(Material.AIR);
@@ -72,11 +74,19 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     protected void setItemAt(Vector2f vector, ItemStack item){
         Inventory inventory = getInventory();
-        inventory.setItem(vectorToSlot(vector), item);
+        inventory.setItem(getSize().vectorToSlot(vector), item);
     }
 
     protected void setItemAt(Vector2f position, IBrush brush){
         setItemAt(position, brush.get(position));
+    }
+
+    public InventorySize getSize() {
+        return _size;
+    }
+
+    public void setSize(InventorySize size) {
+        _size = size;
     }
 
     @Deprecated

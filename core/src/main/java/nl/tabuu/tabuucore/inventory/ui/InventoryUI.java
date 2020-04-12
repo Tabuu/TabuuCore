@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.inventory.ui;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
+import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -21,16 +22,16 @@ public abstract class InventoryUI extends InventoryCanvas {
 
     private Inventory _inventory;
     private String _title;
-    private InventorySize _size;
     private List<InventoryAction> _blockedActions;
     private boolean _reloading;
 
     public InventoryUI(String title, InventorySize size){
         _title = title;
-        _size = size;
         _blockedActions = new ArrayList<>();
         _reloading = true;
+        setSize(size);
         createInventory();
+
         Bukkit.getScheduler().runTask(TabuuCore.getInstance(), ()->{
             this.draw();
             _reloading = false;
@@ -57,7 +58,7 @@ public abstract class InventoryUI extends InventoryCanvas {
         _reloading = true;
         List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
-        ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, _size.getSize());
+        ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, getSize().getSize());
         createInventory();
         getInventory().setContents(contents);
 
@@ -70,7 +71,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     private void createInventory(){
-        switch (_size){
+        switch (getSize()){
 
             case ONE_BY_FIVE:
                 _inventory = Bukkit.createInventory(null, InventoryType.HOPPER, _title);
@@ -78,9 +79,10 @@ public abstract class InventoryUI extends InventoryCanvas {
 
             case THREE_BY_THREE:
                 _inventory = Bukkit.createInventory(null, InventoryType.DROPPER, _title);
+                break;
 
             default:
-                _inventory = Bukkit.createInventory(null, _size.getSize(), _title);
+                _inventory = Bukkit.createInventory(null, getSize().getSize(), _title);
                 break;
 
         }
@@ -90,10 +92,6 @@ public abstract class InventoryUI extends InventoryCanvas {
 
     public void setTitle(String title){
         _title = title;
-    }
-
-    public void setSize(InventorySize size){
-        _size = size;
     }
 
     public List<InventoryAction> getBlockedActions(){
@@ -115,10 +113,6 @@ public abstract class InventoryUI extends InventoryCanvas {
 
     public void removeBlockedAction(InventoryAction... actions){
         _blockedActions.removeAll(Arrays.asList(actions));
-    }
-
-    public InventorySize getSize() {
-        return _size;
     }
 
     @Override
