@@ -3,7 +3,6 @@ package nl.tabuu.tabuucore.inventory.ui;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
-import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -70,7 +69,8 @@ public abstract class InventoryUI extends InventoryCanvas {
         return _reloading;
     }
 
-    private void createInventory(){
+    private void createInventory() {
+
         switch (getSize()){
 
             case ONE_BY_FIVE:
