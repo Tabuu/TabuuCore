@@ -266,6 +266,19 @@ public class NBTTagCompound implements INBTTagCompound {
         return baseToByteArray(_tagCompound);
     }
 
+    @Override
+    public String toJson() {
+        return _tagCompound.toString();
+    }
+
+    @Override
+    public String toJson(org.bukkit.inventory.ItemStack item) {
+        item = apply(item);
+        net.minecraft.server.v1_8_R3.NBTTagCompound compound = new net.minecraft.server.v1_8_R3.NBTTagCompound();
+        CraftItemStack.asNMSCopy(item).save(compound);
+        return compound.toString();
+    }
+
     protected byte[] baseToByteArray(NBTBase base){
         try{
             ByteArrayOutputStream byteOStream = new ByteArrayOutputStream();

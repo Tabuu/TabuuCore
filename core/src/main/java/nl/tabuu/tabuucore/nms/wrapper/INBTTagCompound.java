@@ -298,6 +298,19 @@ public interface INBTTagCompound {
     byte[] toRawByteArray();
 
     /**
+     * Converts this NBTTagCompound to a json string.
+     * @return a json string based on this NBTTagCompound.
+     */
+    String toJson();
+
+    /**
+     * Applies the NBTTagCompound before returning its full json string.
+     * @param item The ItemStack to base the json of.
+     * @return a full json string based on the ItemStack and this NBTTagCompound.
+     */
+    String toJson(ItemStack item);
+
+    /**
      * Returns a new empty NBTTagCompound.
      * @return a new empty NBTTagCompound.
      */
