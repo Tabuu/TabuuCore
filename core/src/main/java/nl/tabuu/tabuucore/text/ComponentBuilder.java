@@ -19,6 +19,10 @@ public class ComponentBuilder {
         _components = new Stack<>();
     }
 
+    /**
+     * Creates a ComponentBuilder.
+     * @return The created ComponentBuilder.
+     */
     public static ComponentBuilder create() {
         return new ComponentBuilder();
     }
