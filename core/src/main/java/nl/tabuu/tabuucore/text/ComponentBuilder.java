@@ -28,36 +28,74 @@ public class ComponentBuilder {
         _current = null;
     }
 
+    /**
+     * Returns an array of BaseComponents based on this builder.
+     * @return An array of BaseComponents based on this builder.
+     */
     public BaseComponent[] build() {
         push();
         _components.removeIf(Objects::isNull);
         return _components.toArray(new BaseComponent[0]);
     }
 
+    /**
+     * Adds the specified based components to the builder.
+     * @param baseComponents The components to add.
+     * @return This builder.
+     */
     public ComponentBuilder then(BaseComponent... baseComponents) {
         push();
         _current = baseComponents;
         return this;
     }
 
+    /**
+     * Adds the components of a builder.
+     * @param builder The the builder to get the components from.
+     * @return This builder.
+     */
+    public ComponentBuilder then(ComponentBuilder builder) {
+        return then(builder.build());
+    }
+
+    /**
+     * Adds the specified text to the builder.
+     * @param text The text to add.
+     * @return This builder.
+     */
     public ComponentBuilder thenText(String text) {
         push();
         _current = TextComponent.fromLegacyText(text);
         return this;
     }
 
+    /**
+     * Adds the specified translatable text to the builder.
+     * @param translatable The translatable text to add.
+     * @return This builder.
+     */
     public ComponentBuilder thenTranslatable(String translatable) {
         push();
         _current = new BaseComponent[]{new TranslatableComponent(translatable)};
         return this;
     }
 
+    /**
+     * Parses a with {@link #parse(String text)} and adds it's BaseComponents.
+     * @param text The text to parse.
+     * @return This builder.
+     */
     public ComponentBuilder thenParse(String text) {
         push();
         _current = parse(text).build();
         return this;
     }
 
+    /**
+     * A foreach to edit the current (last added) BaseComponents.
+     * @param edit The consumer to apply to the current BaseComponents.
+     * @return This builder.
+     */
     public ComponentBuilder forCurrent(Consumer<BaseComponent> edit) {
         if (_current == null) return this;
         for (BaseComponent component : _current)
@@ -65,11 +103,21 @@ public class ComponentBuilder {
         return this;
     }
 
+    /**
+     * Sets the color of the current BaseComponents.
+     * @param color The color to set.
+     * @return This builder.
+     */
     public ComponentBuilder setColor(ChatColor color) {
         forCurrent(component -> component.setColor(color));
         return this;
     }
 
+    /**
+     * Adds formatting to the current BaseComponents.
+     * @param formatting The formatting to add.
+     * @return This builder.
+     */
     public ComponentBuilder addFormatting(ChatColor... formatting) {
         for (ChatColor format : formatting) {
             switch (format) {
@@ -102,39 +150,77 @@ public class ComponentBuilder {
         return this;
     }
 
+    /**
+     * Sets the click event of the current BaseComponents.
+     * @param action The action on click.
+     * @param value The value of the action.
+     * @return This builder.
+     */
     public ComponentBuilder setClickEvent(ClickEvent.Action action, String value) {
         ClickEvent clickEvent = new ClickEvent(action, value);
         forCurrent(current -> current.setClickEvent(clickEvent));
         return this;
     }
 
+    /**
+     * Sets the hover event of the current BaseComponents.
+     * @param action The action on hover.
+     * @param components The components of the hover.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverEvent(HoverEvent.Action action, BaseComponent... components) {
         HoverEvent hoverEvent = new HoverEvent(action, components);
         forCurrent(current -> current.setHoverEvent(hoverEvent));
         return this;
     }
 
+    /**
+     * Sets the hover event of the current BaseComponents.
+     * @param action The action on hover.
+     * @param builder The the builder to get the components from.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverEvent(HoverEvent.Action action, ComponentBuilder builder) {
         setHoverEvent(action, builder.build());
         return this;
     }
 
+    /**
+     * Sets the hover text of the current BaseComponents.
+     * @param components The components of the hover.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverText(BaseComponent... components) {
         setHoverEvent(HoverEvent.Action.SHOW_TEXT, components);
         return this;
     }
 
+    /**
+     * Sets the hover text of the current BaseComponents.
+     * @param builder The the builder to get the components from.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverText(ComponentBuilder builder) {
         setHoverText(builder.build());
         return this;
     }
 
+    /**
+     * Sets the hover text of the current BaseComponents.
+     * @param text The text of the hover.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverText(String text) {
         ComponentBuilder builder = ComponentBuilder.create().thenText(text);
         setHoverText(builder);
         return this;
     }
 
+    /**
+     * Sets the hover item of the current BaseComponents based on the given item.
+     * @param item The item of the hover.
+     * @return This builder.
+     */
     public ComponentBuilder setHoverItem(ItemStack item) {
         INBTTagCompound tag = INBTTagCompound.get(item);
         String json = tag.toJson(item);
@@ -143,6 +229,12 @@ public class ComponentBuilder {
         return this;
     }
 
+    /**
+     * Formats the specified string into a builder containing the base components of that string.
+     * @param string The string to format.
+     * @return A builder based on the given string.
+     * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
+     */
     public static ComponentBuilder parse(final String string) {
         Map<String, BaseComponent[]> components = new HashMap<>();
 
