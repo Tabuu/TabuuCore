@@ -246,7 +246,7 @@ public class ComponentBuilder {
 
         Map<Vector2f, BaseComponent[]> components = new HashMap<>();
 
-        Pattern hoverPattern = Pattern.compile("\\[(?<text>[^]]*)]\\((?:(?<hfunc>[^,)]*),)?(?<hval>[^)]*)\\)(?:\\((?<cfunc>[^)]*),(?<cval>[^)]*)\\))?");
+        Pattern hoverPattern = Pattern.compile("\\[(?<text>(?:[^]\\\\]|\\\\.)+?)]\\((?:(?<hfunc>(?:[^,)\\\\]|\\\\.)+?),)?(?<hval>(?:[^)\\\\]|\\\\.)*?)\\)(?:\\((?<cfunc>(?:[^)\\\\]|\\\\.)+?),(?<cval>(?:[^)\\\\]|\\\\.)+?)\\))?");
         Pattern translatablePattern = Pattern.compile("\\{(?<text>[^}]*)}");
 
         int formatChanges = 0;
@@ -257,12 +257,21 @@ public class ComponentBuilder {
 
         while (hoverMatch.find()) {
             String text = hoverMatch.group("text");
+            text = text.replace("\\]", "]");
+
 
             String hoverValue = hoverMatch.group("hval");
-            String hoverFunction = hoverMatch.group("hfunc");
+            hoverValue = hoverValue.replace("\\)", ")");
+            hoverValue = hoverValue.replace("\\,", ",");
 
+            String hoverFunction = hoverMatch.group("hfunc");
             String clickFunction = hoverMatch.group("cfunc");
+
             String clickValue = hoverMatch.group("cval");
+            if(clickValue != null) {
+                clickValue = clickValue.replace("\\)", ")");
+                clickValue = clickValue.replace("\\,", ",");
+            }
 
             ComponentBuilder textBuilder = ComponentBuilder.parse(text);
             ComponentBuilder hoverBuilder = ComponentBuilder.create();
