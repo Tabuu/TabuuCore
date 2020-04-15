@@ -11,7 +11,7 @@
     <parent>
         <artifactId>tabuucore-parent</artifactId>
         <groupId>nl.tabuu</groupId>
-        <version>2020.4.4</version>
+        <version>2020.4.5</version>
     </parent>
 
     <dependencies>

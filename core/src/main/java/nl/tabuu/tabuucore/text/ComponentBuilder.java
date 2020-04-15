@@ -2,7 +2,10 @@ package nl.tabuu.tabuucore.text;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
+import nl.tabuu.tabuucore.util.vector.Vector1f;
+import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -240,7 +243,8 @@ public class ComponentBuilder {
      * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
      */
     public static ComponentBuilder parse(final String string) {
-        Map<String, BaseComponent[]> components = new HashMap<>();
+
+        Map<Vector2f, BaseComponent[]> components = new HashMap<>();
 
         Pattern hoverPattern = Pattern.compile("\\[(?<text>[^]]*)]\\((?:(?<hfunc>[^,)]*),)?(?<hval>[^)]*)\\)(?:\\((?<cfunc>[^)]*),(?<cval>[^)]*)\\))?");
         Pattern translatablePattern = Pattern.compile("\\{(?<text>[^}]*)}");
@@ -284,7 +288,7 @@ public class ComponentBuilder {
 
             textBuilder.setHoverEvent(hoverAction, hoverBuilder);
 
-            components.put(hoverMatch.group(), textBuilder.build());
+            components.put(new Vector2f(hoverMatch.start(), hoverMatch.end()), textBuilder.build());
             plainText = plainText.replace(hoverMatch.group(), "");
             formatChanges++;
         }
@@ -297,31 +301,35 @@ public class ComponentBuilder {
             String text = translatableMatch.group("text");
             ComponentBuilder translatableBuilder = ComponentBuilder.create().thenTranslatable(text);
 
-            components.put(translatableMatch.group(), translatableBuilder.build());
+            components.put(new Vector2f(translatableMatch.start(), translatableMatch.end()), translatableBuilder.build());
             plainText = plainText.replace(translatableMatch.group(), "");
             formatChanges++;
         }
 
         if (formatChanges == 0)
-            components.put(string, new BaseComponent[]{new TextComponent(string)});
+            components.put(new Vector2f(0, string.length()), TextComponent.fromLegacyText(string));
         // endregion
 
         // region Sorting
+        int offset = 0;
         Stack<BaseComponent[]> sorted = new Stack<>();
-        StringBuilder stringBuilder = new StringBuilder();
+        List<Vector2f> positions = new ArrayList<>(components.keySet());
 
-        for (char character : string.toCharArray()) {
-            stringBuilder.append(character);
-            String current = stringBuilder.toString();
+        positions.sort(Comparator.comparing(Vector1f::getIntX));
 
-            if (components.containsKey(current)) {
-                sorted.add(components.get(current));
-                stringBuilder = new StringBuilder();
-            } else if (components.keySet().stream().noneMatch(key -> key.startsWith(current))) {
-                stringBuilder = new StringBuilder();
-                sorted.add(new BaseComponent[]{new TextComponent(current)});
-            }
+        for(Vector2f position : positions) {
+            String substring = string.substring(offset, position.getIntX());
+            if(!substring.isEmpty())
+                sorted.add(TextComponent.fromLegacyText(substring));
+
+            sorted.add(components.get(position));
+
+            offset = position.getIntY();
         }
+
+        Vector2f last = positions.get(positions.size() - 1);
+        if(last.getIntY() < string.length())
+            sorted.add(TextComponent.fromLegacyText(string.substring(last.getIntY())));
         // endregion
 
         ComponentBuilder builder = new ComponentBuilder();
