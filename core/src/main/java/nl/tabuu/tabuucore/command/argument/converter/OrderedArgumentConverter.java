@@ -19,13 +19,14 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
     public OrderedArgumentConverter(){
         _argumentSequence = new ArrayList<>();
+        _parameterType = ArgumentType.NULL;
     }
 
     @Override
     public List<String> completeArgument(CommandSender sender, String... arguments) {
         String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
 
-        if(arguments.length <= 0 || (_parameterType == null && _argumentSequence.size() < arguments.length))
+        if(arguments.length <= 0 || (_parameterType.equals(ArgumentType.NULL) && _argumentSequence.size() < arguments.length))
             return new ArrayList<>();
 
         String partialArgument = arguments[arguments.length - 1];
@@ -81,7 +82,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
             }
         }
 
-        if(_parameterType != null && convertedArguments.length > _argumentSequence.size()){
+        if(!_parameterType.equals(ArgumentType.NULL) && convertedArguments.length > _argumentSequence.size()){
             for(int i = _argumentSequence.size(); i < convertedArguments.length; i++)
                 converted.add(convertArgument(convertedArguments[i], _parameterType));
         }

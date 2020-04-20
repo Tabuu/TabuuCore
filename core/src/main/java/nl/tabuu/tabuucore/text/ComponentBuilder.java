@@ -243,7 +243,6 @@ public class ComponentBuilder {
      * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
      */
     public static ComponentBuilder parse(final String string) {
-
         Map<Vector2f, BaseComponent[]> components = new HashMap<>();
 
         Pattern hoverPattern = Pattern.compile("\\[(?<text>(?:[^]\\\\]|\\\\.)+?)]\\((?:(?<hfunc>(?:[^,)\\\\]|\\\\.)+?),)?(?<hval>(?:[^)\\\\]|\\\\.)*?)\\)(?:\\((?<cfunc>(?:[^)\\\\]|\\\\.)+?),(?<cval>(?:[^)\\\\]|\\\\.)+?)\\))?");

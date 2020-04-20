@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore;
 
+import nl.tabuu.tabuucore.command.CommandRegister;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
@@ -22,6 +23,7 @@ public class TabuuCore extends TabuuCorePlugin {
 
     private static TabuuCore _instance;
     private InventoryUIManager _inventoryUIManager;
+    private CommandRegister _commandRegister;
 
     @Override
     public void onEnable(){
@@ -49,6 +51,9 @@ public class TabuuCore extends TabuuCorePlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), getInstance());
         _inventoryUIManager = new InventoryUIManager();
 
+        // Command register related.
+        _commandRegister = new CommandRegister();
+
         // Hologram related.
         Bukkit.getPluginManager().registerEvents(new HologramListener(), getInstance());
 
@@ -72,8 +77,16 @@ public class TabuuCore extends TabuuCorePlugin {
     }
 
     /**
+     * Returns the {@link CommandRegister} used by TabuuCore.
+     * @return The {@link CommandRegister} used by TabuuCore.
+     */
+    public CommandRegister getCommandRegister() {
+        return _commandRegister;
+    }
+
+    /**
      * Returns the {@link InventoryUIManager} used by TabuuCore.
-     * @return the {@link InventoryUIManager} used by TabuuCore.
+     * @return The {@link InventoryUIManager} used by TabuuCore.
      */
     public InventoryUIManager getInventoryUIManager(){
         return _inventoryUIManager;
@@ -81,7 +94,7 @@ public class TabuuCore extends TabuuCorePlugin {
 
     /**
      * Returns the instance of TabuuCore.
-     * @return the instance of TabuuCore.
+     * @return The instance of TabuuCore.
      */
     public static TabuuCore getInstance(){
         return _instance;
