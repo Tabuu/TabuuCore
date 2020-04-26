@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../00_Plugin_Making/01_APIs/TabuuCore/JavaDoc" />
-    <option name="OTHER_OPTIONS" value="-link https://hub.spigotmc.org/javadocs/spigot/ -link https://docs.oracle.com/en/java/javase/12/docs/api/" />
+    <option name="OTHER_OPTIONS" value="-link https://hub.spigotmc.org/javadocs/spigot/ -link https://docs.oracle.com/en/java/javase/12/docs/api/ -link https://ci.md-5.net/job/BungeeCord/ws/chat/target/apidocs/" />
     <option name="OPTION_LINK_TO_JDK_DOCS" value="true" />
   </component>
   <component name="MavenProjectsManager">

@@ -14,18 +14,21 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Command utility class used for registering methods that use the {@link CommandExecutor} annotation.
+ */
 public class CommandRegister {
 
+    /**
+     * Registers a class containing methods annotated with {@link CommandExecutor}.
+     * @param object The object containing methods annotated with {@link CommandExecutor}
+     * @param plugin The plugin to register the commands to.
+     */
     public void registerExecutors(Object object, JavaPlugin plugin) {
-
         if(Objects.isNull(object))
             throw new IllegalArgumentException("Object may not be null");
 
-        Map<String, Command> parents = new HashMap<>();
-        Map<String, List<Command>> unregisteredChildren = new HashMap<>();
-
         Class<?> clazz = object.getClass();
-
         for(Method method : clazz.getDeclaredMethods()) {
             if(!isValidExecutor(method)) continue;
 
@@ -64,7 +67,6 @@ public class CommandRegister {
         method.setAccessible(true);
 
         Command command = new Command(executor.command()) {
-
             @Override
             protected CommandResult onCommand(CommandSender sender, List<Optional<?>> arguments) {
                 List<?> args;
