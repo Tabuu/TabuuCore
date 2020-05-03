@@ -9,3 +9,6 @@ TabuuCore has a Javadoc, however this Javadoc is still incomplete. [Link to Java
 
 ## License
 Licensed under the [GNU General Public License v3.0](LICENSE) license.
+
+## Statistics
+![bStats Statistics](https://bstats.org/signatures/bukkit/TabuuCore.svg)
