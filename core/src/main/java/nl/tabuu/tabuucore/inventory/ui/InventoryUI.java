@@ -22,22 +22,21 @@ public abstract class InventoryUI extends InventoryCanvas {
     private Inventory _inventory;
     private String _title;
     private List<InventoryAction> _blockedActions;
-    private boolean _reloading;
+    private boolean _initial;
 
     public InventoryUI(String title, InventorySize size){
         _title = title;
         _blockedActions = new ArrayList<>();
-        _reloading = true;
+        _initial = true;
         setSize(size);
-        createInventory();
-
-        Bukkit.getScheduler().runTask(TabuuCore.getInstance(), ()->{
-            this.draw();
-            _reloading = false;
-        });
     }
 
-    public void open(HumanEntity player){
+    public void open(HumanEntity player) {
+        if(_initial) {
+            createInventory();
+            this.draw();
+        }
+
         player.openInventory(getInventory());
     }
 
@@ -53,8 +52,9 @@ public abstract class InventoryUI extends InventoryCanvas {
         new ArrayList<>(getInventory().getViewers()).forEach(this::close);
     }
 
-    public void reload(){
-        _reloading = true;
+    public void reload() {
+        if(_initial) return;
+
         List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
         ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, getSize().getSize());
@@ -62,11 +62,11 @@ public abstract class InventoryUI extends InventoryCanvas {
         getInventory().setContents(contents);
 
         viewers.forEach(this::open);
-        _reloading = false;
     }
 
+    @Deprecated
     public boolean isReloading(){
-        return _reloading;
+        return false;
     }
 
     private void createInventory() {
@@ -86,7 +86,7 @@ public abstract class InventoryUI extends InventoryCanvas {
                 break;
 
         }
-
+        
         TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 

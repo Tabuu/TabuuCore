@@ -78,7 +78,8 @@ public class CommandRegister {
                 try {
                     return (CommandResult) method.invoke(object, senderType.getClassType().cast(sender), args);
                 } catch (InvocationTargetException e) {
-                    throw new IllegalArgumentException(String.format("Method %s does not take the correct parameters.", method.getName()));
+                    e.getCause().printStackTrace();
+                    return CommandResult.WRONG_SYNTAX;
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                     return CommandResult.WRONG_SYNTAX;

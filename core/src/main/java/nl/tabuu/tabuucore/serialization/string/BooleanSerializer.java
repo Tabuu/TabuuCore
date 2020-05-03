@@ -14,12 +14,14 @@ public class BooleanSerializer extends AbstractStringSerializer<Boolean> {
             case "1":
             case "on":
             case "t":
+            case "yes":
                 return true;
 
             case "false":
             case "0":
             case "off":
             case "f":
+            case "no":
                 return false;
         }
 
