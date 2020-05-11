@@ -91,7 +91,7 @@ public class ItemList extends ArrayList<ItemStack>{
     /**
      * Stacks all provided items with {@link #stack(ItemStack itemStack)}
      * @param stacks ItemStacks to be stacked.
-     * @return Self.
+     * @return List of items that could not fit.
      */
     public ItemList stackAll(ItemStack... stacks){
         ItemList itemList = new ItemList();

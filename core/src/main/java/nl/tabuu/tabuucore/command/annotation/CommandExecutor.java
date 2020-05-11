@@ -47,4 +47,10 @@ public @interface CommandExecutor {
      * @return An array of child commands.
      */
     ChildCommand[] children() default {};
+
+    /**
+     * Returns the method name of a valid tab-suggest method.
+     * @return The method name of a valid tab-suggest method.
+     */
+    String tabSuggestMethod() default "";
 }

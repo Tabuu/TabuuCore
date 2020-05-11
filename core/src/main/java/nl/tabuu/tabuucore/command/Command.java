@@ -98,6 +98,8 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         }
 
         List<Optional<?>> convertedArguments = getArgumentConverter().convertArguments(sender, arguments);
+        if(convertedArguments == null) return true;
+
         CommandResult result = onCommand(sender, convertedArguments);
 
         switch (result) {
@@ -160,7 +162,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
 
         suggestions.addAll(_argumentConverter.completeArgument(sender, arguments));
 
-        suggestions = onTabSuggest(sender, previousArguments, currentArgument, suggestions);
+        suggestions = new ArrayList<>(onTabSuggest(sender, previousArguments, currentArgument, suggestions));
 
         suggestions.removeIf(string -> !string.toLowerCase().startsWith(currentArgument.toLowerCase()));
         Collections.sort(suggestions);

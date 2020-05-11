@@ -59,9 +59,10 @@ public class OrderedArgumentConverter extends ArgumentConverter {
      * @param feedBackReceiver The sender of the arguments.
      * @param arguments The arguments to be converted/deserialized.
      * @return A list of all converted arguments, wrapped in an {@link Optional}, if an argument is missing a {@link Optional#empty()} is given.
+     *         Or null when an error occurred.
      */
     @Override
-    public List<Optional<?>> convertArguments(CommandSender feedBackReceiver, String... arguments){
+    public List<Optional<?>> convertArguments(CommandSender feedBackReceiver, String... arguments) {
         String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
         List<Optional<?>> converted = new ArrayList<>();
 
@@ -79,6 +80,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
                 if(!_local.containsKey(errorMessage))
                     errorMessage = "ERROR_PARSING_UNKNOWN";
                 feedBackReceiver.sendMessage(_local.translate(errorMessage, "{ARG}", convertedArguments[i]));
+                return null;
             }
         }
 
@@ -86,7 +88,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
             for(int i = _argumentSequence.size(); i < convertedArguments.length; i++)
                 converted.add(convertArgument(convertedArguments[i], _parameterType));
         }
-        else if(convertedArguments.length < _argumentSequence.size()){
+        else if(convertedArguments.length < _argumentSequence.size()) {
             for(int i = convertedArguments.length; i < _argumentSequence.size(); i++)
                 converted.add(Optional.empty());
         }
