@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore.command.annotation;
+package nl.tabuu.tabuucore.command.register.annotation;
 
 /**
  * Annotation used to define child commands of a {@link CommandExecutor}, by linking a method that is also annotated with {@link CommandExecutor}.

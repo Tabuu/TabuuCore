@@ -24,7 +24,7 @@ public abstract class TabuuCorePlugin extends JavaPlugin {
     /**
      * Registers the command executors from a class.
      * @param object A class with command executors.
-     * @see nl.tabuu.tabuucore.command.annotation.CommandExecutor
+     * @see nl.tabuu.tabuucore.command.register.annotation.CommandExecutor
      */
     public void registerExecutors(Object object) {
         TabuuCore.getInstance().getCommandRegister().registerExecutors(object, this);

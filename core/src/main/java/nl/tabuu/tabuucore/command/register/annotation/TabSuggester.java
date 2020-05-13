@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore.command.annotation;
+package nl.tabuu.tabuucore.command.register.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

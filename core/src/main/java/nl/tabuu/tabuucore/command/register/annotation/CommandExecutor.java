@@ -1,4 +1,4 @@
-package nl.tabuu.tabuucore.command.annotation;
+package nl.tabuu.tabuucore.command.register.annotation;
 
 import nl.tabuu.tabuucore.command.Command;
 import nl.tabuu.tabuucore.command.argument.ArgumentType;
@@ -34,13 +34,6 @@ public @interface CommandExecutor {
      * @see nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter#setParameter(ArgumentType type)
      */
     ArgumentType parameter() default ArgumentType.NULL;
-
-    /**
-     * Returns whether or not the full sequence of {@link #argumentSequence()} should be present.
-     * When true, a list of optional will be returned, else a raw list.
-     * @return Whether or not the full sequence of {@link #argumentSequence()} should be present.
-     */
-    boolean requireFullSequence() default false;
 
     /**
      * Returns an array of child commands.
