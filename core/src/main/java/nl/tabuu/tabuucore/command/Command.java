@@ -77,10 +77,10 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         }
 
         boolean isCorrectSenderType = !hasRequiredSenderType() || getRequiredSenderType().getClassType().isInstance(sender);
-        String senderTypeMessage = _local.translate("ERROR_COMMAND_INVALID_SENDER_TYPE",
-                "{TYPE}", getRequiredSenderType().name());
 
         if (!isCorrectSenderType) {
+            String senderTypeMessage = _local.translate("ERROR_COMMAND_INVALID_SENDER_TYPE",
+                    "{TYPE}", getRequiredSenderType().name());
             sender.sendMessage(senderTypeMessage);
             return true;
         }
@@ -160,9 +160,12 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
         if (isFirstArgument)
             suggestions.addAll(_subCommandMap.keySet());
 
+
         suggestions.addAll(_argumentConverter.completeArgument(sender, arguments));
 
-        suggestions = new ArrayList<>(onTabSuggest(sender, previousArguments, currentArgument, suggestions));
+        boolean isCorrectSenderType = !hasRequiredSenderType() || getRequiredSenderType().getClassType().isInstance(sender);
+        if(isCorrectSenderType)
+            suggestions = new ArrayList<>(onTabSuggest(sender, previousArguments, currentArgument, suggestions));
 
         suggestions.removeIf(string -> !string.toLowerCase().startsWith(currentArgument.toLowerCase()));
         Collections.sort(suggestions);

@@ -57,6 +57,18 @@ public class CommandRegister {
         return matches.stream().findAny().get();
     }
 
+    private boolean isParameterWildcard(Type type) {
+        if(!(type instanceof ParameterizedType)) return false;
+
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type[] parameters = parameterizedType.getActualTypeArguments();
+
+        for(Type parameter : parameters)
+            if(parameter instanceof WildcardType) return true;
+
+        return false;
+    }
+
     private Class<?> getParameterizedTypeClass(Type type) {
         if(!(type instanceof ParameterizedType))
             throw new IllegalArgumentException("The provided type is not parameterizable.");
@@ -74,6 +86,9 @@ public class CommandRegister {
 
         if (parameter instanceof Class)
             return (Class<?>) parameter;
+
+        else if (parameter instanceof WildcardType)
+            throw new IllegalArgumentException("Type may not be a wildcard.");
 
         else
             throw new IllegalArgumentException("Could not find class.");
@@ -142,7 +157,7 @@ public class CommandRegister {
         } else tabSuggesterMethod = null;
 
         Parameter argumentParameter = executorMethod.getParameters()[1];
-        final boolean isFullSequenceRequired = !Optional.class.isAssignableFrom(getParameterizedTypeClass(argumentParameter.getParameterizedType()));
+        final boolean isFullSequenceRequired = isParameterWildcard(argumentParameter.getParameterizedType());
 
         Command command = new Command(executor.command()) {
             @Override
