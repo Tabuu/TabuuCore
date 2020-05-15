@@ -35,6 +35,7 @@ public abstract class InventoryUI extends InventoryCanvas {
         if(_initial) {
             createInventory();
             this.draw();
+            _initial = false;
         }
 
         player.openInventory(getInventory());
@@ -69,7 +70,7 @@ public abstract class InventoryUI extends InventoryCanvas {
         return false;
     }
 
-    private void createInventory() {
+    protected void createInventory() {
 
         switch (getSize()){
 

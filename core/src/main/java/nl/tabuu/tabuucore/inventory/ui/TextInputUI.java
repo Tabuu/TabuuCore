@@ -8,6 +8,7 @@ import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -57,9 +58,10 @@ public class TextInputUI extends InventoryFormUI{
 
         setInventory(_anvilWindow.getInventory());
 
-        _anvilWindow.open();
-
         TabuuCore.getInstance().getInventoryUIManager().register(this);
+
+        this.draw();
+        _anvilWindow.open();
     }
 
     @Override
@@ -67,6 +69,9 @@ public class TextInputUI extends InventoryFormUI{
         _anvilUtil.setActiveContainerToDefault(player);
         _anvilUtil.sendPacketCloseWindow(player, _anvilWindow.getWindowId());
     }
+
+    @Override
+    protected void createInventory() { }
 
     private void submit(Player player){
         String string = _anvilWindow.getRenameText();

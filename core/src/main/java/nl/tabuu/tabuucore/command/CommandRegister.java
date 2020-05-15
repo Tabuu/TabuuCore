@@ -6,6 +6,7 @@ import nl.tabuu.tabuucore.command.register.annotation.ChildCommand;
 import nl.tabuu.tabuucore.command.register.annotation.CommandExecutor;
 import nl.tabuu.tabuucore.command.register.annotation.TabSuggester;
 import nl.tabuu.tabuucore.command.register.exception.CommandRegisterException;
+import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,16 +25,17 @@ public class CommandRegister {
 
     /**
      * Registers a class containing methods annotated with {@link CommandExecutor}.
+     *
      * @param object The object containing methods annotated with {@link CommandExecutor}
      * @param plugin The plugin to register the commands to.
      */
     public void registerExecutors(Object object, JavaPlugin plugin) {
-        if(Objects.isNull(object))
+        if (Objects.isNull(object))
             throw new IllegalArgumentException("Object may not be null");
 
-        for(Method method : findMethods(object, this::isValidExecutor)) {
+        for (Method method : findMethods(object, this::isValidExecutor)) {
             Command root = getCommandFromCommandExecutor(object, method);
-            if(root.hasParent()) continue;
+            if (root.hasParent()) continue;
 
             plugin.getCommand(root.getName()).setExecutor(root);
         }
@@ -48,40 +50,40 @@ public class CommandRegister {
     private Method findMethod(Object object, String name, Predicate<Method> validator) {
         List<Method> matches = findMethods(object, (method) -> method.getName().equals(name) && validator.test(method));
 
-        if(matches.isEmpty())
+        if (matches.isEmpty())
             throw new CommandRegisterException(String.format("No valid method found with name %s.", name));
 
-        if(matches.size() > 1)
+        if (matches.size() > 1)
             throw new CommandRegisterException(String.format("Multiple valid methods found with name %s.", name));
 
         return matches.stream().findAny().get();
     }
 
     private boolean isParameterWildcard(Type type) {
-        if(!(type instanceof ParameterizedType)) return false;
+        if (!(type instanceof ParameterizedType)) return false;
 
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type[] parameters = parameterizedType.getActualTypeArguments();
 
-        for(Type parameter : parameters)
-            if(parameter instanceof WildcardType) return true;
+        for (Type parameter : parameters)
+            if (parameter instanceof WildcardType) return true;
 
         return false;
     }
 
     private Class<?> getParameterizedTypeClass(Type type) {
-        if(!(type instanceof ParameterizedType))
+        if (!(type instanceof ParameterizedType))
             throw new IllegalArgumentException("The provided type is not parameterizable.");
 
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type[] parameters = parameterizedType.getActualTypeArguments();
 
-        if(parameters.length != 1)
+        if (parameters.length != 1)
             throw new IllegalArgumentException("The provided parameterizable type has more or less than 1 parameter.");
 
         Type parameter = parameters[0];
 
-        if(parameter instanceof ParameterizedType)
+        if (parameter instanceof ParameterizedType)
             parameter = ((ParameterizedType) parameter).getRawType();
 
         if (parameter instanceof Class)
@@ -95,39 +97,39 @@ public class CommandRegister {
     }
 
     private boolean isValidExecutor(Method method) {
-        if(!method.isAnnotationPresent(CommandExecutor.class)) return false;
-        if(method.getParameterCount() < 2) return false;
+        if (!method.isAnnotationPresent(CommandExecutor.class)) return false;
+        if (method.getParameterCount() < 2) return false;
 
         Parameter sender = method.getParameters()[0];
-        if(!CommandSender.class.isAssignableFrom(sender.getType())) return false;
+        if (!CommandSender.class.isAssignableFrom(sender.getType())) return false;
 
         Parameter arguments = method.getParameters()[1];
-        if(!List.class.isAssignableFrom(arguments.getType())) return false;
+        if (!List.class.isAssignableFrom(arguments.getType())) return false;
 
-        if(!CommandResult.class.isAssignableFrom(method.getReturnType())) return false;
+        if (!CommandResult.class.isAssignableFrom(method.getReturnType())) return false;
 
         return true;
     }
 
     private boolean isValidTabSuggester(Method method) {
-        if(!method.isAnnotationPresent(TabSuggester.class)) return false;
-        if(method.getParameterCount() < 4) return false;
+        if (!method.isAnnotationPresent(TabSuggester.class)) return false;
+        if (method.getParameterCount() < 4) return false;
 
         Parameter sender = method.getParameters()[0];
-        if(!CommandSender.class.isAssignableFrom(sender.getType())) return false;
+        if (!CommandSender.class.isAssignableFrom(sender.getType())) return false;
 
         Parameter arguments = method.getParameters()[1];
-        if(!List.class.isAssignableFrom(arguments.getType())) return false;
-        if(!String.class.isAssignableFrom(getParameterizedTypeClass(arguments.getParameterizedType()))) return false;
+        if (!List.class.isAssignableFrom(arguments.getType())) return false;
+        if (!String.class.isAssignableFrom(getParameterizedTypeClass(arguments.getParameterizedType()))) return false;
 
         Parameter partial = method.getParameters()[2];
-        if(!String.class.isAssignableFrom(partial.getType())) return false;
+        if (!String.class.isAssignableFrom(partial.getType())) return false;
 
         Parameter suggestions = method.getParameters()[3];
-        if(!List.class.isAssignableFrom(suggestions.getType())) return false;
-        if(!String.class.isAssignableFrom(getParameterizedTypeClass(suggestions.getParameterizedType()))) return false;
+        if (!List.class.isAssignableFrom(suggestions.getType())) return false;
+        if (!String.class.isAssignableFrom(getParameterizedTypeClass(suggestions.getParameterizedType()))) return false;
 
-        if(!List.class.isAssignableFrom(method.getReturnType())) return false;
+        if (!List.class.isAssignableFrom(method.getReturnType())) return false;
 
         return true;
     }
@@ -137,7 +139,7 @@ public class CommandRegister {
     }
 
     private Command getCommandFromCommandExecutor(Object object, Method executorMethod) {
-        if(!isValidExecutor(executorMethod))
+        if (!isValidExecutor(executorMethod))
             throw new CommandRegisterException(String.format("Method '%s' is not a valid executor.", executorMethod.getName()));
 
         executorMethod.setAccessible(true);
@@ -151,21 +153,20 @@ public class CommandRegister {
 
         final boolean hasTabSuggester = !executor.tabSuggestMethod().isEmpty();
         final Method tabSuggesterMethod;
-        if(hasTabSuggester) {
+        if (hasTabSuggester) {
             tabSuggesterMethod = getTabSuggest(object, executor.tabSuggestMethod());
             tabSuggesterMethod.setAccessible(true);
         } else tabSuggesterMethod = null;
 
         Parameter argumentParameter = executorMethod.getParameters()[1];
-        final boolean isFullSequenceRequired = isParameterWildcard(argumentParameter.getParameterizedType());
+        final boolean isFullSequenceRequired = !isParameterWildcard(argumentParameter.getParameterizedType());
 
         Command command = new Command(executor.command()) {
             @Override
             protected CommandResult onCommand(CommandSender sender, List<Optional<?>> arguments) {
                 List<?> convertedArguments;
-
-                if(isFullSequenceRequired) {
-                    if(!arguments.stream().allMatch(Optional::isPresent)) return CommandResult.WRONG_SYNTAX;
+                if (isFullSequenceRequired) {
+                    if (!arguments.stream().allMatch(Optional::isPresent)) return CommandResult.WRONG_SYNTAX;
                     convertedArguments = arguments.stream().map(Optional::get).collect(Collectors.toList());
                 } else convertedArguments = arguments;
 
@@ -182,7 +183,7 @@ public class CommandRegister {
 
             @Override
             protected List<String> onTabSuggest(CommandSender sender, List<String> arguments, String partial, List<String> suggestions) {
-                if(hasTabSuggester) {
+                if (hasTabSuggester) {
                     try {
                         List<?> value = (List<?>) tabSuggesterMethod.invoke(object, senderClass.cast(sender), arguments, partial, suggestions);
                         return (List<String>) value;
@@ -203,8 +204,8 @@ public class CommandRegister {
         command.setArgumentConverter(converter);
         command.setRequiredSenderType(senderType);
 
-        if(executor.children().length > 0) {
-            for(ChildCommand childMeta : executor.children()) {
+        if (executor.children().length > 0) {
+            for (ChildCommand childMeta : executor.children()) {
                 Method subCommandExecutor = findMethod(object, childMeta.method(), this::isValidExecutor);
                 Command subCommand = getCommandFromCommandExecutor(object, subCommandExecutor);
                 command.addSubCommand(childMeta.label(), subCommand);
