@@ -2,11 +2,11 @@ package nl.tabuu.tabuucore.command;
 
 import nl.tabuu.tabuucore.command.argument.ArgumentConverter;
 import nl.tabuu.tabuucore.command.argument.converter.OrderedArgumentConverter;
+import nl.tabuu.tabuucore.command.register.ICommandListener;
 import nl.tabuu.tabuucore.command.register.annotation.ChildCommand;
 import nl.tabuu.tabuucore.command.register.annotation.CommandExecutor;
 import nl.tabuu.tabuucore.command.register.annotation.TabSuggester;
 import nl.tabuu.tabuucore.command.register.exception.CommandRegisterException;
-import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,7 +29,7 @@ public class CommandRegister {
      * @param object The object containing methods annotated with {@link CommandExecutor}
      * @param plugin The plugin to register the commands to.
      */
-    public void registerExecutors(Object object, JavaPlugin plugin) {
+    public void registerExecutors(ICommandListener object, JavaPlugin plugin) {
         if (Objects.isNull(object))
             throw new IllegalArgumentException("Object may not be null");
 

@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.plugin;
 
 import nl.tabuu.tabuucore.TabuuCore;
+import nl.tabuu.tabuucore.command.register.ICommandListener;
 import nl.tabuu.tabuucore.configuration.ConfigurationManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,7 +27,7 @@ public abstract class TabuuCorePlugin extends JavaPlugin {
      * @param object A class with command executors.
      * @see nl.tabuu.tabuucore.command.register.annotation.CommandExecutor
      */
-    public void registerExecutors(Object object) {
+    public void registerExecutors(ICommandListener object) {
         TabuuCore.getInstance().getCommandRegister().registerExecutors(object, this);
     }
 }
