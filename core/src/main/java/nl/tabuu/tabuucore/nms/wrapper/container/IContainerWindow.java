@@ -25,12 +25,10 @@ public interface IContainerWindow {
             String className = type.getSimpleName().substring(1);
             Class wrapper = NMSUtil.getWrapperClass("container." + className);
 
-            Constructor constructor = wrapper.getDeclaredConstructor(Player.class);
+            Constructor<T> constructor = wrapper.getDeclaredConstructor(Player.class);
             constructor.setAccessible(true);
 
-            return (T) constructor.newInstance(player);
-
-            // return (T) NMSUtil.getWrapperClass("container." + className).getConstructor(Player.class).newInstance(player);
+            return constructor.newInstance(player);
         }
         catch (ReflectiveOperationException e) {
             throw new UnsupportedOperationException("Could not create wrapper class!");

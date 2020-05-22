@@ -1,5 +1,5 @@
 name: TabuuCore
-version: 2020.4.5
+version: 2020.5.1-pre
 main: nl.tabuu.tabuucore.TabuuCore
 description: Tabuu's core plugin.
 author: Tabuu

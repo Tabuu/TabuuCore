@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.Repairable;
 
 import java.util.function.BiConsumer;
 
-public class TextInputUI extends InventoryFormUI{
+public class TextInputUI extends InventoryFormUI {
 
     private IInventoryUtil _anvilUtil;
     private IAnvilContainerWindow _anvilWindow;
@@ -26,7 +26,7 @@ public class TextInputUI extends InventoryFormUI{
     private ItemStack _renameItem;
     private String _defaultValue;
 
-    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit){
+    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
         super("", InventorySize.ONE_ROW);
         _onTextSubmit = onTextSubmit;
         _renameItem = renameItem;
@@ -35,7 +35,7 @@ public class TextInputUI extends InventoryFormUI{
     }
 
     @Override
-    public void draw(){
+    public void draw() {
         ItemStack renameItem = _renameItem;
         ItemMeta itemMeta = renameItem.getItemMeta();
         itemMeta.setDisplayName(_defaultValue);
@@ -51,7 +51,7 @@ public class TextInputUI extends InventoryFormUI{
     }
 
     @Override
-    public void open(HumanEntity human){
+    public void open(HumanEntity human) {
         Player player = (Player) human;
 
         _anvilWindow = IContainerWindow.get(player, IAnvilContainerWindow.class);
@@ -65,15 +65,16 @@ public class TextInputUI extends InventoryFormUI{
     }
 
     @Override
-    public void onClose(Player player){
+    public void onClose(Player player) {
         _anvilUtil.setActiveContainerToDefault(player);
         _anvilUtil.sendPacketCloseWindow(player, _anvilWindow.getWindowId());
     }
 
     @Override
-    protected void createInventory() { }
+    protected void createInventory() {
+    }
 
-    private void submit(Player player){
+    private void submit(Player player) {
         String string = _anvilWindow.getRenameText();
         _anvilUtil.handleInventoryCloseEvent(player);
         _onTextSubmit.accept(player, string);
