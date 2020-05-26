@@ -34,7 +34,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     public void open(HumanEntity player) {
         if(_initial) {
             createInventory();
-            this.draw();
+            draw();
             _initial = false;
         }
 
