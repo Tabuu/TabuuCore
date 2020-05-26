@@ -159,7 +159,7 @@ public class CommandRegister {
         } else tabSuggesterMethod = null;
 
         Parameter argumentParameter = executorMethod.getParameters()[1];
-        final boolean isFullSequenceRequired = !isParameterWildcard(argumentParameter.getParameterizedType());
+        final boolean isFullSequenceRequired = isParameterWildcard(argumentParameter.getParameterizedType());
 
         Command command = new Command(executor.command()) {
             @Override
