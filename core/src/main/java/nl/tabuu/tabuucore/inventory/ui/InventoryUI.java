@@ -3,11 +3,14 @@ package nl.tabuu.tabuucore.inventory.ui;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
+import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -34,7 +37,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     public void open(HumanEntity player) {
         if(_initial) {
             createInventory();
-            draw();
+            draw(); /* onDraw(); */ //TODO: Replace.
             _initial = false;
         }
 
@@ -127,19 +130,19 @@ public abstract class InventoryUI extends InventoryCanvas {
     }
 
     @Override
-    public void onClick(Player player, InventoryUIClick click) { }
+    public void onClick(InventoryClickEvent event) { }
 
     @Override
-    public void onClickUI(Player player, InventoryUIClick click){ }
+    public void onClickUI(InventoryClickEvent event) { }
 
     @Override
-    public void onDrag(Player player, InventoryUIDrag drag) { }
+    public void onDrag(InventoryDragEvent event) { }
 
     @Override
-    public void onDragUI(Player player, InventoryUIDrag drag) { }
+    public void onDragUI(InventoryDragEvent event) { }
 
     @Override
-    public void onOpen(Player player){}
+    public void onOpen(Player player) { }
 
     @Override
     public void onClose(Player player){

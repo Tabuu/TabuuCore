@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated /* 3rd June 2020 */
 public class InventoryUIDrag {
 
     private ItemStack _cursorItem, _oldCursorItem;
@@ -13,8 +14,9 @@ public class InventoryUIDrag {
     private Set<Integer> _slots, _rawSlots;
     private Map<Integer, ItemStack> _newItems;
     private DragType _dragType;
+    private InventoryDragEvent _handle;
 
-    public InventoryUIDrag(InventoryDragEvent event){
+    public InventoryUIDrag(InventoryDragEvent event) {
         _cursorItem         = event.getCursor();
         _oldCursorItem      = event.getOldCursor();
         _slots              = event.getInventorySlots();
@@ -22,6 +24,8 @@ public class InventoryUIDrag {
         _newItems           = event.getNewItems();
         _dragType           = event.getType();
         _canceled           = false;
+
+        _handle = event;
     }
 
     public ItemStack getCursorItem() {
@@ -54,6 +58,10 @@ public class InventoryUIDrag {
 
     public boolean isCanceled(){
         return _canceled;
+    }
+
+    public InventoryDragEvent getHandle() {
+        return _handle;
     }
 
 }

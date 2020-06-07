@@ -1,8 +1,8 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
-import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.ToggleableStyle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.function.BiConsumer;
 
@@ -26,7 +26,8 @@ public abstract class ToggleableElement extends StyleableElement<ToggleableStyle
     }
 
     @Override
-    public void click(Player player, InventoryUIClick click) {
+    public void click(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
         _value ^= true;
 
         if(_consumer != null)

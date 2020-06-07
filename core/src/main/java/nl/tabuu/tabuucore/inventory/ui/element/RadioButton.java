@@ -1,8 +1,8 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
-import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.ToggleableStyle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.function.BiConsumer;
 
@@ -21,7 +21,9 @@ public class RadioButton extends Checkbox {
     }
 
     @Override
-    public void click(Player player, InventoryUIClick click) {
+    public void click(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+
         if(!getValue()){
             _group.getElements().forEach((e) -> {
                 if(e instanceof RadioButton && e != this) {

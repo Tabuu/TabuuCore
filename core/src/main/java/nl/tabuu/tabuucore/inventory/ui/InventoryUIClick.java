@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+@Deprecated /* 3rd June 2020 */
 public class InventoryUIClick {
 
     private ClickType _clickType;
@@ -15,6 +16,7 @@ public class InventoryUIClick {
     private boolean _isRightClick, _isLeftClick, _isShiftClick;
     private ItemStack _clickedItem, _cursorItem;
     private boolean _canceled;
+    private InventoryClickEvent _handle;
 
     public InventoryUIClick(InventoryClickEvent event){
         _clickType          = event.getClick();
@@ -29,6 +31,8 @@ public class InventoryUIClick {
         _clickedItem        = event.getCurrentItem();
         _cursorItem         = event.getCursor();
         _canceled           = false;
+
+        _handle = event;
     }
 
     public ClickType getClickType() {
@@ -83,4 +87,7 @@ public class InventoryUIClick {
         return _canceled;
     }
 
+    public InventoryClickEvent getHandle() {
+        return _handle;
+    }
 }

@@ -1,8 +1,8 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
-import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.function.Consumer;
 
@@ -44,11 +44,13 @@ public class Button extends StyleableElement<Style> implements IClickable {
     }
 
     @Override
-    public void click(Player player, InventoryUIClick click) {
-        if(click.isLeftClick() && getLeftConsumer() != null)
+    public void click(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+
+        if(event.isLeftClick() && getLeftConsumer() != null)
             getLeftConsumer().accept(player);
 
-        if(click.isRightClick() && getRightConsumer() != null)
+        if(event.isRightClick() && getRightConsumer() != null)
             getRightConsumer().accept(player);
     }
 

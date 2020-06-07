@@ -1,10 +1,10 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
-import nl.tabuu.tabuucore.inventory.ui.InventoryUIClick;
 import nl.tabuu.tabuucore.inventory.ui.TextInputUI;
 import nl.tabuu.tabuucore.inventory.ui.element.style.TextInputStyle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.function.BiConsumer;
 
@@ -30,7 +30,8 @@ public class TextInput extends StyleableElement<TextInputStyle> implements IClic
     }
 
     @Override
-    public void click(Player player, InventoryUIClick click) {
+    public void click(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
         new TextInputUI(getStyle().getRenameItem(), getStyle().getPlaceHolder(), this::setValue).open(player);
     }
 

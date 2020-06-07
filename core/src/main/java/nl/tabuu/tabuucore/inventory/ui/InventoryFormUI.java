@@ -1,16 +1,17 @@
 package nl.tabuu.tabuucore.inventory.ui;
 
 import nl.tabuu.tabuucore.inventory.InventorySize;
-import nl.tabuu.tabuucore.inventory.ui.element.Element;
-import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
-import nl.tabuu.tabuucore.inventory.ui.element.StyleableElement;
+import nl.tabuu.tabuucore.inventory.ui.element.*;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
+import java.util.function.Consumer;
 
 public abstract class InventoryFormUI extends InventoryUI {
 
@@ -19,32 +20,46 @@ public abstract class InventoryFormUI extends InventoryUI {
     public InventoryFormUI(String title, InventorySize size) {
         super(title, size);
         _elements = new HashMap<>();
-        addBlockedAction(InventoryAction.MOVE_TO_OTHER_INVENTORY, InventoryAction.COLLECT_TO_CURSOR);
+        addBlockedAction(InventoryAction.COLLECT_TO_CURSOR);
     }
 
     @Override
-    public void onClickUI(Player player, InventoryUIClick click) {
-        click.setCanceled(true);
+    public void onClick(InventoryClickEvent event) {
+        if(!event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)) return;
 
-        Vector2f position = getSize().slotToVector(click.getSlot());
+        for(Element element : getElements(true)) {
+
+            if(element instanceof ItemInput) {
+                ItemInput itemInput = (ItemInput) element;
+
+
+            }
+        }
+    }
+
+    @Override
+    public void onClickUI(InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        Vector2f position = getSize().slotToVector(event.getSlot());
         Element element = _elements.get(position);
 
-        if(element instanceof IClickable && element.isEnabled()){
+        if(element instanceof IClickable && element.isEnabled()) {
             IClickable clickable = (IClickable) element;
-            clickable.click(player, click);
+            clickable.click(event);
             updateElement(position);
         }
     }
 
     @Override
-    public void onDragUI(Player player, InventoryUIDrag drag) {
-        drag.setCanceled(true);
+    public void onDragUI(InventoryDragEvent event) {
+        event.setCancelled(true);
 
         //TODO: ItemInput?
     }
 
     @Override
-    protected void draw(){
+    protected void onDraw(){
         _elements.keySet().forEach(this::updateElement);
     }
 
@@ -52,7 +67,7 @@ public abstract class InventoryFormUI extends InventoryUI {
         Element element = _elements.get(position);
 
         if(element instanceof StyleableElement){
-            StyleableElement styleable = (StyleableElement) element;
+            StyleableElement<?> styleable = (StyleableElement<?>) element;
             styleable.updateStyle();
             setItemAt(position, styleable.getDisplayItem());
         }
@@ -61,5 +76,20 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void setElement(Vector2f position, Element element){
         _elements.put(position, element);
         element.setPosition(position);
+    }
+
+    private List<Element> getElements(boolean deep) {
+        List<Element> elements = new ArrayList<>();
+
+        for(Element element : _elements.values()) {
+            elements.add(element);
+
+            if(deep && element instanceof ElementGroup) {
+                ElementGroup group = (ElementGroup) element;
+                elements.addAll(group.getElements());
+            }
+        }
+
+        return elements;
     }
 }

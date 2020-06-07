@@ -35,7 +35,7 @@ public class TextInputUI extends InventoryFormUI {
     }
 
     @Override
-    public void draw() {
+    public void onDraw() {
         ItemStack renameItem = _renameItem;
         ItemMeta itemMeta = renameItem.getItemMeta();
         itemMeta.setDisplayName(_defaultValue);
@@ -47,7 +47,7 @@ public class TextInputUI extends InventoryFormUI {
 
         setElement(new Vector2f(2, 0), submitButton);
         setElement(new Vector2f(0, 0), submitButton);
-        super.draw();
+        super.onDraw();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TextInputUI extends InventoryFormUI {
 
         TabuuCore.getInstance().getInventoryUIManager().register(this);
 
-        this.draw();
+        this.onDraw();
         _anvilWindow.open();
     }
 
