@@ -5,6 +5,7 @@
 
 package nl.tabuu.tabuucore.util;
 
+import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.util.vector.Vector3f;
@@ -84,6 +85,20 @@ public class BukkitUtils {
 			return player.getInventory().getItemInHand();
 		else
 			return player.getInventory().getItemInMainHand();
+	}
+
+	public static ItemStack[] getStorageContents(Player player) {
+		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
+			return player.getInventory().getContents();
+		else
+			return player.getInventory().getStorageContents();
+	}
+
+	public static void setStorageContents(Player player, ItemStack[] items) {
+		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
+			player.getInventory().setContents(items);
+		else
+			player.getInventory().setStorageContents(items);
 	}
 
 	/**

@@ -2,7 +2,9 @@ package nl.tabuu.tabuucore.inventory.ui.element;
 
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemBuilder;
+import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.material.XMaterial;
+import nl.tabuu.tabuucore.util.BukkitUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -27,7 +29,7 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
         _consumer = consumer;
     }
 
-    protected BiConsumer<Player, ItemStack> getConsumer() {
+    public BiConsumer<Player, ItemStack> getConsumer() {
         return _consumer;
     }
 
@@ -77,13 +79,20 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
 
             case NUMBER_KEY:
                 ItemStack hotbar = player.getInventory().getItem(event.getHotbarButton());
-                if(hotbar == null) hotbar = new ItemBuilder(XMaterial.AIR).build();
+                if(hotbar == null) hotbar = XMaterial.AIR.parseItem();
                 player.getInventory().setItem(event.getHotbarButton(), swap);
                 value = hotbar.clone();
                 break;
 
             case SHIFT_LEFT:
             case SHIFT_RIGHT:
+                ItemList inventory = new ItemList();
+                inventory.addAll(BukkitUtils.getStorageContents(player));
+                value = inventory.stack(event.getCurrentItem());
+                if(value != null) inventory.remove(inventory.size() - 1);
+                BukkitUtils.setStorageContents(player, inventory.toArray(new ItemStack[0]));
+                break;
+
             case DOUBLE_CLICK:
             case DROP:
             case CONTROL_DROP:
@@ -97,9 +106,8 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
 
         if (!_clone) player.setItemOnCursor(cursor.clone());
 
-        setValue(value.clone());
-
-        if (getConsumer() != null) getConsumer().accept(player, cursor);
+        if(value == null) value = XMaterial.AIR.parseItem();
+        setValue(player, value.clone());
     }
 
     @Override
@@ -110,6 +118,11 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
     @Override
     public void setValue(ItemStack value) {
         _value = value;
+    }
+
+    public void setValue(Player player, ItemStack value) {
+        setValue(value);
+        if (getConsumer() != null) getConsumer().accept(player, value);
     }
 
     @Override

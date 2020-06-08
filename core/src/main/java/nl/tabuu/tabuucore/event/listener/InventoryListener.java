@@ -33,11 +33,10 @@ public class InventoryListener implements Listener {
         InventoryUI inventoryUI = getUI(topInventory);
         if (inventoryUI == null) return;
 
-        if (inventoryUI.isBlockedAction(event.getAction())) {
+        if (inventoryUI.isBlockedAction(event.getAction()))
             event.setCancelled(true);
-            return;
-        }
-        else if (inventory.equals(topInventory))
+
+        if (inventory.equals(topInventory))
             inventoryUI.onClickUI(event);
 
         inventoryUI.onClick(event);
