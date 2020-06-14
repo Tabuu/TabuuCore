@@ -1,7 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
-import nl.tabuu.tabuucore.item.ItemBuilder;
 import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.util.BukkitUtils;
