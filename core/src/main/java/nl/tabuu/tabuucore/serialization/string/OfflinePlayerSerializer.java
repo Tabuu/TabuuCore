@@ -15,16 +15,16 @@ public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePla
     @Override
     public OfflinePlayer deserialize(String string) {
         if(string.length() > 16){
-            try{
+            try {
                 UUID uuid = UUID.fromString(string);
                 return Bukkit.getOfflinePlayer(uuid);
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 return null;
             }
         }
         else return Arrays
                     .stream(Bukkit.getOfflinePlayers())
-                    .filter(p -> p.getName().equalsIgnoreCase(string))
+                    .filter(p -> p.getName() != null && p.getName().equalsIgnoreCase(string))
                     .findAny().orElse(null);
     }
 }
