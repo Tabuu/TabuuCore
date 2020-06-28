@@ -8,6 +8,7 @@ package nl.tabuu.tabuucore.util;
 import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
+import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.vector.Vector3f;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -106,10 +107,7 @@ public class BukkitUtils {
 	 * @return	a {@link OfflinePlayer} with that name or null if no player with that name has ever joined the server.
 	 */
 	public static OfflinePlayer getOfflinePlayerByName(String playerName){
-		for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers())
-			if(offlinePlayer.getName().equalsIgnoreCase(playerName))
-				return offlinePlayer;
-		return null;
+		return Serializer.OFFLINE_PLAYER.deserialize(playerName);
 	}
 
 	/**
