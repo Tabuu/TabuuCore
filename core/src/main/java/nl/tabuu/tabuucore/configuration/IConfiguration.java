@@ -38,6 +38,19 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     void reload();
 
     /**
+     * Gets a value from a path, using a deserializer. If the value is null, return the default value.
+     * @param path          Path to get the value from.
+     * @param deserializer  Deserializer to deserialize the value with.
+     * @param def           The default value to return if null.
+     * @param <V>           Type of the value.
+     * @return              Value at the given path, or the default value if null.
+     */
+    default <V> V getOrDefault(String path, IObjectDeserializer<String, V> deserializer, V def) {
+        V value = get(path, deserializer);
+        return value == null ? def : value;
+    }
+
+    /**
      * Gets a value from a path, using a deserializer.
      *
      * @param path         Path to get the value from.
