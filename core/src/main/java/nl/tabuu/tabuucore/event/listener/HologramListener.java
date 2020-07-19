@@ -20,7 +20,7 @@ public class HologramListener implements Listener {
 
         for (IHologram hologram : _api.getHolograms()) {
             if (hologram.getPlayers().contains(player))
-                hologram.show(player);
+                hologram.addPlayer(player);
         }
     }
 }

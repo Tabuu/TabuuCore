@@ -2,7 +2,8 @@ package nl.tabuu.tabuucore.text;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
-import nl.tabuu.tabuucore.debug.Debug;
+import nl.tabuu.tabuucore.nms.NMSUtil;
+import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import nl.tabuu.tabuucore.util.vector.Vector1f;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
@@ -127,33 +128,31 @@ public class ComponentBuilder {
      */
     public ComponentBuilder addFormatting(ChatColor... formatting) {
         for (ChatColor format : formatting) {
-            switch (format) {
-                case BOLD:
-                    forCurrent(component -> component.setBold(true));
-                    break;
+            if (format.equals(ChatColor.BOLD))
+                forCurrent(component -> component.setBold(true));
 
-                case ITALIC:
-                    forCurrent(component -> component.setItalic(true));
-                    break;
+            else if (format.equals(ChatColor.ITALIC))
+                forCurrent(component -> component.setItalic(true));
 
-                case UNDERLINE:
-                    forCurrent(component -> component.setUnderlined(true));
-                    break;
+            else if (format.equals(ChatColor.UNDERLINE))
+                forCurrent(component -> component.setUnderlined(true));
 
-                case STRIKETHROUGH:
-                    forCurrent(component -> component.setStrikethrough(true));
-                    break;
+            else if (format.equals(ChatColor.STRIKETHROUGH))
+                forCurrent(component -> component.setStrikethrough(true));
 
-                case MAGIC:
-                    forCurrent(component -> component.setObfuscated(true));
-                    break;
+            else if (format.equals(ChatColor.MAGIC))
+                forCurrent(component -> component.setObfuscated(true));
 
-                default:
-                    setColor(format);
-                    break;
-            }
+            else
+                setColor(format);
         }
 
+        return this;
+    }
+
+    public ComponentBuilder setFont(String fontName) {
+        assert NMSUtil.getVersion().isPostOrEquals(NMSVersion.v1_16_R1) : "This method is not supported in your version of Minecraft.";
+        forCurrent(component -> component.setFont(fontName));
         return this;
     }
 

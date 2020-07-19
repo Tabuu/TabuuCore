@@ -24,7 +24,7 @@ public class TicksPerSecond implements ITicksPerSecond {
         MinecraftServer server = MinecraftServer.getServer();
         try {
             double[] tpsArray = (double[]) _tpsField.get(server);
-            return tpsArray[time.getIndex()];
+            return tpsArray[time.ordinal()];
         } catch (IllegalAccessException e) {
             TabuuCore.getInstance().getLogger().severe(ERROR_RETRIEVING);
         }

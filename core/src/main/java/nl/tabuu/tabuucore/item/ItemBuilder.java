@@ -93,8 +93,8 @@ public class ItemBuilder {
 	 * @see ItemMeta#setDisplayName(String)
 	 */
 	public ItemBuilder setDisplayName(String name) {
-		ItemMeta meta = _itemStack.getItemMeta();
-		
+		ItemMeta meta = getItemMeta();
+
 		meta.setDisplayName(name);
 		
 		_itemStack.setItemMeta(meta);
@@ -110,7 +110,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#setLocalizedName(String)
 	 */
 	public ItemBuilder setLocalizedName(String name) {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 
 		meta.setLocalizedName(name);
 
@@ -126,7 +126,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#setLore(List)
 	 */
 	public ItemBuilder addLore(String... lore) {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 		
 		List<String> oldLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 		oldLore.addAll(Arrays.asList(lore));
@@ -143,7 +143,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#setLore(List)
 	 */
 	public ItemBuilder setLore(String... lore) {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 
 		ArrayList<String> newLore = new ArrayList<>();
 		for(String string : lore){
@@ -166,7 +166,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#getLore()
 	 */
 	public List<String> getLore(){
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 
 		if(meta.hasLore())
 			return meta.getLore();
@@ -180,7 +180,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#setLore(List)
 	 */
 	public ItemBuilder clearLore() {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 		
 		meta.setLore(null);
 		
@@ -196,7 +196,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#addItemFlags(ItemFlag...)
 	 */
 	public ItemBuilder addItemFlags(ItemFlag... flags) {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 
 		meta.addItemFlags(flags);
 		
@@ -212,7 +212,7 @@ public class ItemBuilder {
 	 * @see ItemMeta#removeItemFlags(ItemFlag...)
 	 */
 	public ItemBuilder removeFlags(ItemFlag... flags) {
-		ItemMeta meta = _itemStack.getItemMeta();
+		ItemMeta meta = getItemMeta();
 		
 		meta.removeItemFlags(flags);
 		
@@ -265,5 +265,14 @@ public class ItemBuilder {
 			_tagCompound.apply(_itemStack);
 		_tagCompound = INBTTagCompound.get(_itemStack);
 		return _tagCompound;
+	}
+
+	/**
+	 * Returns the items meta, or throws an exception.
+	 * @return The items meta.
+	 */
+	public ItemMeta getItemMeta() {
+		assert _itemStack.getItemMeta() != null : "This item does not have meta data.";
+		return _itemStack.getItemMeta();
 	}
 }
