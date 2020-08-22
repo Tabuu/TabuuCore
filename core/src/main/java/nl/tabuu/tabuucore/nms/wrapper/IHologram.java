@@ -1,9 +1,12 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
+import nl.tabuu.tabuucore.hologram.HologramLine;
+import nl.tabuu.tabuucore.hologram.HologramStringLine;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface IHologram {
@@ -74,13 +77,21 @@ public interface IHologram {
      * Sets the lines of the hologram.
      * @param lines the lines to be set.
      */
-    void setLines(String... lines);
+    default void setLines(String... lines) {
+        setLines(Arrays.stream(lines).map(HologramStringLine::new).toArray(HologramLine[]::new));
+    }
+
+    /**
+     * Sets the lines of the hologram.
+     * @param lines the lines to be set.
+     */
+    void setLines(HologramLine... lines);
 
     /**
      * Returns the lines of this hologram.
      * @return the lines of this hologram.
      */
-    List<String> getLines();
+    List<HologramLine> getLines();
 
     /**
      * Sets the location of this hologram.

@@ -1,35 +1,36 @@
 package nl.tabuu.tabuucore.nms.v1_15_R1;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_15_R1.*;
+import nl.tabuu.tabuucore.hologram.HologramItemLine;
+import nl.tabuu.tabuucore.hologram.HologramLine;
+import nl.tabuu.tabuucore.hologram.HologramStringLine;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Hologram implements IHologram {
-    private List<EntityArmorStand> _entities;
+    private List<Map.Entry<EntityArmorStand, HologramLine>> _lines;
     private Set<UUID> _viewers;
     private boolean _destroyed;
 
-    private List<String> _lines;
     private Location _location;
-
-    private double _lineSpacing = 0.25D;
-
     private boolean _visible = true;
 
-    public Hologram(Location location, String[] lines) {
-        _entities = new ArrayList<>();
+    public Hologram(Location location, HologramLine[] lines) {
+        _lines = new LinkedList<>();
         _viewers = new HashSet<>();
         _destroyed = false;
 
-        _lines = Arrays.asList(lines);
         _location = location;
 
         setLines(lines);
@@ -38,7 +39,7 @@ public class Hologram implements IHologram {
     @Override
     public void destroy() {
         setVisible(false);
-        _entities.forEach(EntityArmorStand::die);
+        _lines.forEach(entry -> entry.getKey().die());
         _destroyed = true;
     }
 
@@ -85,49 +86,47 @@ public class Hologram implements IHologram {
     }
 
     @Override
-    public void setLines(String... lines) {
+    public void setLines(HologramLine... lines) {
         setVisible(false);
+        _lines.clear();
 
-        boolean entityOverflow = lines.length < _entities.size();
-        boolean entityUnderflow = lines.length > _entities.size();
+        double length = Arrays.stream(lines).mapToDouble(line -> line.getTopSpacing() + line.getBottomSpacing()).sum();
+        Location location = getLocation().clone().add(0, length - 1.975d, 0);
 
-        if (entityUnderflow) {
-            Location location = getLocation().subtract(0, _entities.size() * _lineSpacing, 0);
-            int underflow = lines.length - _entities.size();
+        for(int i = 0; i < lines.length; i++) {
+            HologramLine line = lines[i];
 
-            for (int i = 0; i < underflow; i++) {
-                _entities.add(createArmorStand(location));
-                location.subtract(0, _lineSpacing, 0);
+            if(i > 0) location.subtract(0, line.getTopSpacing(), 0);
+            _lines.add(new HashMap.SimpleEntry<>(createArmorStand(location.clone()), line));
+            location.subtract(0, line.getBottomSpacing(), 0);
+        }
+
+        for(Map.Entry<EntityArmorStand, HologramLine> entry : _lines) {
+            HologramLine line = entry.getValue();
+            EntityArmorStand stand = entry.getKey();
+
+            if(line instanceof HologramStringLine) {
+                HologramStringLine string = (HologramStringLine) line;
+                stand.setCustomName(new ChatComponentText(string.getString()));
+                stand.setCustomNameVisible(true);
+            } else if (line instanceof HologramItemLine) {
+                HologramItemLine item = (HologramItemLine) line;
+                stand.setEquipment(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
+                stand.setCustomName(new ChatComponentText(" "));
             }
-        } else if (entityOverflow) {
-            int overflow = _entities.size() - lines.length;
-
-            for (int i = 0; i < overflow; i++)
-                _entities.remove(_entities.size() - 1);
         }
-
-        for (int i = 0; i < lines.length; i++) {
-            EntityArmorStand stand = _entities.get(i);
-            stand.setCustomName(new ChatComponentText(lines[i]));
-        }
-
-        _lines = Arrays.asList(lines);
         setVisible(true);
     }
 
     @Override
-    public List<String> getLines() {
-        return Collections.unmodifiableList(_lines);
+    public List<HologramLine> getLines() {
+        return _lines.stream().map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
     @Override
     public void setLocation(Location location) {
         _location = location.clone();
-
-        for (EntityArmorStand entity : _entities) {
-            entity.enderTeleportTo(location.getX(), location.getY(), location.getZ());
-            location.subtract(0, _lineSpacing, 0);
-        }
+        setLines(_lines.stream().map(Map.Entry::getValue).toArray(HologramLine[]::new));
     }
 
     @Override
@@ -141,14 +140,22 @@ public class Hologram implements IHologram {
     }
 
     private void update(Player player) {
-        if (isVisible()) {
-            for (EntityArmorStand entity : _entities) {
-                sendPacket(player, new PacketPlayOutSpawnEntityLiving(entity));
-                sendPacket(player, new PacketPlayOutEntityMetadata(entity.getId(), entity.getDataWatcher(), true));
+        for (Map.Entry<EntityArmorStand, HologramLine> line : _lines) {
+            EntityArmorStand stand = line.getKey();
+
+            if(!isVisible()) {
+                sendPacket(player, new PacketPlayOutEntityDestroy(stand.getId()));
+                continue;
             }
-        } else {
-            for (EntityArmorStand entity : _entities)
-                sendPacket(player, new PacketPlayOutEntityDestroy(entity.getId()));
+
+            sendPacket(player, new PacketPlayOutSpawnEntityLiving(stand));
+            sendPacket(player, new PacketPlayOutEntityMetadata(stand.getId(), stand.getDataWatcher(), true));
+
+            if(line.getValue() instanceof HologramItemLine) {
+                HologramItemLine itemLine = (HologramItemLine) line.getValue();
+                ItemStack item = CraftItemStack.asNMSCopy(itemLine.getItem());
+                sendPacket(player, new PacketPlayOutEntityEquipment(stand.getId(), EnumItemSlot.HEAD, item));
+            }
         }
     }
 
@@ -164,7 +171,7 @@ public class Hologram implements IHologram {
         EntityArmorStand entity = new EntityArmorStand(world, location.getX(), location.getY(), location.getZ());
 
         entity.setCustomNameVisible(true);
-        entity.setNoGravity(false);
+        entity.setNoGravity(true);
         entity.setInvisible(true);
         entity.setMarker(false);
 
