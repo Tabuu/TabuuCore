@@ -6,13 +6,13 @@ public class DoubleSerializer extends AbstractStringSerializer<Double> {
         if(Math.round(number) == number)
             return String.format("%.0f", number);
 
-        return number.toString();
+        return number.toString().replace('.', '_');
     }
 
     @Override
     public Double deserialize(String string) {
         try {
-            return Double.parseDouble(string);
+            return Double.parseDouble(string.replace('_', '.'));
         }
         catch (NumberFormatException exception){
             return null;

@@ -31,13 +31,11 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
         if(string == null)
             return null;
 
-
         DoubleSerializer doubleSerializer = Serializer.DOUBLE;
         String[] args = string.split(" ");
 
         if(args.length < 4)
             return null;
-
 
         World world = Bukkit.getWorld(args[0].replace("|", " "));
         Double
