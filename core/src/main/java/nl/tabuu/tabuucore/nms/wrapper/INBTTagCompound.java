@@ -325,6 +325,7 @@ public interface INBTTagCompound {
 
     /**
      * Returns a new empty NBTTagCompound and uses {@link #copy(byte[])} method to fill it with data.
+     * @param bytes The bytes containing the tag's data.
      * @return a new empty NBTTagCompound.
      */
     static INBTTagCompound get(byte[] bytes){
@@ -336,6 +337,7 @@ public interface INBTTagCompound {
 
     /**
      * Returns a new empty NBTTagCompound and uses {@link #copy(ItemStack)} method to fill it with data.
+     * @param item The item to get the tag of.
      * @return a new empty NBTTagCompound.
      */
     static INBTTagCompound get(ItemStack item){
@@ -347,6 +349,7 @@ public interface INBTTagCompound {
 
     /**
      * Returns a new empty NBTTagCompound and uses {@link #copy(Entity)} method to fill it with data.
+     * @param entity The entity to get the tag of.
      * @return a new empty NBTTagCompound.
      */
     static INBTTagCompound get(Entity entity){

@@ -51,8 +51,8 @@ public interface IInventoryUtil {
 
     /**
      * Adds a slot listener.
-     * @param player
-     * @param container
+     * @param player The player to create the slot listener for.
+     * @param container The container containing the slots to listen to.
      */
     void addActiveContainerSlotListener(Player player, IContainerWindow container);
 

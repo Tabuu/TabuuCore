@@ -42,6 +42,7 @@ public interface ITicksPerSecond {
 
         /**
          * @deprecated Deprecated in favor of {@link #ordinal()}
+         * @return Returns the {@link #ordinal()} of the enum value.
          */
         @Deprecated
         public int getIndex(){

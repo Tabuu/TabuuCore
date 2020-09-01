@@ -20,7 +20,7 @@ public class Dictionary extends HashMap<String, String> {
     }
 
     /**
-     * Translates a configuration key to its value. The translation will be colored using the '&' character as prefix character.
+     * Translates a configuration key to its value. The translation will be colored using the '&amp;' character as prefix character.
      * @param key the key.
      * @param replacements replaces the fist string (index n) with the next string (index n + 1).
      * @return translated string.
