@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 
 public class Debug {
 
-    public static void log(Object object){
+    public static void log(Object object) {
         Bukkit.broadcastMessage(getPrefix() + object.toString());
     }
 

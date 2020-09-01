@@ -19,7 +19,7 @@ public class HologramListener implements Listener {
         Player player = event.getPlayer();
 
         for (IHologram hologram : _api.getHolograms()) {
-            if (hologram.getPlayers().contains(player))
+            if (hologram.getPlayers().contains(player) || hologram.isGlobal())
                 hologram.addPlayer(player);
         }
     }

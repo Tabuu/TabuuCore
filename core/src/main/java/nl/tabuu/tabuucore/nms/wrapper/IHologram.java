@@ -105,6 +105,10 @@ public interface IHologram {
      */
     Location getLocation();
 
+    boolean isGlobal();
+
+    void setGlobal(boolean global);
+
     /**
      * Returns whether or not this hologram is visible to the specified player.
      * @param player the player to check.

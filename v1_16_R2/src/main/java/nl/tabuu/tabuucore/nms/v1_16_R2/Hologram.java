@@ -21,10 +21,8 @@ import java.util.stream.Collectors;
 public class Hologram implements IHologram {
     private List<Map.Entry<EntityArmorStand, HologramLine>> _lines;
     private Set<UUID> _viewers;
-    private boolean _destroyed;
-
+    private boolean _destroyed, _global, _visible = true;
     private Location _location;
-    private boolean _visible = true;
 
     public Hologram(Location location, HologramLine[] lines) {
         _lines = new LinkedList<>();
@@ -55,19 +53,17 @@ public class Hologram implements IHologram {
         if (!offlinePlayer.isOnline()) return;
         Player player = (Player) offlinePlayer;
 
-        update(player, true);
+        update(player);
     }
 
     @Override
     public void addPlayer(OfflinePlayer offlinePlayer) {
-        if(_viewers.contains(offlinePlayer.getUniqueId())) return;
-
         _viewers.add(offlinePlayer.getUniqueId());
 
         if (!offlinePlayer.isOnline()) return;
         Player player = (Player) offlinePlayer;
 
-        update(player, true);
+        update(player);
     }
 
     @Override
@@ -153,9 +149,21 @@ public class Hologram implements IHologram {
         return _viewers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isGlobal() {
+        return _global;
+    }
+
+    @Override
+    public void setGlobal(boolean global) {
+        if(global && !_global)
+            Bukkit.getOnlinePlayers().forEach(this::addPlayer);
+
+        _global = global;
+    }
+
     private void update(EntityArmorStand stand, HologramLine line, Player player) {
         sendPacket(player, new PacketPlayOutEntityDestroy(stand.getId()));
-        line.setUpdating(false);
         if(!isVisible()) return;
 
         stand.pitch = (float) line.getPitch();
@@ -187,20 +195,29 @@ public class Hologram implements IHologram {
         }
     }
 
-    private void update(Player player, boolean force) {
+    private void update(Player player) {
         for (Map.Entry<EntityArmorStand, HologramLine> hologramLine : _lines) {
             EntityArmorStand stand = hologramLine.getKey();
             HologramLine line = hologramLine.getValue();
-            if(line.isUpdating() || force) update(stand, line, player);
+            update(stand, line, player);
         }
     }
 
     private void update(boolean force) {
-        for (OfflinePlayer offlinePlayer : getPlayers()) {
-            if (!offlinePlayer.isOnline()) continue;
-            Player player = (Player) offlinePlayer;
+        for (Map.Entry<EntityArmorStand, HologramLine> hologramLine : _lines) {
+            EntityArmorStand stand = hologramLine.getKey();
+            HologramLine line = hologramLine.getValue();
 
-            update(player, force);
+            if(!line.isUpdating() && ! force) continue;
+
+            for (OfflinePlayer offlinePlayer : getPlayers()) {
+                if (!offlinePlayer.isOnline()) continue;
+                Player player = (Player) offlinePlayer;
+
+                update(stand, line, player);
+            }
+
+            line.setUpdating(false);
         }
     }
 
