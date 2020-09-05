@@ -9,10 +9,10 @@ import java.io.*;
 
 public class YamlConfiguration extends org.bukkit.configuration.file.YamlConfiguration implements IConfiguration {
 
-    File _file;
-    InputStream _defaults;
+    private File _file;
+    private InputStream _defaults;
 
-    public YamlConfiguration(File file, InputStream defaults){
+    public YamlConfiguration(File file, InputStream defaults) {
         _file = file;
         _defaults = defaults;
 
@@ -36,7 +36,7 @@ public class YamlConfiguration extends org.bukkit.configuration.file.YamlConfigu
         super.set(path, null);
     }
 
-    private void writeDefaults(){
+    private void writeDefaults() {
         if (!_file.exists())
             _file.getParentFile().mkdirs();
 

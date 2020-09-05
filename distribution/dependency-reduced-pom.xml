@@ -3,7 +3,7 @@
   <parent>
     <artifactId>tabuucore-parent</artifactId>
     <groupId>nl.tabuu</groupId>
-    <version>2020.8.0</version>
+    <version>2020.9.0-pre</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.tabuu</groupId>

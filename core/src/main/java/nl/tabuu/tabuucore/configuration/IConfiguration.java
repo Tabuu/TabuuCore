@@ -75,6 +75,11 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
         set(path, serializer.serialize(value));
     }
 
+    default <V> boolean isDeserializable(String path, IObjectDeserializer<String, V> deserializer) {
+        String value = getString(path);
+        return deserializer.deserialize(value) != null;
+    }
+
     /**
      * Gets a list from a path, using a deserializer.
      *
@@ -120,28 +125,6 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     @Override
     default Location getLocation(String path) {
         return get(path, Serializer.LOCATION);
-    }
-
-    /**
-     * Returns an enum from the specified path.
-     *
-     * @param enumClass The enum's class.
-     * @param path      The path to get the enum from.
-     * @param <T>       The enum's class.
-     * @return An enum from the specified path.
-     */
-    default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path) {
-        return get(path, (string) -> Enum.valueOf(enumClass, string));
-    }
-
-    /**
-     * Sets an enum to the specified path.
-     *
-     * @param path  The path to set the enum to.
-     * @param value The enum to set.
-     */
-    default void set(String path, Enum value) {
-        set(path, value.name());
     }
 
     /**
@@ -328,6 +311,32 @@ public interface IConfiguration extends Configuration, ConfigurationSection {
     @Deprecated /*6th of april 2020*/
     default Player getPlayer(String path) {
         return get(path, Serializer.PLAYER);
+    }
+
+    /**
+     * Returns an enum from the specified path.
+     *
+     * @param enumClass The enum's class.
+     * @param path      The path to get the enum from.
+     * @param <T>       The enum's class.
+     * @return An enum from the specified path.
+     * @deprecated Deprecated in favor of {@link Enum#valueOf}
+     */
+    @Deprecated
+    default <T extends Enum<T>> T getEnum(Class<T> enumClass, String path) {
+        return get(path, (string) -> Enum.valueOf(enumClass, string));
+    }
+
+    /**
+     * Sets an enum to the specified path.
+     *
+     * @param path  The path to set the enum to.
+     * @param value The enum to set.
+     * @deprecated Deprecated in favor of {@link Enum#name()}
+     */
+    @Deprecated
+    default void set(String path, Enum value) {
+        set(path, value.name());
     }
 
     /**
