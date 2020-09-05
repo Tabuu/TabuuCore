@@ -60,19 +60,20 @@ public interface IDataHolder {
 
     void set(String path, String value);
     void setStringList(String path, List<String> list);
-    void setStringMap(String path, Map<String, String> map);
+    default void setStringMap(String path, Map<String, String> map) { delete(path); map.forEach((child, value) -> set(path + "." + child, value)); }
 
     void set(String path, char value);
     void setCharacterList(String path, List<Character> list);
-    void setCharacterMap(String path, Map<String, Character> map);
+    default void setCharacterMap(String path, Map<String, Character> map) { delete(path); map.forEach((child, value) -> set(path + "." + child, value)); }
+
 
     void set(String path, boolean value);
     void setBooleanList(String path, List<Boolean> list);
-    void setBooleanMap(String path, Map<String, Boolean> map);
+    default void setBooleanMap(String path, Map<String, Boolean> map) { delete(path); map.forEach((child, value) -> set(path + "." + child, value)); }
 
     void set(String path, Number value);
     void setNumberList(String path, List<Number> list);
-    void setNumberMap(String path, Map<String, Number> map);
+    default void setNumberMap(String path, Map<String, Number> map) { delete(path); map.forEach((child, value) -> set(path + "." + child, value)); }
 
     // endregion
 

@@ -1,88 +1,59 @@
 package nl.tabuu.tabuucore.configuration.file;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import nl.tabuu.tabuucore.configuration.IConfiguration;
-import nl.tabuu.tabuucore.serialization.string.Serializer;
-import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationOptions;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 import java.io.*;
 import java.util.*;
 
 public class JsonConfiguration implements IConfiguration {
 
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     private JsonParser _parser;
     private JsonObject _root;
     private File _file;
     private InputStream _defaults;
 
-    public JsonConfiguration(JsonObject object) {
-        _root = object;
-    }
-
     public JsonConfiguration(File file, InputStream defaults) {
-        _parser = new JsonParser();
         _file = file;
         _defaults = defaults;
+        _parser = new JsonParser();
         writeDefaults();
-
-        Reader jsonReader = null;
-
-        try {
-            jsonReader = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(jsonReader != null)
-            _root = _parser.parse(jsonReader).getAsJsonObject();
     }
 
-    private void writeDefaults() {
-        if (!_file.exists())
-            _file.getParentFile().mkdirs();
+    @Override
+    public InputStream getDefaults() {
+        return _defaults;
+    }
 
-        if(_defaults == null) return;
+    @Override
+    public File getFile() {
+        return _file;
+    }
 
-        try {
-            if (!_file.exists()) {
-                InputStream in = _defaults;
-                OutputStream out = new FileOutputStream(_file);
-                byte[] buf = new byte[_defaults.available()];
-                int len;
-                while ((len = in.read(buf)) > 0)
-                    out.write(buf, 0, len);
-                out.close();
-                in.close();
-            }
-            reload();
-        } catch (IOException ex) {
-            Bukkit.getLogger().severe("Plugin unable to write configuration file " + _file.getName() + "!");
+    @Override
+    public void reload() {
+        try (Reader jsonReader = new FileReader(getFile())){
+            JsonElement element = _parser.parse(jsonReader);
+            if(element.isJsonObject()) _root = element.getAsJsonObject();
+            else _root = new JsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public String getJsonElementName(String path) {
         String[] parts = path.split("\\.");
+        parts = Arrays.stream(parts).filter(s -> !s.isEmpty()).toArray(String[]::new);
+
         if(parts.length < 1) return "";
         else return parts[parts.length - 1];
     }
 
     public JsonElement getJsonElement(String path) {
         String[] parts = path.split("\\.");
+        parts = Arrays.stream(parts).filter(s -> !s.isEmpty()).toArray(String[]::new);
 
         JsonObject current = _root;
         for(String part : parts) {
@@ -96,8 +67,16 @@ public class JsonConfiguration implements IConfiguration {
         return current;
     }
 
+    public JsonArray getJsonArray(String path) {
+        JsonElement element = getJsonElement(path);
+        if(!element.isJsonArray()) return null;
+
+        return element.getAsJsonArray();
+    }
+
     public JsonObject getJsonParentObject(String path) {
         String[] parts = path.split("\\.");
+        parts = Arrays.stream(parts).filter(s -> !s.isEmpty()).toArray(String[]::new);
         if(parts.length < 2) return _root;
 
         parts = Arrays.copyOfRange(parts, 0, parts.length - 1);
@@ -114,39 +93,11 @@ public class JsonConfiguration implements IConfiguration {
     }
 
     @Override
-    public void save() {
-        try {
-            Validate.notNull(_file, "File cannot be null");
-            Files.createParentDirs(_file);
-            String data = _root.toString();
-
-            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(_file), Charsets.UTF_8)) {
-                writer.write(data);
-            }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Override
     public void delete(String path) {
-        String[] parts = path.split("\\.");
-        String elementName = parts[parts.length - 1];
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
 
-    }
-
-    @Override
-    public void reload() {
-        Reader jsonReader = null;
-
-        try {
-            jsonReader = new FileReader(_file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if(jsonReader != null)
-            _root = _parser.parse(jsonReader).getAsJsonObject();
+        object.remove(name);
     }
 
     private Set<String> getKeys(Set<String> keys, String path, JsonObject object, boolean deep) {
@@ -156,7 +107,7 @@ public class JsonConfiguration implements IConfiguration {
             JsonElement element = entry.getValue();
             keys.add(newPath);
 
-            if(deep && entry.getValue().isJsonObject())
+            if(deep && element.isJsonObject())
                 getKeys(keys, newPath, element.getAsJsonObject(), true);
         }
 
@@ -164,90 +115,13 @@ public class JsonConfiguration implements IConfiguration {
     }
 
     @Override
+    public Set<String> getKeys(String path, boolean deep) {
+        return getKeys(new HashSet<>(), path, _root, deep);
+    }
+
+    @Override
     public Set<String> getKeys(boolean deep) {
-        return getKeys(new HashSet<>(), "", _root, deep);
-    }
-
-    @Override
-    public Map<String, Object> getValues(boolean deep) {
-        Map<String, Object> values = new HashMap<>();
-
-        for(String key : getKeys(deep))
-            values.put(key, getJsonElement(key).toString());
-
-        return values;
-    }
-
-    @Override
-    public boolean contains(String path) {
-        return getJsonElement(path) != null;
-    }
-
-    @Override
-    public boolean contains(String path, boolean ignoreDefault) {
-        return contains(path);
-    }
-
-    @Override
-    public boolean isSet(String path) {
-        return contains(path);
-    }
-
-    @Override
-    public String getCurrentPath() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public String getName() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Configuration getRoot() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ConfigurationSection getParent() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Object get(String path) {
-        return getJsonElement(path).toString();
-    }
-
-    @Override
-    public Object get(String path, Object other) {
-        return contains(path) ? getJsonElement(path).toString() : other;
-    }
-
-    @Override
-    public void set(String path, Object object) {
-        String name = getJsonElementName(path);
-
-        if(object instanceof String)
-            getJsonParentObject(path).addProperty(name, (String) object);
-
-        else if (object instanceof Number)
-            getJsonParentObject(path).addProperty(name, (Number) object);
-
-        else if (object instanceof Boolean)
-            getJsonParentObject(path).addProperty(name, (Boolean) object);
-
-        else if (object instanceof Character)
-            getJsonParentObject(path).addProperty(name, (Character) object);
-    }
-
-    @Override
-    public ConfigurationSection createSection(String s) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ConfigurationSection createSection(String s, Map<?, ?> map) {
-        throw new NotImplementedException();
+        return getKeys("", deep);
     }
 
     @Override
@@ -260,326 +134,299 @@ public class JsonConfiguration implements IConfiguration {
     }
 
     @Override
-    public String getString(String path, String other) {
-        try {
-            return getJsonElement(path).getAsString();
-        } catch (ClassCastException | IllegalStateException exception) {
-            return other;
+    public List<String> getStringList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<String> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsString());
+            } catch (ClassCastException | IllegalStateException ignore) { }
         }
+
+        return list;
     }
 
     @Override
-    public boolean isString(String path) {
-        return getString(path) != null;
+    public void set(String path, String value) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        object.addProperty(name, value);
     }
 
     @Override
-    public int getInt(String path) {
-        try {
-            return getJsonElement(path).getAsInt();
-        } catch (ClassCastException | IllegalStateException exception) {
-            return 0;
-        }
+    public void setStringList(String path, List<String> list) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        JsonArray array = new JsonArray();
+        list.forEach(array::add);
+
+        object.add(name, array);
     }
 
     @Override
-    public int getInt(String path, int other) {
-        try {
-            return getJsonElement(path).getAsInt();
-        } catch (ClassCastException | IllegalStateException exception) {
-            return other;
-        }
-    }
-
-    @Override
-    public boolean isInt(String path) {
-        try {
-            getJsonElement(path).getAsInt();
-            return true;
-        } catch (ClassCastException | IllegalStateException exception) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean getBoolean(String path) {
+    public Boolean getBoolean(String path) {
         try {
             return getJsonElement(path).getAsBoolean();
         } catch (ClassCastException | IllegalStateException exception) {
-            return false;
+            return null;
         }
     }
 
     @Override
-    public boolean getBoolean(String path, boolean other) {
+    public List<Boolean> getBooleanList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Boolean> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsBoolean());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
+    }
+
+    @Override
+    public void set(String path, boolean value) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        object.addProperty(name, value);
+    }
+
+    @Override
+    public void setBooleanList(String path, List<Boolean> list) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        JsonArray array = new JsonArray();
+        list.forEach(array::add);
+
+        object.add(name, array);
+    }
+
+    @Override
+    public Character getCharacter(String path) {
         try {
-            return getJsonElement(path).getAsBoolean();
+            return getJsonElement(path).getAsCharacter();
         } catch (ClassCastException | IllegalStateException exception) {
-            return other;
+            return null;
         }
     }
 
     @Override
-    public boolean isBoolean(String path) {
-        try {
-            getJsonElement(path).getAsBoolean();
-            return true;
-        } catch (ClassCastException | IllegalStateException exception) {
-            return false;
+    public List<Character> getCharacterList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Character> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsCharacter());
+            } catch (ClassCastException | IllegalStateException ignore) { }
         }
+
+        return list;
     }
 
     @Override
-    public double getDouble(String path) {
+    public void set(String path, char value) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        object.addProperty(name, value);
+    }
+
+    @Override
+    public void setCharacterList(String path, List<Character> list) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        JsonArray array = new JsonArray();
+        list.forEach(array::add);
+
+        object.add(name, array);
+    }
+
+    @Override
+    public Double getDouble(String path) {
         try {
             return getJsonElement(path).getAsDouble();
         } catch (ClassCastException | IllegalStateException exception) {
-            return 0d;
+            return null;
         }
     }
 
     @Override
-    public double getDouble(String path, double other) {
-        try {
-            return getJsonElement(path).getAsDouble();
-        } catch (ClassCastException | IllegalStateException exception) {
-            return other;
+    public List<Double> getDoubleList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Double> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsDouble());
+            } catch (ClassCastException | IllegalStateException ignore) { }
         }
+
+        return list;
     }
 
     @Override
-    public boolean isDouble(String path) {
-        try {
-            getJsonElement(path).getAsDouble();
-            return true;
-        } catch (ClassCastException | IllegalStateException exception) {
-            return false;
-        }
-    }
-
-    @Override
-    public long getLong(String path) {
+    public Long getLong(String path) {
         try {
             return getJsonElement(path).getAsLong();
         } catch (ClassCastException | IllegalStateException exception) {
-            return 0L;
+            return null;
         }
     }
 
     @Override
-    public long getLong(String path, long other) {
+    public List<Long> getLongList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Long> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsLong());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
+    }
+
+    @Override
+    public Integer getInteger(String path) {
         try {
-            return getJsonElement(path).getAsLong();
+            return getJsonElement(path).getAsInt();
         } catch (ClassCastException | IllegalStateException exception) {
-            return other;
+            return null;
         }
     }
 
     @Override
-    public boolean isLong(String path) {
+    public List<Integer> getIntegerList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Integer> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsInt());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
+    }
+
+    @Override
+    public Float getFloat(String path) {
         try {
-            getJsonElement(path).getAsLong();
-            return true;
+            return getJsonElement(path).getAsFloat();
         } catch (ClassCastException | IllegalStateException exception) {
-            return false;
+            return null;
         }
     }
 
     @Override
-    public List<?> getList(String path) {
-        throw new NotImplementedException();
+    public List<Float> getFloatList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Float> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsFloat());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
     }
 
     @Override
-    public List<?> getList(String path, List<?> other) {
-        // List<?> list = getList(path);
-        // return list == null || list.isEmpty() ? other : list;
-        return other;
+    public Byte getByte(String path) {
+        try {
+            return getJsonElement(path).getAsByte();
+        } catch (ClassCastException | IllegalStateException exception) {
+            return null;
+        }
     }
 
     @Override
-    public boolean isList(String path) {
-        JsonElement element = getJsonElement(path);
-        return element != null && element.isJsonArray();
+    public List<Byte> getByteList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Byte> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsByte());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
     }
 
     @Override
-    public List<String> getStringList(String s) {
-        return null;
+    public Short getShort(String path) {
+        try {
+            return getJsonElement(path).getAsShort();
+        } catch (ClassCastException | IllegalStateException exception) {
+            return null;
+        }
     }
 
     @Override
-    public List<Integer> getIntegerList(String s) {
-        return null;
+    public List<Short> getShortList(String path) {
+        JsonArray array = getJsonArray(path);
+        if(array == null) return null;
+
+        List<Short> list = new ArrayList<>();
+
+        for(JsonElement element : array) {
+            try {
+                list.add(element.getAsShort());
+            } catch (ClassCastException | IllegalStateException ignore) { }
+        }
+
+        return list;
     }
 
     @Override
-    public List<Boolean> getBooleanList(String s) {
-        return null;
+    public void set(String path, Number value) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        object.addProperty(name, value);
     }
 
     @Override
-    public List<Double> getDoubleList(String s) {
-        return null;
+    public void setNumberList(String path, List<Number> list) {
+        String name = getJsonElementName(path);
+        JsonObject object = getJsonParentObject(path);
+
+        JsonArray array = new JsonArray();
+        list.forEach(array::add);
+
+        object.add(name, array);
     }
 
     @Override
-    public List<Float> getFloatList(String s) {
-        return null;
-    }
-
-    @Override
-    public List<Long> getLongList(String s) {
-        return null;
-    }
-
-    @Override
-    public List<Byte> getByteList(String s) {
-        return null;
-    }
-
-    @Override
-    public List<Character> getCharacterList(String s) {
-        return null;
-    }
-
-    @Override
-    public List<Short> getShortList(String s) {
-        return null;
-    }
-
-    @Override
-    public List<Map<?, ?>> getMapList(String s) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public <T> T getObject(String s, Class<T> aClass) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public <T> T getObject(String s, Class<T> aClass, T t) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public <T extends ConfigurationSerializable> T getSerializable(String s, Class<T> aClass, T t) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Vector getVector(String path) {
-        return get(path, Serializer.VECTOR);
-    }
-
-    @Override
-    public Vector getVector(String path, Vector other) {
-        return getOrDefault(path, Serializer.VECTOR, other);
-    }
-
-    @Override
-    public boolean isVector(String path) {
-        return isDeserializable(path, Serializer.VECTOR);
-    }
-
-    @Override
-    public OfflinePlayer getOfflinePlayer(String path, OfflinePlayer offlinePlayer) {
-        return getOrDefault(path, Serializer.OFFLINE_PLAYER, offlinePlayer);
-    }
-
-    @Override
-    public boolean isOfflinePlayer(String path) {
-        return isDeserializable(path, Serializer.OFFLINE_PLAYER);
-    }
-
-    @Override
-    public ItemStack getItemStack(String path) {
-        return get(path, Serializer.ITEMSTACK);
-    }
-
-    @Override
-    public ItemStack getItemStack(String path, ItemStack itemStack) {
-        return getOrDefault(path, Serializer.ITEMSTACK, itemStack);
-    }
-
-    @Override
-    public boolean isItemStack(String path) {
-        return isDeserializable(path, Serializer.ITEMSTACK);
-    }
-
-    @Override
-    public Color getColor(String s) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Color getColor(String s, Color color) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public boolean isColor(String s) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Location getLocation(String path, Location location) {
-        return getOrDefault(path, Serializer.LOCATION, location);
-    }
-
-    @Override
-    public boolean isLocation(String path) {
-        return isDeserializable(path, Serializer.LOCATION);
-    }
-
-    @Override
-    public ConfigurationSection getConfigurationSection(String path) {
-        return new JsonConfiguration(getJsonElement(path).getAsJsonObject());
-    }
-
-    @Override
-    public boolean isConfigurationSection(String path) {
-        return getJsonElement(path).isJsonObject();
-    }
-
-    @Override
-    public ConfigurationSection getDefaultSection() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void addDefault(String s, Object o) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void addDefaults(Map<String, Object> map) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void addDefaults(Configuration configuration) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void setDefaults(Configuration configuration) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public Configuration getDefaults() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public ConfigurationOptions options() {
-        throw new NotImplementedException();
+    public String toString() {
+        return GSON.toJson(_root);
     }
 }
