@@ -6,22 +6,15 @@ import nl.tabuu.tabuucore.serialization.IObjectDeserializer;
 import nl.tabuu.tabuucore.serialization.IObjectSerializer;
 import nl.tabuu.tabuucore.serialization.string.AbstractStringSerializer;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
-import nl.tabuu.tabuucore.util.Dictionary;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public interface IConfiguration extends IDataHolder {
 

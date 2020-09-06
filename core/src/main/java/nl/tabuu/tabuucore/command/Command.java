@@ -14,6 +14,7 @@ import org.bukkit.command.defaults.BukkitCommand;
 import java.util.*;
 
 public abstract class Command extends BukkitCommand implements CommandExecutor, TabCompleter {
+
     private Command _parent;
     private SenderType _requiredSenderType;
     private ArgumentConverter _argumentConverter;
@@ -48,10 +49,7 @@ public abstract class Command extends BukkitCommand implements CommandExecutor, 
 
         _parent = parent;
         _subCommandMap = new HashMap<>();
-        _local = TabuuCore.getInstance()
-                .getConfigurationManager()
-                .getConfiguration("lang")
-                .getDictionary("");
+        _local = TabuuCore.getInstance().getLocal();
     }
 
     /**

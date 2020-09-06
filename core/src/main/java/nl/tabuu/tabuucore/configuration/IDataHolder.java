@@ -92,6 +92,10 @@ public interface IDataHolder {
         return dictionary;
     }
 
+    IDataHolder getDataSection(String path);
+
+    void setDataSection(String path, IDataHolder data);
+
     Set<String> getKeys(boolean deep);
 
     Set<String> getKeys(String path, boolean deep);
@@ -106,6 +110,8 @@ public interface IDataHolder {
      * @param path The path to be deleted.
      */
     void delete(String path);
+
+    IDataHolder createSection(String path);
 
     // endregion
 
@@ -248,9 +254,6 @@ public interface IDataHolder {
      * @param <V>             Type of the value.
      */
     default <K, V> void setMap(String path, Map<K, V> map, IObjectSerializer<K, String> keySerializer, IObjectSerializer<V, String> valueSerializer) {
-        if (path.isEmpty())
-            throw new IllegalArgumentException("Cannot set to an empty path!");
-
         delete(path);
 
         for (Map.Entry<K, V> entry : map.entrySet()) {

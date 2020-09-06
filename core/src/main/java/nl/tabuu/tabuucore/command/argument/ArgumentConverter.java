@@ -12,7 +12,7 @@ public abstract class ArgumentConverter {
     protected Dictionary _local;
 
     protected ArgumentConverter(){
-        _local = TabuuCore.getInstance().getConfigurationManager().getConfiguration("lang").getDictionary("");
+        _local = TabuuCore.getInstance().getLocal();
     }
 
     /**

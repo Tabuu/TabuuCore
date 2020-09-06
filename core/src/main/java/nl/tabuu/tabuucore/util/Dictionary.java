@@ -15,8 +15,8 @@ public class Dictionary extends HashMap<String, String> {
     public Dictionary(){
         super();
 
-        IConfiguration config = TabuuCore.getInstance().getConfigurationManager().getConfiguration("config");
-        _usePlaceholderApi = config.getBoolean("Dependencies.PlaceholderAPI.Enabled");
+        IConfiguration config = TabuuCore.getInstance().getConfigurationManager().getConfiguration("config.yml");
+        _usePlaceholderApi = config.getBoolean("Dependencies.PlaceholderAPI.Enabled", false);
     }
 
     /**

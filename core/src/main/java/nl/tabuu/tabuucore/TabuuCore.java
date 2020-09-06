@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore;
 
 import nl.tabuu.tabuucore.command.CommandRegister;
+import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
@@ -11,6 +12,7 @@ import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.api.HologramAPI;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
+import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;
 
 import java.util.Arrays;
@@ -24,6 +26,7 @@ public class TabuuCore extends TabuuCorePlugin {
     private static TabuuCore _instance;
     private InventoryUIManager _inventoryUIManager;
     private CommandRegister _commandRegister;
+    private Dictionary _local;
 
     @Override
     public void onEnable(){
@@ -44,8 +47,8 @@ public class TabuuCore extends TabuuCorePlugin {
         }
 
         // Registering configuration.
-        getConfigurationManager().addConfiguration("lang");
-        getConfigurationManager().addConfiguration("config");
+        getConfigurationManager().addConfiguration("config.yml", YamlConfiguration.class);
+        _local = getConfigurationManager().addConfiguration("lang.yml", YamlConfiguration.class).getDictionary("");
 
         // Inventory user interface related.
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), getInstance());
@@ -98,5 +101,9 @@ public class TabuuCore extends TabuuCorePlugin {
      */
     public static TabuuCore getInstance(){
         return _instance;
+    }
+
+    public Dictionary getLocal() {
+        return _local;
     }
 }
