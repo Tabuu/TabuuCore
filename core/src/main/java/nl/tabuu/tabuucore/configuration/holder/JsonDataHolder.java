@@ -119,7 +119,6 @@ public class JsonDataHolder implements IDataHolder {
             String newPath = path + (path.isEmpty() ? "" : ".") + name;
             JsonElement element = entry.getValue();
             keys.add(newPath);
-            System.out.println("Key found! " + newPath);
 
             if(deep && element.isJsonObject())
                 getKeys(keys, newPath, element.getAsJsonObject(), true);
