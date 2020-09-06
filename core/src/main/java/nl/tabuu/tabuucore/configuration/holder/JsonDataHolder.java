@@ -84,7 +84,8 @@ public class JsonDataHolder implements IDataHolder {
 
     @Override
     public void delete(String path) {
-        getJsonTarget(path, JsonObject::remove);
+        if(path.isEmpty()) _root = new JsonObject();
+        else getJsonTarget(path, JsonObject::remove);
     }
 
     @Override

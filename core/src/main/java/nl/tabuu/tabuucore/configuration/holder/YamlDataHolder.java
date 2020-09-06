@@ -81,7 +81,8 @@ public class YamlDataHolder implements IDataHolder {
 
     @Override
     public void delete(String path) {
-        getYamlTarget(path, Map::remove);
+        if(path.isEmpty()) _root = new HashMap<>();
+        else getYamlTarget(path, Map::remove);
     }
 
     @Override
