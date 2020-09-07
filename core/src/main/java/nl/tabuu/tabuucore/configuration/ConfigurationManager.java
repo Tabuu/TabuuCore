@@ -84,13 +84,13 @@ public class ConfigurationManager {
     /**
      * Creates, adds, and returns a configuration.
      * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
-     * @param loadPath The path of the internal file to be used.
-     * @param savePath The path to save the configuration to (relative to the plugin's data folder).
+     * @param resourcePath The path of the internal file to be used.
+     * @param filePath The path to save the configuration to (relative to the plugin's data folder).
      * @return The created configuration.
      */
     @Deprecated
-    public IConfiguration addConfiguration(String name, String loadPath, String savePath) {
-        return addConfiguration(name, new YamlConfiguration(new File(_plugin.getDataFolder(), loadPath), _plugin.getResource(savePath)));
+    public IConfiguration addConfiguration(String name, String filePath, String resourcePath) {
+        return addConfiguration(name, YamlConfiguration.class, filePath, resourcePath);
     }
 
     /**

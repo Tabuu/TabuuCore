@@ -213,7 +213,7 @@ public interface IDataHolder {
      */
     default <K, V> Map<K, V> getMap(String path, IObjectDeserializer<String, K> keyDeserializer, IObjectDeserializer<String, V> valueDeserializer) {
         HashMap<K, V> map = new HashMap<>();
-        Set<String> keys = getKeys(path, false);
+        Set<String> keys = getDataSection(path).getKeys(false);
 
         for (String key : keys) {
             String value = getString(path + "." + key);
