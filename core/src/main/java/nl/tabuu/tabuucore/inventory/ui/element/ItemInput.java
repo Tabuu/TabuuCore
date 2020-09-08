@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.material.XMaterial;
@@ -126,7 +127,6 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
 
     @Override
     public void updateStyle() {
-        super.updateStyle();
-        if (isEnabled()) setDisplayItem(_value);
+        setDisplayItem(isEnabled() ? _value.clone() : getStyle().getDisabled());
     }
 }

@@ -109,7 +109,8 @@ public class JsonDataHolder implements IDataHolder {
             throw new IllegalArgumentException("DataSection must have the same type as parent.");
 
         JsonDataHolder section = (JsonDataHolder) data;
-        forJsonTarget(path, (parent, property) -> parent.add(property, section._root));
+        if(path.isEmpty()) _root = section._root;
+        else forJsonTarget(path, (parent, property) -> parent.add(property, section._root));
     }
 
     private Set<String> getKeys(Set<String> keys, String path, JsonObject object, boolean deep) {

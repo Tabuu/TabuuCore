@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.item;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.material.SafeMaterial;
 import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
@@ -9,10 +10,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents an object to build an {@link ItemStack} with.
@@ -272,7 +270,8 @@ public class ItemBuilder {
 	 * @return The items meta.
 	 */
 	public ItemMeta getItemMeta() {
-		assert _itemStack.getItemMeta() != null : "This item does not have meta data.";
-		return _itemStack.getItemMeta();
+		ItemMeta meta = _itemStack.getItemMeta();
+		Objects.requireNonNull(meta, "This item does not have meta data.");
+		return meta;
 	}
 }

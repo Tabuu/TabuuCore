@@ -32,7 +32,7 @@ public class TextInput extends StyleableElement<TextInputStyle> implements IClic
     @Override
     public void click(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        new TextInputUI(getStyle().getRenameItem(), getStyle().getPlaceHolder(), this::setValue).open(player);
+        new TextInputUI(getStyle().getRenameItem(), getStyle().getPlaceHolder(), this::setValue, this::returnToUI).open(player);
     }
 
     @Override

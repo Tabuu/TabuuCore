@@ -17,15 +17,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class TextInputUI extends InventoryFormUI {
 
     private IInventoryUtil _anvilUtil;
     private IAnvilContainerWindow _anvilWindow;
     private BiConsumer<Player, String> _onTextSubmit;
+    private Consumer<Player> _onClose;
     private ItemStack _renameItem;
     private String _defaultValue;
 
+    @Deprecated
     public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
         super("", InventorySize.ONE_ROW);
         _onTextSubmit = onTextSubmit;
@@ -33,6 +36,12 @@ public class TextInputUI extends InventoryFormUI {
         _anvilUtil = IInventoryUtil.get();
         _defaultValue = defaultValue;
     }
+
+    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(renameItem, defaultValue, onTextSubmit);
+        _onClose = onClose;
+    }
+
 
     @Override
     public void onDraw() {
@@ -68,6 +77,9 @@ public class TextInputUI extends InventoryFormUI {
     public void onClose(Player player) {
         _anvilUtil.setActiveContainerToDefault(player);
         _anvilUtil.sendPacketCloseWindow(player, _anvilWindow.getWindowId());
+
+        if(_onClose != null)
+            Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> _onClose.accept(player));
     }
 
     @Override

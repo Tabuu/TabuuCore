@@ -24,7 +24,7 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
     @Override
     public List<String> completeArgument(CommandSender sender, String... arguments) {
-        String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments));
+        String[] convertedArguments = Serializer.STRING.deserializeArray(String.join(" ", arguments)); // Hehhh?
 
         if(arguments.length <= 0 || (_parameterType.equals(ArgumentType.NULL) && _argumentSequence.size() < arguments.length))
             return new ArrayList<>();
@@ -95,5 +95,4 @@ public class OrderedArgumentConverter extends ArgumentConverter {
 
         return converted;
     }
-
 }

@@ -106,7 +106,8 @@ public class YamlDataHolder implements IDataHolder {
             throw new IllegalArgumentException("DataSection must have the same type as parent.");
 
         YamlDataHolder section = (YamlDataHolder) data;
-        forYamlTarget(path, (parent, property) -> parent.put(property, section._root));
+        if(path.isEmpty()) _root = section._root;
+        else forYamlTarget(path, (parent, property) -> parent.put(property, section._root));
     }
 
     private Set<String> getKeys(Set<String> keys, String path, Map<String, Object> object, boolean deep) {

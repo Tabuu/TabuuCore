@@ -418,7 +418,9 @@ public interface IDataHolder {
      */
     default <V> V get(String path, IObjectDeserializer<String, V> deserializer) {
         String value = getString(path);
-        return value == null ? null : deserializer.deserialize(value);
+        try {
+            return deserializer.deserialize(value);
+        } catch (Exception exception) { return null; }
     }
 
     /**
@@ -440,8 +442,10 @@ public interface IDataHolder {
      * @return List at the given path.
      */
     default <V> List<V> getList(String path, IObjectDeserializer<String, V> deserializer) {
-        List<String> stringList = getStringList(path);
-        return stringList.stream().map(deserializer::deserialize).collect(Collectors.toList());
+        List<String> list = getStringList(path);
+        try {
+            return list.stream().map(deserializer::deserialize).collect(Collectors.toList());
+        } catch (Exception exception) { return Collections.emptyList(); }
     }
 
     /**
