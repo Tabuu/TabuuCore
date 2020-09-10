@@ -42,8 +42,8 @@ public class YamlConfiguration extends YamlDataHolder implements IConfiguration 
     public void reload() {
         try (Reader yamlReader = new FileReader(getFile())){
             Map<String, Object> element = _parser.load(yamlReader);
-            if(element != null) _root = element;
-            else _root = new HashMap<>();
+            if(element != null) setRoot(element);
+            else setRoot(createEmptyParent());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,6 +56,6 @@ public class YamlConfiguration extends YamlDataHolder implements IConfiguration 
 
     @Override
     public String toString() {
-        return _parser.dump(_root);
+        return _parser.dump(getRoot());
     }
 }

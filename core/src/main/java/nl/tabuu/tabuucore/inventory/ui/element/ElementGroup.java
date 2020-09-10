@@ -2,23 +2,33 @@ package nl.tabuu.tabuucore.inventory.ui.element;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class ElementGroup extends Element {
 
     private List<Element> _elements;
 
-    public ElementGroup(Element... elements){
-        this();
-        addElements(elements);
-    }
-
     public ElementGroup(){
         _elements = new ArrayList<>();
     }
 
-    public void addElements(Element... elements){
+    public ElementGroup(Element... elements){
+        this();
+        add(elements);
+    }
+
+    public void add(Collection<Element> elements) {
+        _elements.addAll(elements);
+    }
+
+    public void add(Element... elements){
         _elements.addAll(Arrays.asList(elements));
+    }
+
+    @Deprecated /* 10th of september 2020 */
+    public void addElements(Element... elements){
+        add(elements);
     }
 
     public List<Element> getElements(){

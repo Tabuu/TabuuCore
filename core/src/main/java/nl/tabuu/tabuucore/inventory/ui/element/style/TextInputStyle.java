@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class TextInputStyle extends Style {
 
-    ItemStack _renameItem;
-    String _placeHolder;
+    private ItemStack _renameItem;
+    private String _placeHolder;
 
     public TextInputStyle(ItemStack enabled, ItemStack disabled, ItemStack renameItem, String placeHolder) {
         super(enabled, disabled);

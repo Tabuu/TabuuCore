@@ -72,6 +72,7 @@ public interface IConfiguration extends IDataHolder {
     void reload();
 
     // region Deprecated
+
     /**
      * Returns a {@link Location} list from the specified path. Deserialized by the {@link nl.tabuu.tabuucore.serialization.string.LocationSerializer} class.
      *

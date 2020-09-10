@@ -17,7 +17,7 @@ public class RadioButton extends Checkbox {
     public RadioButton(ToggleableStyle style, ElementGroup group, BiConsumer<Player, Boolean> onChange) {
         super(style, onChange);
         _group = group;
-        _group.addElements(this);
+        _group.add(this);
     }
 
     @Override

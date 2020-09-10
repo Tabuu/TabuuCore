@@ -35,8 +35,8 @@ public class JsonConfiguration extends JsonDataHolder implements IConfiguration 
     public void reload() {
         try (Reader jsonReader = new FileReader(getFile())){
             JsonElement element = _parser.parse(jsonReader);
-            if(element.isJsonObject()) _root = element.getAsJsonObject();
-            else _root = new JsonObject();
+            if(element.isJsonObject()) setRoot(element.getAsJsonObject());
+            else setRoot(createEmptyParent());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +44,6 @@ public class JsonConfiguration extends JsonDataHolder implements IConfiguration 
 
     @Override
     public String toString() {
-        return GSON.toJson(_root);
+        return GSON.toJson(getRoot());
     }
 }

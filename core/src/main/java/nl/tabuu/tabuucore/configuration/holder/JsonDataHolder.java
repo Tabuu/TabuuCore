@@ -3,286 +3,174 @@ package nl.tabuu.tabuucore.configuration.holder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import nl.tabuu.tabuucore.configuration.IDataHolder;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class JsonDataHolder implements IDataHolder {
-
-    protected JsonObject _root;
+public class JsonDataHolder extends AbstractDataHolder<JsonObject, JsonElement> {
 
     public JsonDataHolder() {
-        _root = new JsonObject();
+        super();
     }
 
     public JsonDataHolder(JsonObject root) {
-        _root = root;
+        super(root);
     }
 
-    // region Json Utilities
-    private JsonElement getJsonTarget(String path, BiFunction<JsonObject, String, JsonElement> parentPropertyFunction) {
-        String[] parts = path.split("\\.");
-        parts = Arrays.stream(parts).filter(s -> !s.isEmpty()).toArray(String[]::new);
-
-        if(parts.length < 1) return _root;
-        else if(parts.length < 2) return parentPropertyFunction.apply(_root, parts[0]);
-
-        String propertyName = parts[parts.length - 1];
-        parts = Arrays.copyOfRange(parts, 0, parts.length - 1);
-
-        JsonObject parent = _root;
-
-        for(String part : parts) {
-            if(!parent.has(part)) parent.add(part, new JsonObject());
-            else if(!parent.get(part).isJsonObject()) return null;
-
-            parent = parent.getAsJsonObject(part);
-        }
-
-        return parentPropertyFunction.apply(parent, propertyName);
-    }
-
-    private void forJsonTarget(String path, BiConsumer<JsonObject, String> parentPropertyConsumer) {
-        getJsonTarget(path, (parent, property) -> {
-            parentPropertyConsumer.accept(parent, property);
-            return null;
-        });
-    }
-
-    private JsonElement getJsonElement(String path) {
-        return getJsonTarget(path, JsonObject::get);
-    }
-
-    private <T> T getJsonElementValue(String path, Function<JsonElement, T> function) {
-        try {
-            return function.apply(getJsonElement(path));
-        } catch (ClassCastException | IllegalStateException exception) {
-            return null;
-        }
-    }
-
-    private <T> List<T> getJsonArrayValues(String path, Function<JsonElement, T> function) {
-        JsonElement element = getJsonElement(path);
-        if(element == null || !element.isJsonArray()) return null;
-
-        JsonArray array = element.getAsJsonArray();
-        List<T> list = new ArrayList<>();
-
-        for(JsonElement item : array) {
-            try {
-                list.add(function.apply(item));
-            } catch (ClassCastException | IllegalStateException ignore) { }
-        }
-
-        return list;
-    }
-
-    // endregion
-
+    @Nonnull
     @Override
-    public void delete(String path) {
-        if(path.isEmpty()) _root = new JsonObject();
-        else getJsonTarget(path, JsonObject::remove);
+    protected BiFunction<JsonObject, String, JsonElement> getChildFromParentWithKeyFunction() {
+        return JsonObject::get;
+    }
+
+    @Nonnull
+    @Override
+    protected BiConsumer<JsonObject, String> getDeleteChildFromParentWithKeyFunction() {
+        return JsonObject::remove;
     }
 
     @Override
-    public IDataHolder createSection(String path) {
-        JsonObject child = new JsonObject();
-        forJsonTarget(path, (parent, property) -> parent.add(property, child));
+    protected boolean isElementIterable(JsonElement element) {
+        return element.isJsonArray();
+    }
 
-        return new JsonDataHolder(child);
+    @Nullable
+    @Override
+    protected Iterable<JsonElement> getElementAsIterable(@Nonnull JsonElement element) {
+        return isElementIterable(element) ? element.getAsJsonArray() : null;
     }
 
     @Override
-    public IDataHolder getDataSection(String path) {
-        JsonElement element = getJsonTarget(path, JsonObject::get);
-        if(element == null || !element.isJsonObject()) return null;
-        else return new JsonDataHolder(element.getAsJsonObject());
+    protected boolean isElementParent(@Nonnull JsonElement element) {
+        return element.isJsonObject();
+    }
+
+    @Nullable
+    @Override
+    protected JsonObject getElementAsParent(@Nonnull JsonElement element) {
+        return isElementParent(element) ? element.getAsJsonObject() : null;
     }
 
     @Override
-    public void setDataSection(String path, IDataHolder data) {
-        if(!(data instanceof JsonDataHolder))
-            throw new IllegalArgumentException("DataSection must have the same type as parent.");
-
-        JsonDataHolder section = (JsonDataHolder) data;
-        if(path.isEmpty()) _root = section._root;
-        else forJsonTarget(path, (parent, property) -> parent.add(property, section._root));
+    protected boolean parentContains(@Nonnull JsonObject parent, @Nonnull String key) {
+        return parent.has(key);
     }
 
-    private Set<String> getKeys(Set<String> keys, String path, JsonObject object, boolean deep) {
-        if(object == null) return keys;
+    @Nonnull
+    @Override
+    protected JsonObject createEmptyParent() {
+        return new JsonObject();
+    }
 
-        for(Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            String name = entry.getKey();
-            String newPath = path + (path.isEmpty() ? "" : ".") + name;
-            JsonElement element = entry.getValue();
-            keys.add(newPath);
-
-            if(deep && element.isJsonObject())
-                getKeys(keys, newPath, element.getAsJsonObject(), true);
-        }
-
-        return keys;
+    @Nonnull
+    @Override
+    protected IDataHolder createDataHolder(JsonObject root) {
+        return new JsonDataHolder(root);
     }
 
     @Override
-    public Set<String> getKeys(String path, boolean deep) {
-        JsonElement element;
-
-        if(path.isEmpty()) element = _root;
-        else element = getJsonElement(path);
-
-        return getKeys(new HashSet<>(), path, element != null && element.isJsonObject() ? element.getAsJsonObject() : null, deep);
+    protected void addChild(@Nonnull JsonObject parent, @Nonnull String key, JsonElement element) {
+        parent.add(key, element);
     }
 
+    @Nonnull
     @Override
-    public Set<String> getKeys(boolean deep) {
-        return getKeys("", deep);
-    }
-
-    @Override
-    public String getString(String path) {
-        return getJsonElementValue(path, JsonElement::getAsString);
-    }
-
-    @Override
-    public List<String> getStringList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsString);
-    }
-
-    @Override
-    public void set(String path, String value) {
-        forJsonTarget(path, (parent, property) -> parent.addProperty(property, value));
-    }
-
-    @Override
-    public void setStringList(String path, List<String> list) {
+    protected <T> JsonElement iterableToElement(Iterable<T> iterable, Function<T, JsonElement> valueToElementFunction) {
         JsonArray array = new JsonArray();
-        list.forEach(array::add);
+        for(T item : iterable)
+            array.add(valueToElementFunction.apply(item));
 
-        forJsonTarget(path, (parent, property) -> parent.add(property, array));
+        return array;
     }
 
+    @Nonnull
     @Override
-    public Boolean getBoolean(String path) {
-        return getJsonElementValue(path, JsonElement::getAsBoolean);
+    protected Set<Map.Entry<String, JsonElement>> getChildren(@Nonnull JsonObject parent) {
+        return parent.entrySet();
     }
 
+    @Nonnull
     @Override
-    public List<Boolean> getBooleanList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsBoolean);
+    protected Function<String, JsonElement> getStringToElementFunction() {
+        return JsonPrimitive::new;
     }
 
+    @Nonnull
     @Override
-    public void set(String path, boolean value) {
-        forJsonTarget(path, (parent, property) -> parent.addProperty(property, value));
+    protected Function<Character, JsonElement> getCharacterToElementFunction() {
+        return JsonPrimitive::new;
     }
 
+    @Nonnull
     @Override
-    public void setBooleanList(String path, List<Boolean> list) {
-        JsonArray array = new JsonArray();
-        list.forEach(array::add);
-
-        forJsonTarget(path, (parent, property) -> parent.add(property, array));
+    protected Function<Boolean, JsonElement> getBooleanToElementFunction() {
+        return JsonPrimitive::new;
     }
 
+    @Nonnull
     @Override
-    public Character getCharacter(String path) {
-        return getJsonElementValue(path, JsonElement::getAsCharacter);
+    protected <N extends Number> Function<N, JsonElement> getNumberToElementFunction() {
+        return JsonPrimitive::new;
     }
 
+    @Nonnull
     @Override
-    public List<Character> getCharacterList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsCharacter);
+    protected Function<JsonElement, String> getElementToStringFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsString);
     }
 
+    @Nonnull
     @Override
-    public void set(String path, char value) {
-        forJsonTarget(path, (parent, property) -> parent.addProperty(property, value));
+    protected Function<JsonElement, Character> getElementToCharacterFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsCharacter);
     }
 
+    @Nonnull
     @Override
-    public void setCharacterList(String path, List<Character> list) {
-        JsonArray array = new JsonArray();
-        list.forEach(array::add);
-
-        forJsonTarget(path, (parent, property) -> parent.add(property, array));
+    protected Function<JsonElement, Boolean> getElementToBooleanFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsBoolean);
     }
 
+    @Nonnull
     @Override
-    public Double getDouble(String path) {
-        return getJsonElementValue(path, JsonElement::getAsDouble);
+    protected Function<JsonElement, Byte> getElementToByteFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsByte);
     }
 
+    @Nonnull
     @Override
-    public List<Double> getDoubleList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsDouble);
+    protected Function<JsonElement, Double> getElementToDoubleFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsDouble);
     }
 
+    @Nonnull
     @Override
-    public Long getLong(String path) {
-        return getJsonElementValue(path, JsonElement::getAsLong);
+    protected Function<JsonElement, Float> getElementToFloatFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsFloat);
     }
 
+    @Nonnull
     @Override
-    public List<Long> getLongList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsLong);
+    protected Function<JsonElement, Integer> getElementToIntegerFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsInt);
     }
 
+    @Nonnull
     @Override
-    public Integer getInteger(String path) {
-        return getJsonElementValue(path, JsonElement::getAsInt);
+    protected Function<JsonElement, Long> getElementToLongFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsLong);
     }
 
+    @Nonnull
     @Override
-    public List<Integer> getIntegerList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsInt);
-    }
-
-    @Override
-    public Float getFloat(String path) {
-        return getJsonElementValue(path, JsonElement::getAsFloat);
-    }
-
-    @Override
-    public List<Float> getFloatList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsFloat);
-    }
-
-    @Override
-    public Byte getByte(String path) {
-        return getJsonElementValue(path, JsonElement::getAsByte);
-    }
-
-    @Override
-    public List<Byte> getByteList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsByte);
-    }
-
-    @Override
-    public Short getShort(String path) {
-        return getJsonElementValue(path, JsonElement::getAsShort);
-    }
-
-    @Override
-    public List<Short> getShortList(String path) {
-        return getJsonArrayValues(path, JsonElement::getAsShort);
-    }
-
-    @Override
-    public void set(String path, Number value) {
-        forJsonTarget(path, (parent, property) -> parent.addProperty(property, value));
-    }
-
-    @Override
-    public void setNumberList(String path, List<Number> list) {
-        JsonArray array = new JsonArray();
-        list.forEach(array::add);
-
-        forJsonTarget(path, (parent, property) -> parent.add(property, array));
+    protected Function<JsonElement, Short> getElementToShortFunction() {
+        return getElementToTypeOrNull(JsonElement::getAsShort);
     }
 }
