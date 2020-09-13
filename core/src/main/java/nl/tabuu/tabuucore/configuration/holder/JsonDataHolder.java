@@ -1,13 +1,16 @@
 package nl.tabuu.tabuucore.configuration.holder;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import nl.tabuu.tabuucore.configuration.IDataHolder;
+import nl.tabuu.tabuucore.serialization.ISerializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -22,6 +25,45 @@ public class JsonDataHolder extends AbstractDataHolder<JsonObject, JsonElement> 
 
     public JsonDataHolder(JsonObject root) {
         super(root);
+    }
+
+    @Override
+    public <T extends ISerializable<IDataHolder>> void setSerializableList(@Nonnull String path, @Nonnull List<T> list) {
+        JsonArray array = new JsonArray();
+        for(T item : list) {
+            JsonObject object = createEmptyParent();
+            IDataHolder data = createDataHolder(object);
+            item.serialize(data);
+            array.add(object);
+        }
+
+        setElement(path, array);
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends IDataHolder, T extends ISerializable<D>> List<T> getSerializableList(@Nonnull String path, @Nonnull Class<T> type) {
+        return getListValue(path, (element) -> {
+
+            if(!element.isJsonObject()) return null;
+            JsonObject object = element.getAsJsonObject();
+
+            try {
+                Constructor<T> constructor = type.getConstructor(IDataHolder.class);
+                constructor.setAccessible(true);
+                return constructor.newInstance(createDataHolder(object));
+            } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+
+            try {
+                Method method = type.getDeclaredMethod("deserialize", IDataHolder.class);
+                method.setAccessible(true);
+                return (T) method.invoke(null, createDataHolder(object));
+            } catch (ClassCastException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+
+            return null;
+
+        });
     }
 
     @Nonnull

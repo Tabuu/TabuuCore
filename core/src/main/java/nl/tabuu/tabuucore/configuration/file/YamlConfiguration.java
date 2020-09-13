@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.configuration.file;
 import nl.tabuu.tabuucore.configuration.IConfiguration;
 import nl.tabuu.tabuucore.configuration.holder.YamlDataHolder;
 import org.bukkit.configuration.file.YamlConstructor;
+import org.bukkit.configuration.file.YamlRepresenter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;

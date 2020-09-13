@@ -1,8 +1,10 @@
 package nl.tabuu.tabuucore.util;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.chat.BaseComponent;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.configuration.IConfiguration;
+import nl.tabuu.tabuucore.text.ComponentBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -26,7 +28,7 @@ public class Dictionary extends HashMap<String, String> {
      * @return translated string.
      * @see ChatColor#translateAlternateColorCodes(char, String)
      */
-    public String translate(String key, String... replacements){
+    public String translate(String key, Object... replacements){
         return translate(key, true, '&', replacements);
     }
 
@@ -39,19 +41,16 @@ public class Dictionary extends HashMap<String, String> {
      * @return translated string.
      * @see ChatColor#translateAlternateColorCodes(char, String)
      */
-    public String translate(String key, boolean useColor, char colorSymbol, String... replacements) {
+    public String translate(String key, boolean useColor, char colorSymbol, Object... replacements) {
         String translation = get(key);
 
         if(translation == null)
             return key;
 
-        for(int i = 0; i < replacements.length; i += 2){
-            // Not an even amount of replacements
-            if(i == replacements.length - 1)
-                break;
+        if(replacements.length % 2 != 0) throw new IllegalArgumentException("The replacements should come in pairs, and so result in an even number.");
 
-            translation = translation.replace(replacements[i], replacements[i + 1]);
-        }
+        for(int i = 0; i < replacements.length; i += 2)
+            translation = translation.replace(replacements[i].toString(), replacements[i + 1].toString());
 
         if(useColor)
             translation = ChatColor.translateAlternateColorCodes(colorSymbol, translation);
@@ -67,7 +66,7 @@ public class Dictionary extends HashMap<String, String> {
      * @return translated string.
      * @see ChatColor#translateAlternateColorCodes(char, String)
      */
-    public String translate(String key, Player player, String... replacements){
+    public String translate(String key, Player player, Object... replacements) {
         return translate(key, player, true, true, '&', replacements);
     }
 
@@ -82,12 +81,25 @@ public class Dictionary extends HashMap<String, String> {
      * @return translated string.
      * @see ChatColor#translateAlternateColorCodes(char, String)
      */
-    public String translate(String key, Player player, boolean usePlaceholderApi, boolean useColor, char colorSymbol, String... replacements){
+    public String translate(String key, Player player, boolean usePlaceholderApi, boolean useColor, char colorSymbol, Object... replacements){
         String translation = translate(key, useColor, colorSymbol, replacements);
 
         if(usePlaceholderApi && _usePlaceholderApi)
             translation = PlaceholderAPI.setPlaceholders(player, translation);
 
         return translation;
+    }
+
+    public void send(Player player, String key, boolean usePlaceholderApi, boolean useColor, boolean useTextComponents, char colorSymbol, Object... replacements) {
+        String message = translate(key, player, usePlaceholderApi, useColor, colorSymbol, replacements);
+
+        if(useTextComponents) {
+            BaseComponent[] components = ComponentBuilder.parse(message).build();
+            player.spigot().sendMessage(components);
+        } else player.sendMessage(message);
+    }
+
+    public void send(Player player, String key, Object... replacements) {
+        send(player, key, true, true, true, '&', replacements);
     }
 }

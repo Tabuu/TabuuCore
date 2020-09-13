@@ -1,11 +1,21 @@
 package nl.tabuu.tabuucore.serialization.string;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class TimeSerializer extends AbstractStringSerializer<Long> {
+
+    private Pattern _regex;
+
+    public TimeSerializer() {
+        _regex = Pattern.compile("(?<count>\\d+)(?<type>(ms|m|h|d|y|s))");
+
+    }
 
     @Override
     public String serialize(Long number) {
         if (number < 1) {
-            return "0 ms";
+            return "0ms";
         }
 
         StringBuffer timeBuf = new StringBuffer();
@@ -58,43 +68,50 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
 
     @Override
     public Long deserialize(String string) {
-        long output = 0L;
+        Long time = null;
+        Matcher match = _regex.matcher(string);
 
-        String[] args = string.split(" ");
+        while(match.find()) {
+            if(time == null) time = 0L;
+            String countString = match.group("count");
+            String type = match.group("type");
 
-        LongSerializer serializer = Serializer.LONG;
+            Long count = Serializer.LONG.deserialize(countString);
+            if(count == null) count = 0L;
 
-        for(String arg : args) {
-            if(arg.endsWith("ms"))
-                output += serializer.deserialize(arg.replace("ms", ""));
+            switch (type) {
+                case "ms":
+                    time += count;
+                    break;
 
-            else if(arg.endsWith("s"))
-                output += serializer.deserialize(arg.replace("s", "")) * 1000L;
+                case "s":
+                    time += count * 1000L;
+                    break;
 
-            else if(arg.endsWith("m"))
-                output += serializer.deserialize(arg.replace("m", "")) * 60000L;
+                case "m":
+                    time += count * 6000L;
+                    break;
 
-            else if(arg.endsWith("h"))
-                output += serializer.deserialize(arg.replace("h", "")) * 3600000L;
+                case "h":
+                    time += count * 3600000L;
+                    break;
 
-            else if(arg.endsWith("d"))
-                output += serializer.deserialize(arg.replace("d", "")) * 86400000L;
+                case "d":
+                    time += count * 86400000L;
+                    break;
 
-            else if(arg.endsWith("y"))
-                output += serializer.deserialize(arg.replace("y", "")) * 31536000000L;
+                case "y":
+                    time += count * 31536000000L;
+                    break;
+            }
         }
 
-        return output;
+        return time;
     }
 
     private void prependTimeAndUnit(StringBuffer timeBuf, long time, String unit) {
-        if (time < 1) {
+        if (time < 1)
             return;
-        }
-
-        if (timeBuf.length() > 0) {
-            timeBuf.insert(0, " ");
-        }
 
         timeBuf.insert(0, unit);
         timeBuf.insert(0, time);

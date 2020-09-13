@@ -23,14 +23,6 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
 
     // region Utilities
 
-    @Nonnull protected String getPathDivider() {
-        return ".";
-    }
-
-    @Nonnull protected String getPathSplitterRegex() {
-        return "\\.";
-    }
-
     @Nonnull protected P getRoot() {
         return _root;
     }
@@ -64,7 +56,10 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
     protected abstract void addChild(@Nonnull P parent, @Nonnull String key, C element);
 
     protected void setElement(@Nonnull String path, C element) {
-        forParentWithKey(path, (parent, key) -> addChild(parent, key, element));
+        if(path.isEmpty() && isElementParent(element)) {
+            P root = getElementAsParent(element);
+            setRoot(root);
+        } else forParentWithKey(path, (parent, key) -> addChild(parent, key, element));
     }
 
     protected <T> void setValue(@Nonnull String path, T value, Function<T, C> valueToElementFunction) {
@@ -172,14 +167,14 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
     // endregion
 
     @Override
-    @Nonnull public IDataHolder createSection(@Nonnull String path) {
-        forParentWithKey(path, (parent, key) -> addChild(parent, key, createEmptyParent()));
-        return getDataSection(path);
+    @Nonnull public IDataHolder createEmptySection() {
+        return createDataHolder(createEmptyParent());
     }
 
     @Override
     public void delete(@Nonnull String path) {
-        forParentWithKey(path, (parent, key) -> getDeleteChildFromParentWithKeyFunction().accept(parent, key));
+        if(path.isEmpty()) setRoot(createEmptyParent());
+        else forParentWithKey(path, (parent, key) -> getDeleteChildFromParentWithKeyFunction().accept(parent, key));
     }
 
     // region Getters
@@ -229,6 +224,7 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
         return getValue(path, getElementToStringFunction());
     }
 
+    @Nonnull
     @Override
     public List<String> getStringList(@Nonnull String path) {
         return getListValue(path, getElementToStringFunction());
@@ -338,6 +334,7 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
     @SuppressWarnings("unchecked")
     public void setDataSection(@Nonnull String path, @Nonnull IDataHolder data) {
         if(!data.getClass().isInstance(this)) return;
+        delete(path);
 
         try {
             AbstractDataHolder<P, C> holder = (AbstractDataHolder<P, C>) data;
