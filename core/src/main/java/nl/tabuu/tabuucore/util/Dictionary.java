@@ -90,7 +90,7 @@ public class Dictionary extends HashMap<String, String> {
         return translation;
     }
 
-    public void send(Player player, String key, boolean usePlaceholderApi, boolean useColor, boolean useTextComponents, char colorSymbol, Object... replacements) {
+    public void send(Player player, String key, boolean usePlaceholderApi, boolean useColor, char colorSymbol, boolean useTextComponents, Object... replacements) {
         String message = translate(key, player, usePlaceholderApi, useColor, colorSymbol, replacements);
 
         if(useTextComponents) {
@@ -100,6 +100,6 @@ public class Dictionary extends HashMap<String, String> {
     }
 
     public void send(Player player, String key, Object... replacements) {
-        send(player, key, true, true, true, '&', replacements);
+        send(player, key, true, true, '&', true, replacements);
     }
 }

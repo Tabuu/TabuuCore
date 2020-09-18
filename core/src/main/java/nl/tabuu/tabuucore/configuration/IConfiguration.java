@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface IConfiguration extends IDataHolder {
 
@@ -26,27 +27,33 @@ public interface IConfiguration extends IDataHolder {
 
     InputStream getDefaults();
 
-    default void writeDefaults() {
-        if (!getFile().exists())
-            getFile().getParentFile().mkdirs();
+    default boolean writeDefaults() {
+        if(!getFile().exists()) return true;
+
+        boolean success = true;
+        success = getFile().getParentFile().mkdirs();
 
         try {
-            if (!getFile().exists()) {
-                if(getDefaults() != null) {
-                    InputStream in = getDefaults();
-                    OutputStream out = new FileOutputStream(getFile());
-                    byte[] buf = new byte[in.available()];
-                    int len;
-                    while ((len = in.read(buf)) > 0)
-                        out.write(buf, 0, len);
-                    in.close();
-                    out.close();
-                } else getFile().createNewFile();
-            }
-            reload();
+            if(Objects.nonNull(getDefaults())) {
+                InputStream in = getDefaults();
+                OutputStream out = new FileOutputStream(getFile());
+                byte[] buf = new byte[in.available()];
+                int len;
+                while ((len = in.read(buf)) > 0)
+                    out.write(buf, 0, len);
+                in.close();
+                out.close();
+
+                reload();
+            } else success = getFile().createNewFile();
         } catch (IOException ex) {
-            Bukkit.getLogger().severe("Plugin unable to write configuration file " + getFile().getName() + "!");
+            success = false;
         }
+
+        if(!success)
+            Bukkit.getLogger().severe(String.format("Plugin unable to write configuration file %s!", getFile().getName()));
+
+        return success;
     }
 
     /**

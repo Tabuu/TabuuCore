@@ -3,6 +3,9 @@ package nl.tabuu.tabuucore.nms.v1_13_R2;
 import net.minecraft.server.v1_13_R2.*;
 import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 
@@ -42,6 +45,19 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
+    public Block apply(Block block) {
+        Location location = block.getLocation();
+        BlockPosition position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        CraftWorld world = ((CraftWorld) block.getWorld());
+
+        TileEntity tileEntity = world.getHandle().getTileEntity(position);
+        if(tileEntity == null) return null;
+
+        tileEntity.load(_tagCompound);
+        return block;
+    }
+
+    @Override
     public INBTTagCompound copy(org.bukkit.inventory.ItemStack item) {
         _tagCompound = CraftItemStack.asNMSCopy(item).getOrCreateTag();
         return this;
@@ -51,6 +67,19 @@ public class NBTTagCompound implements INBTTagCompound {
     public INBTTagCompound copy(org.bukkit.entity.Entity entity) {
         Entity nmsEntity = ((CraftEntity) entity).getHandle();
         _tagCompound = nmsEntity.save(_tagCompound);
+        return this;
+    }
+
+    @Override
+    public INBTTagCompound copy(Block block) {
+        Location location = block.getLocation();
+        BlockPosition position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        CraftWorld world = ((CraftWorld) block.getWorld());
+
+        TileEntity tileEntity = world.getHandle().getTileEntity(position);
+        if(tileEntity != null)
+            _tagCompound = tileEntity.save(_tagCompound);
+
         return this;
     }
 

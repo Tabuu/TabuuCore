@@ -2,8 +2,10 @@ package nl.tabuu.tabuucore.nms.wrapper;
 
 import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.NMSUtil;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.block.TileState;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,13 @@ public interface INBTTagCompound {
     Entity apply(Entity entity);
 
     /**
+     * Returns an {@link Block} with the NBTTagCompound applied. This does not work for custom NBTTags.
+     * @param block the {@link Block} the NBTTagCompound will be applied to.
+     * @return an {@link Block} with the NBTTagCompound applied.
+     */
+    Block apply(Block block);
+
+    /**
      * Copies the NBTTagCompound from the given {@link ItemStack} to this NBTTagCompound and returns itself.
      * @param item the {@link ItemStack} the NBTTagCompound will be copied from.
      * @return itself.
@@ -40,6 +49,13 @@ public interface INBTTagCompound {
      * @return itself.
      */
     INBTTagCompound copy(Entity entity);
+
+    /**
+     * Copies the NBTTagCompound from the given {@link Block} to this NBTTagCompound and returns itself.
+     * @param block the {@link Block} the NBTTagCompound will be copied from.
+     * @return itself.
+     */
+    INBTTagCompound copy(Block block);
 
     /**
      * Copies the NBTTagCompound from the given bytes to this NBTTagCompound and returns itself.
@@ -355,6 +371,18 @@ public interface INBTTagCompound {
     static INBTTagCompound get(Entity entity){
         INBTTagCompound tagCompound = get();
         tagCompound.copy(entity);
+
+        return tagCompound;
+    }
+
+    /**
+     * Returns a new empty NBTTagCompound and uses {@link #copy(Block)} method to fill it with data.
+     * @param block The entity to get the tag of.
+     * @return a new empty NBTTagCompound.
+     */
+    static INBTTagCompound get(Block block){
+        INBTTagCompound tagCompound = get();
+        tagCompound.copy(block);
 
         return tagCompound;
     }

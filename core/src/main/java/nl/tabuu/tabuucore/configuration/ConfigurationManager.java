@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore.configuration;
 
-import nl.tabuu.tabuucore.configuration.file.JsonConfiguration;
 import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -23,46 +22,24 @@ public class ConfigurationManager {
 
     /**
      * Creates, adds, and returns a configuration.
+     *
      * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
      * @return The created configuration.
      */
     @Deprecated
     public IConfiguration addConfiguration(String name) {
-        return addConfiguration(name, name + ".yml");
-    }
-
-    /**
-     * Creates, adds, and returns a configuration.
-     * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
-     * @param fileName The name of the internal file to be used.
-     * @return The created configuration.
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends IConfiguration> IConfiguration addConfiguration(String name, String fileName) {
-        String[] parts = fileName.split("\\.");
-        String extension = parts[parts.length - 1];
-
-        Class<T> type;
-
-        switch (extension.toLowerCase()) {
-            default:
-            case "yml":
-                type = (Class<T>) YamlConfiguration.class;
-                break;
-
-            case "json":
-                type = (Class<T>) JsonConfiguration.class;
-                break;
-        }
-
-        return addConfiguration(name, type, fileName, fileName);
+        return addConfiguration(name, name + ".yml", YamlConfiguration.class);
     }
 
     public <T extends IConfiguration> T addConfiguration(String filePath, Class<T> configType) {
-        return addConfiguration(filePath, configType, filePath, filePath);
+        return addConfiguration(filePath, filePath, filePath, configType);
     }
 
-    public <T extends IConfiguration> T addConfiguration(String name, Class<T> configType, String filePath, String resourcePath) {
+    public <T extends IConfiguration> T addConfiguration(String name, String filePath, Class<T> configType) {
+        return addConfiguration(name, filePath, filePath, configType);
+    }
+
+    public <T extends IConfiguration> T addConfiguration(String name, String filePath, String resourcePath, Class<T> configType) {
         File file = new File(_plugin.getDataFolder(), filePath);
         InputStream defaults = _plugin.getResource(resourcePath);
 
@@ -83,29 +60,32 @@ public class ConfigurationManager {
 
     /**
      * Creates, adds, and returns a configuration.
-     * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
+     *
+     * @param name         The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
      * @param resourcePath The path of the internal file to be used.
-     * @param filePath The path to save the configuration to (relative to the plugin's data folder).
+     * @param filePath     The path to save the configuration to (relative to the plugin's data folder).
      * @return The created configuration.
      */
     @Deprecated
     public IConfiguration addConfiguration(String name, String filePath, String resourcePath) {
-        return addConfiguration(name, YamlConfiguration.class, filePath, resourcePath);
+        return addConfiguration(name, filePath, resourcePath, YamlConfiguration.class);
     }
 
     /**
      * Adds and returns a specified configuration.
-     * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
+     *
+     * @param name          The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
      * @param configuration The configuration to be added.
      * @return The specified configuration.
      */
-    public IConfiguration addConfiguration(String name, IConfiguration configuration){
+    public IConfiguration addConfiguration(String name, IConfiguration configuration) {
         _configurations.put(name, configuration);
         return getConfiguration(name);
     }
 
     /**
      * Returns the configuration with the specified name.
+     *
      * @param name The name of the configuration.
      * @return The configuration with the specified name.
      */
@@ -116,8 +96,7 @@ public class ConfigurationManager {
     /**
      * Reloads all configurations.
      */
-    public void reloadAll(){
+    public void reloadAll() {
         _configurations.values().forEach(IConfiguration::reload);
     }
-
 }
