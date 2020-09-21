@@ -15,7 +15,7 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
     @Override
     public String serialize(Long number) {
         if (number < 1) {
-            return "0ms";
+            return "";
         }
 
         StringBuffer timeBuf = new StringBuffer();
@@ -112,6 +112,10 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
     private void prependTimeAndUnit(StringBuffer timeBuf, long time, String unit) {
         if (time < 1)
             return;
+
+        if (timeBuf.length() > 0) {
+            timeBuf.insert(0, " ");
+        }
 
         timeBuf.insert(0, unit);
         timeBuf.insert(0, time);
