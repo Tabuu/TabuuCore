@@ -28,13 +28,11 @@ public interface IConfiguration extends IDataHolder {
     InputStream getDefaults();
 
     default boolean writeDefaults() {
-        if(!getFile().exists()) return true;
-
-        boolean success = true;
-        success = getFile().getParentFile().mkdirs();
+        if(!getFile().exists())
+            getFile().getParentFile().mkdirs();
 
         try {
-            if(Objects.nonNull(getDefaults())) {
+            if(!getFile().exists() && Objects.nonNull(getDefaults())) {
                 InputStream in = getDefaults();
                 OutputStream out = new FileOutputStream(getFile());
                 byte[] buf = new byte[in.available()];
@@ -43,17 +41,15 @@ public interface IConfiguration extends IDataHolder {
                     out.write(buf, 0, len);
                 in.close();
                 out.close();
+            }
 
-                reload();
-            } else success = getFile().createNewFile();
+            reload();
         } catch (IOException ex) {
-            success = false;
+            Bukkit.getLogger().severe(String.format("Plugin unable to write configuration file %s!", getFile().getName()));
+            return false;
         }
 
-        if(!success)
-            Bukkit.getLogger().severe(String.format("Plugin unable to write configuration file %s!", getFile().getName()));
-
-        return success;
+        return true;
     }
 
     /**

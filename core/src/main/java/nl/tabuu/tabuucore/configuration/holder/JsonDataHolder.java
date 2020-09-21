@@ -1,6 +1,9 @@
 package nl.tabuu.tabuucore.configuration.holder;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import nl.tabuu.tabuucore.configuration.IDataHolder;
 import nl.tabuu.tabuucore.serialization.ISerializable;
 
@@ -9,7 +12,6 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,13 +55,17 @@ public class JsonDataHolder extends AbstractDataHolder<JsonObject, JsonElement> 
                 Constructor<T> constructor = type.getConstructor(IDataHolder.class);
                 constructor.setAccessible(true);
                 return constructor.newInstance(createDataHolder(object));
-            } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException ignore) { ignore.printStackTrace(); } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
 
             try {
                 Method method = type.getDeclaredMethod("deserialize", IDataHolder.class);
                 method.setAccessible(true);
                 return (T) method.invoke(null, createDataHolder(object));
-            } catch (ClassCastException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+            } catch (ClassCastException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
 
             return null;
 

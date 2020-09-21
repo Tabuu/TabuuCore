@@ -79,7 +79,7 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     protected void setItemAt(Vector2f vector, ItemStack item) {
         Inventory inventory = getInventory();
-        inventory.setItem(getSize().vectorToSlot(vector), item);
+        if(inventory != null) inventory.setItem(getSize().vectorToSlot(vector), item);
     }
 
     protected void setItemAt(Vector2f position, IBrush brush) {

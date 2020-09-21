@@ -13,6 +13,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface IDataHolder {
@@ -56,10 +58,7 @@ public interface IDataHolder {
      * @return The key-string-map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, String> getStringMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getString(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getString);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -123,10 +122,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Character> getCharacterMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getCharacter(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getCharacter);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -190,10 +186,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Boolean> getBooleanMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getBoolean(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getBoolean);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -257,10 +250,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Byte> getByteMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getByte(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getByte);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -324,10 +314,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Double> getDoubleMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getDouble(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getDouble);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -391,10 +378,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Float> getFloatMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getFloat(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getFloat);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -458,10 +442,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Integer> getIntegerMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getInteger(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getInteger);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -525,10 +506,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Long> getLongMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getLong(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getLong);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -592,10 +570,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K> Map<K, Short> getShortMap(@Nonnull String path, IObjectDeserializer<String, K> keyDeserializer) {
-        return getKeys(path, false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), getShort(sub)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, IDataHolder::getShort);
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -639,13 +614,17 @@ public interface IDataHolder {
             Constructor<T> constructor = type.getConstructor(IDataHolder.class);
             constructor.setAccessible(true);
             return constructor.newInstance(data);
-        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+        } catch (InstantiationException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
         try {
             Method method = type.getDeclaredMethod("deserialize", IDataHolder.class);
             method.setAccessible(true);
             return (T) method.invoke(null, data);
-        } catch (ClassCastException | InvocationTargetException | NoSuchMethodException | IllegalAccessException ignore) { }
+        } catch (ClassCastException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -658,6 +637,16 @@ public interface IDataHolder {
     @Nonnull default <D extends IDataHolder, T extends ISerializable<D>> T getSerializable(@Nonnull String path, @Nonnull Class<T> type, @Nonnull T def) {
         T value = getSerializable(path, type);
         return Objects.isNull(value) ? def : value;
+    }
+    /**
+     * Returns the boolean at the specified path, or else the default value.
+     * @param path The path to get the value from.
+     * @param def The value to return if no value was found at the path.
+     * @return The boolean at the specified path, or else the default value.
+     */
+    @Nonnull default <D extends IDataHolder, T extends ISerializable<D>> T getSerializable(@Nonnull String path, @Nonnull Class<T> type, @Nonnull Supplier<T> def) {
+        T value = getSerializable(path, type);
+        return Objects.isNull(value) ? def.get() : value;
     }
     /**
      * Returns the boolean-list at the specified path, or else an empty list.
@@ -686,13 +675,7 @@ public interface IDataHolder {
      * @return The map at the specified path, or else the default value.
      */
     @Nonnull default <K, D extends IDataHolder, T extends ISerializable<D>> Map<K, T> getSerializableMap(@Nonnull String path, @Nonnull Class<T> type, IObjectDeserializer<String, K> keyDeserializer) {
-        IDataHolder data = getDataSection(path);
-        if(data == null) return Collections.emptyMap();
-
-        return data.getKeys(false).stream()
-                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), data.getSerializable(sub, type)))
-                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return collectValuesToMap(path, keyDeserializer, (d, k) -> d.getSerializable(k, type));
     }
     /**
      * Returns the map at the specified path, or else the default value.
@@ -1079,22 +1062,25 @@ public interface IDataHolder {
      */
     @Nonnull default <K, V> Map<K, V> getMap(@Nonnull String path, @Nonnull IObjectDeserializer<String, K> keyDeserializer, @Nonnull IObjectDeserializer<String, V> valueDeserializer) {
         HashMap<K, V> map = new HashMap<>();
-        Set<String> keys = getDataSection(path).getKeys(false);
 
-        for (String stringKey : keys) {
-            String stringValue = getString(path + getPathDivider() + stringKey);
-
-            K key;
-            V value;
-
+        for (Map.Entry<String, String> entry : getStringMap(path).entrySet()) {
             try {
-                key = keyDeserializer.deserialize(stringKey);
-                value = valueDeserializer.deserialize(stringValue);
-            } catch (Exception ignore) { continue; }
-
-            map.put(key, value);
+                K key = keyDeserializer.deserialize(entry.getKey());
+                V value = valueDeserializer.deserialize(entry.getValue());
+                map.put(key, value);
+            } catch (Exception ignore) { }
         }
         return map;
+    }
+
+    @Nonnull default <K, V> Map<K, V> collectValuesToMap(@Nonnull String path, @Nonnull IObjectDeserializer<String, K> keyDeserializer, BiFunction<IDataHolder, String, V> valueFromKeyWithData) {
+        IDataHolder section = getDataSection(path);
+        if(Objects.isNull(section)) return Collections.emptyMap();
+
+        return section.getKeys(false).stream()
+                .map((sub) -> new HashMap.SimpleImmutableEntry<>(keyDeserializer.deserialize(sub), valueFromKeyWithData.apply(section, sub)))
+                .filter(entry -> Objects.nonNull(entry.getKey()) && Objects.nonNull(entry.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

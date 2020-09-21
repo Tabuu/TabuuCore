@@ -89,7 +89,7 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
                     break;
 
                 case "m":
-                    time += count * 6000L;
+                    time += count * 60000L;
                     break;
 
                 case "h":
