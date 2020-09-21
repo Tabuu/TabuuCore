@@ -14,10 +14,6 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
 
     @Override
     public String serialize(Long number) {
-        if (number < 1) {
-            return "";
-        }
-
         StringBuffer timeBuf = new StringBuffer();
 
         long time = number / 1000;
