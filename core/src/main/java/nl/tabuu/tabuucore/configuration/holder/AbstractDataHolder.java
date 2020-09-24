@@ -114,7 +114,7 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
         P parent = getRoot();
         String key;
 
-        if(parts.length == 0) return new HashMap.SimpleImmutableEntry<>(parent, "");
+        if(parts.length == 0 || Arrays.stream(parts).allMatch(String::isEmpty)) return new HashMap.SimpleImmutableEntry<>(parent, "");
         else if(parts.length == 1) key = parts[0];
         else key = parts[parts.length - 1];
 
