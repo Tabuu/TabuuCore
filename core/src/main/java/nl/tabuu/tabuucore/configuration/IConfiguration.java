@@ -32,15 +32,17 @@ public interface IConfiguration extends IDataHolder {
             getFile().getParentFile().mkdirs();
 
         try {
-            if(!getFile().exists() && Objects.nonNull(getDefaults())) {
-                InputStream in = getDefaults();
-                OutputStream out = new FileOutputStream(getFile());
-                byte[] buf = new byte[in.available()];
-                int len;
-                while ((len = in.read(buf)) > 0)
-                    out.write(buf, 0, len);
-                in.close();
-                out.close();
+            if(!getFile().exists()) {
+                if(Objects.nonNull(getDefaults())) {
+                    InputStream in = getDefaults();
+                    OutputStream out = new FileOutputStream(getFile());
+                    byte[] buf = new byte[in.available()];
+                    int len;
+                    while ((len = in.read(buf)) > 0)
+                        out.write(buf, 0, len);
+                    in.close();
+                    out.close();
+                } else getFile().createNewFile();
             }
 
             reload();
