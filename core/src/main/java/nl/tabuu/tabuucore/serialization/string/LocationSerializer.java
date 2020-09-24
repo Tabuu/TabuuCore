@@ -16,11 +16,11 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
                 y = doubleSerializer.serialize(location.getY()),
                 z = doubleSerializer.serialize(location.getZ());
 
-        float
-                yaw = location.getYaw(),
-                pitch = location.getPitch();
+        String
+                yaw = doubleSerializer.serialize((double) location.getYaw()),
+                pitch = doubleSerializer.serialize((double) location.getPitch());
 
-        if(yaw == 0 && pitch == 0)
+        if(location.getYaw() == 0 && location.getPitch() == 0)
             return world + " " + x + " " + y + " " + z;
         else
             return world + " " + x + " " + y + " " + z + " " + yaw + " " + pitch;
