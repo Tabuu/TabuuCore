@@ -17,6 +17,7 @@ public interface IConfiguration extends IDataHolder {
 
     InputStream getDefaults();
 
+    @SuppressWarnings("all")
     default boolean writeDefaults() {
         if(!getFile().exists())
             getFile().getParentFile().mkdirs();

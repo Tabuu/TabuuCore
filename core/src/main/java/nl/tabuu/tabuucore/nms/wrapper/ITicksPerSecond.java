@@ -35,9 +35,9 @@ public interface ITicksPerSecond {
     /**
      * An enum representing the different time based TPS sample groups.
      */
-    enum TPSTime{
+    enum TPSTime {
         ONE_MINUTE,
         FIVE_MINUTES,
-        FIFTEEN_MINUTES;
+        FIFTEEN_MINUTES
     }
 }

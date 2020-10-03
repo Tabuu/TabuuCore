@@ -76,7 +76,7 @@ public enum ArgumentType {
     private AbstractStringSerializer<?> _serializer;
     private IArgumentCompleter _completer;
 
-    ArgumentType(AbstractStringSerializer serializer, IArgumentCompleter completer){
+    ArgumentType(AbstractStringSerializer<?> serializer, IArgumentCompleter completer){
         _serializer = serializer;
         _completer = completer;
     }
@@ -99,7 +99,8 @@ public enum ArgumentType {
      * @param <T> The object-type corresponding with the ArgumentType's deserializer's return type.
      * @return The deserialized argument.
      */
-    public <T> T convert(String argument){
+    @SuppressWarnings("unchecked")
+    public <T> T convert(String argument) {
         if(_serializer != null)
             return (T) _serializer.deserialize(argument);
         return null;

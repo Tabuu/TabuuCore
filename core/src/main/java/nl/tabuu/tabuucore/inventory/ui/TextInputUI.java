@@ -39,6 +39,8 @@ public class TextInputUI extends InventoryFormUI {
     public void onDraw() {
         ItemStack renameItem = _renameItem;
         ItemMeta itemMeta = renameItem.getItemMeta();
+        assert itemMeta != null : "The rename item must have item meta that can be edited.";
+
         itemMeta.setDisplayName(_defaultValue);
 
         renameItem.setItemMeta(itemMeta);

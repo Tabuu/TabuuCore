@@ -39,7 +39,9 @@ public class ItemBuilder {
 	 * @param material the {@link XMaterial}
 	 */
 	public ItemBuilder(XMaterial material) {
-		this(material.parseItem());
+		ItemStack item = material.parseItem();
+		assert item != null : "Material cannot result in null item.";
+		_itemStack = item.clone();
 	}
 
 	/**
@@ -116,10 +118,10 @@ public class ItemBuilder {
 	public ItemBuilder addLore(String... lore) {
 		ItemMeta meta = getItemMeta();
 		
-		List<String> oldLore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+		List<String> oldLore = meta.getLore() != null ? meta.getLore() : new ArrayList<>();
 		oldLore.addAll(Arrays.asList(lore));
 
-		setLore(oldLore.stream().toArray(String[]::new));
+		setLore(oldLore.toArray(new String[0]));
 		
 		return this;
 	}

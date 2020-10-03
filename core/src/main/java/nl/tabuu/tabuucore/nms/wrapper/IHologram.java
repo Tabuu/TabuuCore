@@ -51,6 +51,7 @@ public interface IHologram {
      * Checks if the hologram is visible to its subscribers.
      * @return true if the hologram is visible to its subscribers, else false.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isVisible();
 
     /**

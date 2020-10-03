@@ -20,6 +20,7 @@ public class TicksPerSecond implements ITicksPerSecond {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public double getTPS(TPSTime time) {
         MinecraftServer server = MinecraftServer.getServer();
         try {

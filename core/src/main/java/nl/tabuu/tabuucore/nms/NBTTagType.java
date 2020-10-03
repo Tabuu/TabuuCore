@@ -94,6 +94,7 @@ public enum NBTTagType{
     };
 
     private Class<?> _class;
+    @SuppressWarnings("rawtypes")
     private AbstractByteSerializer _serializer;
 
     <T> NBTTagType(Class<T> clazz, AbstractByteSerializer<T> serializer){
@@ -101,7 +102,8 @@ public enum NBTTagType{
         _serializer = serializer;
     }
 
-    public byte[] toByteArray(Object object){
+    @SuppressWarnings("unchecked")
+    public byte[] toByteArray(Object object) {
         return _serializer != null ? _serializer.serialize(object) : new byte[0];
     }
 
