@@ -8,21 +8,21 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.function.BiConsumer;
 
-public class TextInput extends StyleableElement<TextInputStyle> implements IClickable, IValuable<String>{
+public class TextInput extends StyleableElement<TextInputStyle> implements IClickable, IValuable<String> {
 
     private String _value;
-    private BiConsumer<Player, String> _consumer;
     private InventoryUI _returnUI;
+    private BiConsumer<Player, String> _consumer;
 
     public TextInput(TextInputStyle style, InventoryUI returnUI) {
-        this(style, returnUI, null);
+        super(style);
+        _returnUI = returnUI;
     }
 
     public TextInput(TextInputStyle style, InventoryUI returnUI, BiConsumer<Player, String> consumer) {
-        super(style);
-        _value = style.getPlaceHolder();
+        this(style, returnUI);
         _consumer = consumer;
-        _returnUI = returnUI;
+        _value = "";
     }
 
     public BiConsumer<Player, String> getConsumer(){

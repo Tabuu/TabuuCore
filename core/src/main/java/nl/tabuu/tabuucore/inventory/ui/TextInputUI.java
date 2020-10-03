@@ -4,6 +4,8 @@ import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
+import nl.tabuu.tabuucore.item.ItemBuilder;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
@@ -33,6 +35,18 @@ public class TextInputUI extends InventoryFormUI {
         _anvilUtil = IInventoryUtil.get();
         _defaultValue = defaultValue;
         _onClose = onClose;
+    }
+
+    public TextInputUI(ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(renameItem.build(), defaultValue, onTextSubmit, onClose);
+    }
+
+    public TextInputUI(Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(new ItemStack(renameItem), defaultValue, onTextSubmit, onClose);
+    }
+
+    public TextInputUI(XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(renameItem.parseItem(), defaultValue, onTextSubmit, onClose);
     }
 
     @Override

@@ -8,20 +8,20 @@ import java.util.function.Consumer;
 
 public class Button extends StyleableElement<Style> implements IClickable {
 
-    private Consumer<Player> _left, _right;
+    private Consumer<Player> _onLeftClick, _onRightClick;
+
+    public Button(Style style) {
+        super(style);
+    }
 
     public Button(Style style, Consumer<Player> onLeftClick, Consumer<Player> onRightClick) {
-        super(style);
-        _left = onLeftClick;
-        _right = onRightClick;
+        this(style);
+        _onLeftClick = onLeftClick;
+        _onRightClick = onRightClick;
     }
 
     public Button(Style style, Consumer<Player> onClick) {
         this(style, onClick, onClick);
-    }
-
-    public Button(Style style) {
-        this(style, null);
     }
 
     @Override
@@ -36,10 +36,10 @@ public class Button extends StyleableElement<Style> implements IClickable {
     }
 
     protected Consumer<Player> getLeftConsumer() {
-        return _left;
+        return _onLeftClick;
     }
 
     protected Consumer<Player> getRightConsumer() {
-        return _right;
+        return _onRightClick;
     }
 }

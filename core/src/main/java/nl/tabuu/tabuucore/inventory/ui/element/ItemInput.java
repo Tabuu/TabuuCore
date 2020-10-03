@@ -17,15 +17,15 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
     private ItemStack _value;
     private BiConsumer<Player, ItemStack> _consumer;
 
-    public ItemInput(Style style, boolean clone, BiConsumer<Player, ItemStack> consumer) {
+    public ItemInput(Style style, boolean clone) {
         super(style);
         _clone = clone;
-        _value = new ItemStack(Material.AIR);
-        _consumer = consumer;
     }
 
-    public ItemInput(Style style, boolean clone) {
-        this(style, clone, null);
+    public ItemInput(Style style, boolean clone, BiConsumer<Player, ItemStack> consumer) {
+        this(style, clone);
+        _clone = clone;
+        _consumer = consumer;
     }
 
     public BiConsumer<Player, ItemStack> getConsumer() {
@@ -78,6 +78,7 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
                 ItemStack hotbar = player.getInventory().getItem(event.getHotbarButton());
                 if (hotbar == null) hotbar = XMaterial.AIR.parseItem();
                 player.getInventory().setItem(event.getHotbarButton(), swap);
+                assert hotbar != null;
                 value = hotbar.clone();
                 break;
 
@@ -104,12 +105,13 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
         if (!_clone) player.setItemOnCursor(cursor.clone());
 
         if (value == null) value = XMaterial.AIR.parseItem();
+        assert value != null;
         setValue(player, value.clone());
     }
 
     @Override
     public ItemStack getValue() {
-        return _value;
+        return _value == null ? XMaterial.AIR.parseItem() : _value;
     }
 
     @Override

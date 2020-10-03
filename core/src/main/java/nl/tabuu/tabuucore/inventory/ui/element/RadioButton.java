@@ -24,7 +24,9 @@ public class RadioButton extends Checkbox {
     public void click(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-        if(!getValue()){
+        if(!getValue()) {
+            setValue(true);
+
             _group.getElements().forEach((e) -> {
                 if(e instanceof RadioButton && e != this) {
                     ((RadioButton) e).setValue(false);
@@ -32,7 +34,6 @@ public class RadioButton extends Checkbox {
                     ((RadioButton) e).updateStyle();
                 }
             });
-            setValue(true);
 
             if(getConsumer() != null)
                 getConsumer().accept(player, true);

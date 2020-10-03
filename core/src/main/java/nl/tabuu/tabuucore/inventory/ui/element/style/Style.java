@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element.style;
 
+import nl.tabuu.tabuucore.item.ItemBuilder;
 import nl.tabuu.tabuucore.material.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,14 @@ public class Style {
     }
 
     public Style(ItemStack display) {
+        this(display, display);
+    }
+
+    public Style(ItemBuilder enabled, ItemBuilder disabled) {
+        this(enabled.build(), disabled.build());
+    }
+
+    public Style(ItemBuilder display) {
         this(display, display);
     }
 

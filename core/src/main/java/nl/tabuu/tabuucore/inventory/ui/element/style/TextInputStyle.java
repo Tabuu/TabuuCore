@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element.style;
 
+import nl.tabuu.tabuucore.item.ItemBuilder;
 import nl.tabuu.tabuucore.material.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,14 @@ public class TextInputStyle extends Style {
     }
 
     public TextInputStyle(ItemStack display, ItemStack renameItem, String placeHolder) {
+        this(display, display, renameItem, placeHolder);
+    }
+
+    public TextInputStyle(ItemBuilder enabled, ItemBuilder disabled, ItemBuilder renameItem, String placeHolder) {
+        this(enabled.build(), disabled.build(), renameItem.build(), placeHolder);
+    }
+
+    public TextInputStyle(ItemBuilder display, ItemBuilder renameItem, String placeHolder) {
         this(display, display, renameItem, placeHolder);
     }
 

@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.element.style;
 
+import nl.tabuu.tabuucore.item.ItemBuilder;
 import nl.tabuu.tabuucore.material.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,10 @@ public class ToggleableStyle extends Style {
         super(on, disabled);
         _on = on;
         _off = off;
+    }
+
+    public ToggleableStyle(ItemBuilder on, ItemBuilder off, ItemBuilder disabled) {
+        this(on.build(), off.build(), disabled.build());
     }
 
     public ToggleableStyle(Material on, Material off, Material disabled) {
