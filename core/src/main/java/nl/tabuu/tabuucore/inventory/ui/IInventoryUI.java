@@ -6,27 +6,6 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
 public interface IInventoryUI {
-
-    @Deprecated /* 3rd of June 2020 */
-    default void onDragUI(Player player, InventoryUIDrag drag) {
-        onDragUI(drag.getHandle());
-    }
-
-    @Deprecated /* 3rd of June 2020 */
-    default void onDrag(Player player, InventoryUIDrag drag) {
-        onDrag(drag.getHandle());
-    }
-
-    @Deprecated /* 3rd of June 2020 */
-    default void onClickUI(Player player, InventoryUIClick click) {
-        onClickUI(click.getHandle());
-    }
-
-    @Deprecated /* 3rd of June 2020 */
-    default void onClick(Player player, InventoryUIClick click) {
-        onClick(click.getHandle());
-    }
-
     /**
      * Is called when a player drags items though the ui part of the inventory view.
      *

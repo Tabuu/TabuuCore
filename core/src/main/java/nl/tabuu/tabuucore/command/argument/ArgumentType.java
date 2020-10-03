@@ -70,9 +70,7 @@ public enum ArgumentType {
 
     /**
      * Represents a null-type. For internal use only!
-     * @deprecated For internal use only!
      */
-    @Deprecated
     NULL(null, null);
 
     private AbstractStringSerializer<?> _serializer;

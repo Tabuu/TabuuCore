@@ -953,19 +953,6 @@ public interface IDataHolder {
     @Nonnull default String getPathSplitterRegex() {
         return "\\.";
     }
-    
-    /**
-     * Gets a value from a path, using a deserializer. If the value is null, return the default value.
-     * @param path          Path to get the value from.
-     * @param deserializer  Deserializer to deserialize the value with.
-     * @param def           The default value to return if null.
-     * @param <V>           Type of the value.
-     * @return              Value at the given path, or the default value if null.
-     */
-    @Deprecated
-    @Nonnull default <V> V getOrDefault(@Nonnull String path, @Nonnull IObjectDeserializer<String, V> deserializer, @Nonnull V def) {
-        return get(path, deserializer, def);
-    }
 
     /**
      * Gets a value from a path, using a deserializer. If the value is null, return the default value.

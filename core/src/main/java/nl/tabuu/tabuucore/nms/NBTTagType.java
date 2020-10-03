@@ -50,12 +50,6 @@ public enum NBTTagType{
 
     STRING(String.class, Serializer.STRING),
 
-    /**
-     * @deprecated Cannot be used to get a list from a list.
-     */
-    @Deprecated
-    LIST(List.class, null),
-
     COMPOUND(INBTTagCompound.class, null){
         @Override
         public byte[] toByteArray(Object object) {

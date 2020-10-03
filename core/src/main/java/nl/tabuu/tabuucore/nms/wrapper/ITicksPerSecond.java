@@ -39,14 +39,5 @@ public interface ITicksPerSecond {
         ONE_MINUTE,
         FIVE_MINUTES,
         FIFTEEN_MINUTES;
-
-        /**
-         * @deprecated Deprecated in favor of {@link #ordinal()}
-         * @return Returns the {@link #ordinal()} of the enum value.
-         */
-        @Deprecated
-        public int getIndex(){
-            return ordinal();
-        }
     }
 }

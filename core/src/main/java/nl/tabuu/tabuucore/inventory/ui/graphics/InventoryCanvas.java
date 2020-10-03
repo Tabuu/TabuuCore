@@ -18,11 +18,6 @@ public abstract class InventoryCanvas implements IInventoryUI {
         _currentBrush = new Brush(Material.AIR);
     }
 
-    @Deprecated /* 3rd June 2020 */
-    protected void draw() {
-        onDraw();
-    }
-
     protected abstract void onDraw();
 
     protected void setBrush(IBrush brush) {
@@ -92,15 +87,5 @@ public abstract class InventoryCanvas implements IInventoryUI {
 
     public void setSize(InventorySize size) {
         _size = size;
-    }
-
-    @Deprecated
-    public static int vectorToSlot(Vector2f vector) {
-        return (vector.getIntY() * 9) + vector.getIntX();
-    }
-
-    @Deprecated
-    public static Vector2f slotToVector(int slot) {
-        return new Vector2f(slot % 9, (float) Math.floor(slot / 9f));
     }
 }

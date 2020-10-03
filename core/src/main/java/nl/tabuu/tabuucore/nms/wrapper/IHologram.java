@@ -23,16 +23,6 @@ public interface IHologram {
     boolean isDestroyed();
 
     /**
-     * Hides this hologram for the specified player.
-     * @param player the player this hologram will be hidden from.
-     * @deprecated deprecated in favor of {@link #removePlayer(OfflinePlayer player)}
-     */
-    @Deprecated /*6th of april 2020*/
-    default void hide(Player player) {
-        removePlayer(player);
-    }
-
-    /**
      * Un-subscribes a player from this hologram, making it no longer visible to that player.
      * @param player the player that will be un-subscribed from the hologram.
      */
@@ -43,16 +33,6 @@ public interface IHologram {
      */
     default void removeAll() {
         getPlayers().forEach(this::removePlayer);
-    }
-
-    /**
-     * Shows this hologram to the specified player.
-     * @param player the player this hologram will be showed to.
-     * @deprecated deprecated in favor of {@link #addPlayer(OfflinePlayer player)}
-     */
-    @Deprecated /*6th of april 2020*/
-    default void show(Player player) {
-        addPlayer(player);
     }
 
     /**
@@ -108,17 +88,6 @@ public interface IHologram {
     boolean isGlobal();
 
     void setGlobal(boolean global);
-
-    /**
-     * Returns whether or not this hologram is visible to the specified player.
-     * @param player the player to check.
-     * @return whether or not this hologram is visible to the specified player.
-     * @deprecated in favor of {@link #getPlayers()}
-     */
-    @Deprecated /*6th of april 2020*/
-    default boolean isVisible(Player player) {
-        return getPlayers().contains(player);
-    }
 
     /**
      * Returns a list of players that are subscribed to this hologram.

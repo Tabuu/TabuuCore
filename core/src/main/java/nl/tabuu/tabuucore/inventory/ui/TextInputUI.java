@@ -14,13 +14,11 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.Repairable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TextInputUI extends InventoryFormUI {
-
     private IInventoryUtil _anvilUtil;
     private IAnvilContainerWindow _anvilWindow;
     private BiConsumer<Player, String> _onTextSubmit;
@@ -28,20 +26,14 @@ public class TextInputUI extends InventoryFormUI {
     private ItemStack _renameItem;
     private String _defaultValue;
 
-    @Deprecated
-    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
         super("", InventorySize.ONE_ROW);
         _onTextSubmit = onTextSubmit;
         _renameItem = renameItem;
         _anvilUtil = IInventoryUtil.get();
         _defaultValue = defaultValue;
-    }
-
-    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
-        this(renameItem, defaultValue, onTextSubmit);
         _onClose = onClose;
     }
-
 
     @Override
     public void onDraw() {

@@ -26,11 +26,6 @@ public class ElementGroup extends Element {
         _elements.addAll(Arrays.asList(elements));
     }
 
-    @Deprecated /* 10th of september 2020 */
-    public void addElements(Element... elements){
-        add(elements);
-    }
-
     public List<Element> getElements(){
         return _elements;
     }

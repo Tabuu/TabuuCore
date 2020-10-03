@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui.graphics.brush;
 
+import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Material;
@@ -20,8 +21,8 @@ public class CheckerBrush implements IBrush {
     }
 
     @Override
-    public ItemStack get(Vector2f position){
-        int slot = InventoryCanvas.vectorToSlot(position);
+    public ItemStack get(Vector2f position) {
+        int slot = InventorySize.SIX_ROWS.vectorToSlot(position);
         return _items[slot % _items.length];
     }
 }

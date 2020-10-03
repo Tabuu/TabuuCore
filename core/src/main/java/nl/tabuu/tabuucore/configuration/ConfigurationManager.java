@@ -20,17 +20,6 @@ public class ConfigurationManager {
         _configurations = new HashMap<>();
     }
 
-    /**
-     * Creates, adds, and returns a configuration.
-     *
-     * @param name The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
-     * @return The created configuration.
-     */
-    @Deprecated
-    public IConfiguration addConfiguration(String name) {
-        return addConfiguration(name, name + ".yml", YamlConfiguration.class);
-    }
-
     public <T extends IConfiguration> T addConfiguration(String filePath, Class<T> configType) {
         return addConfiguration(filePath, filePath, filePath, configType);
     }
@@ -56,19 +45,6 @@ public class ConfigurationManager {
         }
 
         return null;
-    }
-
-    /**
-     * Creates, adds, and returns a configuration.
-     *
-     * @param name         The name to be given to the configuration. This name is needed to fetch the configuration with the {@link #getConfiguration(String name)} method.
-     * @param resourcePath The path of the internal file to be used.
-     * @param filePath     The path to save the configuration to (relative to the plugin's data folder).
-     * @return The created configuration.
-     */
-    @Deprecated
-    public IConfiguration addConfiguration(String name, String filePath, String resourcePath) {
-        return addConfiguration(name, filePath, resourcePath, YamlConfiguration.class);
     }
 
     /**

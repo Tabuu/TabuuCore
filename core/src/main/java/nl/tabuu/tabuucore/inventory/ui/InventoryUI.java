@@ -37,7 +37,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     public void open(HumanEntity player) {
         if(_initial) {
             createInventory();
-            draw(); /* onDraw(); */ //TODO: Replace.
+            onDraw();
             _initial = false;
         }
 
@@ -66,11 +66,6 @@ public abstract class InventoryUI extends InventoryCanvas {
         getInventory().setContents(contents);
 
         viewers.forEach(this::open);
-    }
-
-    @Deprecated
-    public boolean isReloading(){
-        return false;
     }
 
     protected void createInventory() {

@@ -10,25 +10,7 @@ public enum InventorySize {
     FIVE_ROWS(9, 5),
     SIX_ROWS(9, 6),
     THREE_BY_THREE(3, 3),
-    ONE_BY_FIVE(1, 5),
-
-    /**
-     * @deprecated Deprecated in favor of {@link #THREE_ROWS}
-     */
-    @Deprecated
-    SINGLE_CHEST(9, 3),
-
-    /**
-     * @deprecated Deprecated in favor of {@link #SIX_ROWS}
-     */
-    @Deprecated
-    DOUBLE_CHEST(9, 6),
-
-    /**
-     * @deprecated Deprecated in favor of {@link #ONE_BY_FIVE}
-     */
-    @Deprecated
-    HOPPER(1, 5);
+    ONE_BY_FIVE(1, 5);
 
     private int _width, _height;
 

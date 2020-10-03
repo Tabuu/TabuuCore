@@ -40,14 +40,6 @@ public class OrderedArgumentConverter extends ArgumentConverter {
         return this;
     }
 
-    /**
-     * @deprecated Name changed to setParameter, as it doesn't 'add' anything.
-     */
-    @Deprecated
-    public OrderedArgumentConverter addParameter(ArgumentType parameterType){
-        return setParameter(parameterType);
-    }
-
     public OrderedArgumentConverter setParameter(ArgumentType parameterType){
         _parameterType = parameterType;
         return this;

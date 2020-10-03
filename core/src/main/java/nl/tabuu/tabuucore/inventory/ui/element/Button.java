@@ -35,15 +35,6 @@ public class Button extends StyleableElement<Style> implements IClickable {
             getRightConsumer().accept(player);
     }
 
-    /**
-     * @return The left click consumer.
-     * @deprecated Deprecated in favor of {@link #getLeftConsumer()} 17th March 2020
-     */
-    @Deprecated
-    protected Consumer<Player> getConsumer() {
-        return getLeftConsumer();
-    }
-
     protected Consumer<Player> getLeftConsumer() {
         return _left;
     }
