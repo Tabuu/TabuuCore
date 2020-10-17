@@ -1,7 +1,6 @@
 package nl.tabuu.tabuucore.inventory.ui;
 
 import nl.tabuu.tabuucore.TabuuCore;
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Element;
 import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
@@ -32,9 +31,9 @@ public abstract class InventoryFormUI extends InventoryUI {
 
     @Override
     public void onClick(InventoryClickEvent event) {
-        if(!event.getClick().equals(ClickType.SHIFT_LEFT) && !event.getClick().equals(ClickType.SHIFT_RIGHT)) return;
+        if (!event.getClick().equals(ClickType.SHIFT_LEFT) && !event.getClick().equals(ClickType.SHIFT_RIGHT)) return;
 
-        if(event.getInventory().equals(event.getClickedInventory())) return;
+        if (event.getInventory().equals(event.getClickedInventory())) return;
 
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
@@ -42,8 +41,8 @@ public abstract class InventoryFormUI extends InventoryUI {
 
         List<ItemInput> inputs = new LinkedList<>(getElements(ItemInput.class));
         inputs.sort(Comparator.comparing(Element::getPosition, ((instance, other) -> {
-            if(instance.getY() > other.getY()) return 1;
-            else if(instance.getY() < other.getY()) return -1;
+            if (instance.getY() > other.getY()) return 1;
+            else if (instance.getY() < other.getY()) return -1;
             else return Float.compare(instance.getX(), other.getX());
         })));
 
@@ -53,9 +52,9 @@ public abstract class InventoryFormUI extends InventoryUI {
             int amount = item.getAmount();
 
             if (value.isSimilar(item)) {
-                if(available <= 0) continue;
+                if (available <= 0) continue;
 
-                if(amount > available) {
+                if (amount > available) {
                     value.setAmount(value.getMaxStackSize());
                     item.setAmount(item.getAmount() - available);
                 } else {
@@ -91,7 +90,7 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void onDragUI(InventoryDragEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack cursor = event.getCursor();
-        if(cursor == null) {
+        if (cursor == null) {
             cursor = event.getOldCursor().clone();
             cursor.setAmount(0);
         }
@@ -108,13 +107,13 @@ public abstract class InventoryFormUI extends InventoryUI {
             }
 
             Element element = _elements.get(slot);
-            if(element instanceof ItemInput) {
+            if (element instanceof ItemInput) {
                 ItemInput input = (ItemInput) element;
                 input.setValue(player, entry.getValue());
             } else {
                 final ItemStack oldItem;
 
-                if(event.getView().getItem(entry.getKey()) == null) oldItem = XMaterial.AIR.parseItem();
+                if (event.getView().getItem(entry.getKey()) == null) oldItem = XMaterial.AIR.parseItem();
                 else oldItem = event.getView().getItem(entry.getKey());
                 assert oldItem != null;
 

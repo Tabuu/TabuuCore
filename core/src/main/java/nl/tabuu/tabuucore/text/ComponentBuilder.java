@@ -2,22 +2,34 @@ package nl.tabuu.tabuucore.text;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.TextComponent;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
+import nl.tabuu.tabuucore.serialization.string.Serializer;
 import nl.tabuu.tabuucore.util.vector.Vector1f;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.inventory.ItemStack;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ComponentBuilder {
 
-    private Stack<BaseComponent> _components;
+    private static Pattern KEY_VALUE_PATTERN, STRUCTURE_PATTERN;
+
+    static {
+        KEY_VALUE_PATTERN = Pattern.compile("(?<key>(?:[^=\\\\]|\\\\.)+)=(?<value>(?:[^,\\\\\\)]|\\\\.)+),?");
+        STRUCTURE_PATTERN = Pattern.compile("(?:\\[(?<text>(?:[^](]|\\\\.)+)]\\((?<attributes>(?:[^](]|\\\\.)+)\\)|(?<flat>(?:[^\\[]|\\\\.)+))");
+    }
+
     private BaseComponent[] _current;
+    private Stack<BaseComponent> _components;
 
     private ComponentBuilder() {
         _components = new Stack<>();
@@ -151,7 +163,7 @@ public class ComponentBuilder {
     }
 
     public ComponentBuilder setFont(String fontName) {
-        assert NMSUtil.getVersion().isPostOrEquals(NMSVersion.v1_16_R1) : "This method is not supported in your version of Minecraft.";
+        assert NMSUtil.getVersion().isPost(NMSVersion.v1_16_R1) : "The method \"setFont\" is not supported in your version of Minecraft.";
         forCurrent(component -> component.setFont(fontName));
         return this;
     }
@@ -241,7 +253,95 @@ public class ComponentBuilder {
      * @return A builder based on the given string.
      * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
      */
-    public static ComponentBuilder parse(final String string) {
+    public static ComponentBuilder parse(String string) {
+        ComponentBuilder builder = new ComponentBuilder();
+
+        Matcher structureMatcher = STRUCTURE_PATTERN.matcher(string);
+        while (structureMatcher.find()) {
+            String text = structureMatcher.group("text");
+            String flat = structureMatcher.group("flat");
+            String attributes = structureMatcher.group("attributes");
+
+            if (Objects.nonNull(flat)) {
+                builder.thenText(flat);
+                continue;
+            }
+            builder.thenParse(unEscape(text));
+
+            Matcher attributeMatcher = KEY_VALUE_PATTERN.matcher(attributes);
+            while (attributeMatcher.find()) {
+                String key = attributeMatcher.group("key").toUpperCase();
+                String value = unEscape(attributeMatcher.group("value"));
+
+                switch (key) {
+                    case "OPEN_URL":
+                    case "OPEN_FILE":
+                    case "RUN_COMMAND":
+                    case "CHANGE_PAGE":
+                    case "SUGGEST_COMMAND":
+                    case "COPY_TO_CLIPBOARD":
+                        builder.setClickEvent(ClickEvent.Action.valueOf(key), value);
+                        break;
+
+                    case "SHOW_ITEM":
+                    case "SHOW_ENTITY":
+                        builder.setHoverEvent(HoverEvent.Action.valueOf(key), new TextComponent(value));
+                        break;
+
+                    case "SHOW_TEXT":
+                        builder.setHoverEvent(HoverEvent.Action.valueOf(key), ComponentBuilder.parse(value));
+                        break;
+
+                    case "COLOR":
+                        Double[] values = Serializer.DOUBLE.deserializeArray(value);
+                        Color color = new Color(values[0].floatValue(), values[1].floatValue(), values[2].floatValue());
+                        builder.setColor(ChatColor.of(color));
+                        break;
+
+                    case "FONT":
+                        builder.setFont(value);
+                        break;
+                }
+            }
+        }
+        return builder;
+    }
+
+    /**
+     * Escapes and returns the given string so that it can be safely used in a the {@link #parse(String string)}.
+     * @param string The string to escape.
+     * @return The escaped string.
+     */
+    public static String escape(String string) {
+        return string
+                .replace("]", "\\]")
+                .replace("[", "\\[")
+                .replace("(", "\\(")
+                .replace(")", "\\)")
+                .replace(",", "\\,");
+    }
+
+    /**
+     * Reverses the {@link #escape(String)} process, and returns the result.
+     * @param string The string to reverse escape.
+     * @return The reverse escape result.
+     */
+    private static String unEscape(String string) {
+        return string
+                .replace("\\]", "]")
+                .replace("\\[", "[")
+                .replace("\\(", "(")
+                .replace("\\)", ")")
+                .replace("\\,", ",");
+    }
+
+    /**
+     * Formats the specified string into a builder containing the base components of that string.
+     * @param string The string to format.
+     * @return A builder based on the given string.
+     * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
+     */
+    public static ComponentBuilder parseOld(String string) {
         Map<Vector2f, BaseComponent[]> components = new HashMap<>();
 
         Pattern hoverPattern = Pattern.compile("\\[(?<text>(?:[^]\\\\]|\\\\.)+?)]\\((?:(?<hfunc>(?:[^,)\\\\]|\\\\.)+?),)?(?<hval>(?:[^)\\\\]|\\\\.)*?)\\)(?:\\((?<cfunc>(?:[^)\\\\]|\\\\.)+?),(?<cval>(?:[^)\\\\]|\\\\.)+?)\\))?");

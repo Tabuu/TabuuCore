@@ -161,7 +161,7 @@ public class CommandRegister {
         Parameter argumentParameter = executorMethod.getParameters()[1];
         final boolean isFullSequenceRequired = isParameterWildcard(argumentParameter.getParameterizedType());
 
-        Command command = new Command(executor.command()) {
+        Command command = new Command(executor.value()) {
             @Override
             protected CommandResult onCommand(CommandSender sender, List<Optional<?>> arguments) {
                 List<?> convertedArguments;

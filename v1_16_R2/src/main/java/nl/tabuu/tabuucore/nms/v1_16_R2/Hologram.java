@@ -175,7 +175,7 @@ public class Hologram implements IHologram {
             stand.setCustomNameVisible(true);
         } else if (line instanceof HologramItemLine) {
             HologramItemLine item = (HologramItemLine) line;
-            stand.setEquipment(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
+            stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
             stand.setCustomName(new ChatComponentText(" "));
         }
 

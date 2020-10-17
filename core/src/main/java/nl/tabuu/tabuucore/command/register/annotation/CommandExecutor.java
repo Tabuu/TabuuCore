@@ -19,7 +19,7 @@ public @interface CommandExecutor {
      * @return The name of the command, as defined in the plugin.yml.
      * @see Command#getName()
      */
-    String command();
+    String value();
 
     /**
      * Returns an ordered array containing the sequence of the argument types.

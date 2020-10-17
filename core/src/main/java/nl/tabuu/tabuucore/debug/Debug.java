@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 public class Debug {
 
     public static void log(Object object) {
-        Bukkit.broadcastMessage(getPrefix() + object.toString());
+        Bukkit.broadcastMessage(getPrefix() + (object == null ? "NULL" : object.toString()));
     }
 
     private static String getPrefix(){
