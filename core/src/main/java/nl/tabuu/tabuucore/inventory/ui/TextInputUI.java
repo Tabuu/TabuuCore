@@ -37,6 +37,10 @@ public class TextInputUI extends InventoryFormUI {
         _onClose = onClose;
     }
 
+    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(renameItem, defaultValue, onTextSubmit, null);
+    }
+
     public TextInputUI(ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
         this(renameItem.build(), defaultValue, onTextSubmit, onClose);
     }
@@ -47,6 +51,18 @@ public class TextInputUI extends InventoryFormUI {
 
     public TextInputUI(XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
         this(renameItem.parseItem(), defaultValue, onTextSubmit, onClose);
+    }
+
+    public TextInputUI(ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(renameItem.build(), defaultValue, onTextSubmit);
+    }
+
+    public TextInputUI(Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(new ItemStack(renameItem), defaultValue, onTextSubmit);
+    }
+
+    public TextInputUI(XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(renameItem.parseItem(), defaultValue, onTextSubmit);
     }
 
     @Override
