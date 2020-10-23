@@ -1,9 +1,12 @@
 package nl.tabuu.tabuucore.serialization.string;
 
+import java.util.Objects;
+
 public class BooleanSerializer extends AbstractStringSerializer<Boolean> {
 
     @Override
     public String serialize(Boolean object) {
+        if(Objects.isNull(object)) return null;
         return object ? "true" : "false";
     }
 

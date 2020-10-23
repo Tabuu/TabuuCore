@@ -4,9 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Objects;
+
 public class LocationSerializer extends AbstractStringSerializer<Location> {
     @Override
     public String serialize(Location location) {
+        if(Objects.isNull(location)) return null;
+
         String world = location.getWorld().getName().replace(" ", "|");
 
         DoubleSerializer doubleSerializer = Serializer.DOUBLE;
@@ -28,8 +32,7 @@ public class LocationSerializer extends AbstractStringSerializer<Location> {
 
     @Override
     public Location deserialize(String string) {
-        if(string == null)
-            return null;
+        if(Objects.isNull(string)) return null;
 
         DoubleSerializer doubleSerializer = Serializer.DOUBLE;
         String[] args = string.split(" ");

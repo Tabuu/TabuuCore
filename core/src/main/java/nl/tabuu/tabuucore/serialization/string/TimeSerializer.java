@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.serialization.string;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,8 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
 
     @Override
     public String serialize(Long number) {
+        if(Objects.isNull(number)) return null;
+
         StringBuffer timeBuf = new StringBuffer();
 
         long time = number / 1000;
@@ -64,6 +67,8 @@ public class TimeSerializer extends AbstractStringSerializer<Long> {
 
     @Override
     public Long deserialize(String string) {
+        if(Objects.isNull(string)) return null;
+
         Long time = null;
         Matcher match = _regex.matcher(string);
 

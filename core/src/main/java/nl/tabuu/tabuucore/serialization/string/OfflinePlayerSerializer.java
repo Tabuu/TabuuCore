@@ -4,16 +4,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 public class OfflinePlayerSerializer extends AbstractStringSerializer<OfflinePlayer> {
     @Override
     public String serialize(OfflinePlayer object) {
+        if(Objects.isNull(object)) return null;
+
         return object.getUniqueId().toString();
     }
 
     @Override
     public OfflinePlayer deserialize(String string) {
+        if(Objects.isNull(string)) return null;
+
         if(string.length() > 16){
             try {
                 UUID uuid = UUID.fromString(string);

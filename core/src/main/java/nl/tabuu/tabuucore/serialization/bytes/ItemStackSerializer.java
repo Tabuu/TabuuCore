@@ -8,11 +8,14 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ItemStackSerializer extends AbstractByteSerializer<ItemStack[]>{
 
     @Override
     public byte[] serialize(ItemStack... items) {
+        if(Objects.isNull(items)) return null;
+
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
@@ -27,13 +30,15 @@ public class ItemStackSerializer extends AbstractByteSerializer<ItemStack[]>{
 
             dataOutput.close();
             return outputStream.toByteArray();
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to convert items to bytes.", e);
+        } catch (Exception ignore) {
+            return null;
         }
     }
 
     @Override
     public ItemStack[] deserialize(byte[] data) {
+        if(Objects.isNull(data)) return null;
+
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
@@ -46,7 +51,7 @@ public class ItemStackSerializer extends AbstractByteSerializer<ItemStack[]>{
 
             return items;
         } catch (IOException | ClassNotFoundException e) {
-            throw new IllegalStateException("Unable to convert bytes to items.", e);
+            return null;
         }
     }
 }

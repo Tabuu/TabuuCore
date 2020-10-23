@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore.serialization.bytes;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -9,11 +8,14 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ConfigurationSerializableSerializer extends AbstractByteSerializer<ConfigurationSerializable[]> {
 
     @Override
     public byte[] serialize(ConfigurationSerializable... serializables) {
+        if(Objects.isNull(serializables)) return null;
+
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
@@ -26,13 +28,15 @@ public class ConfigurationSerializableSerializer extends AbstractByteSerializer<
 
             dataOutput.close();
             return outputStream.toByteArray();
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to convert serializable to bytes.", e);
-        }
+        } catch (Exception ignore) { }
+
+        return null;
     }
 
     @Override
     public ConfigurationSerializable[] deserialize(byte[] data) {
+        if(Objects.isNull(data)) return null;
+
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
@@ -44,9 +48,9 @@ public class ConfigurationSerializableSerializer extends AbstractByteSerializer<
             dataInput.close();
 
             return items;
-        } catch (IOException | ClassNotFoundException e) {
-            throw new IllegalStateException("Unable to convert bytes to items.", e);
-        }
+        } catch (IOException | ClassNotFoundException ignore) { }
+
+        return null;
     }
 
 }
