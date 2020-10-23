@@ -24,7 +24,7 @@ public class ComponentBuilder {
     private static Pattern KEY_VALUE_PATTERN, STRUCTURE_PATTERN;
 
     static {
-        KEY_VALUE_PATTERN = Pattern.compile("(?<key>(?:[^=\\\\]|\\\\.)+)=(?<value>(?:[^,\\\\\\)]|\\\\.)+),?");
+        KEY_VALUE_PATTERN = Pattern.compile("(?<key>(?:[^=\\\\]|\\\\.)+)=(?<value>(?:[^,\\\\)]|\\\\.)+),?");
         STRUCTURE_PATTERN = Pattern.compile("(?:\\[(?<text>(?:[^](]|\\\\.)+)]\\((?<attributes>(?:[^](]|\\\\.)+)\\)|(?<flat>(?:[^\\[]|\\\\.)+))");
     }
 
@@ -260,19 +260,27 @@ public class ComponentBuilder {
         while (structureMatcher.find()) {
             String text = structureMatcher.group("text");
             String flat = structureMatcher.group("flat");
-            String attributes = structureMatcher.group("attributes");
+            String rawAttributes = structureMatcher.group("attributes");
 
             if (Objects.nonNull(flat)) {
                 builder.thenText(flat);
                 continue;
             }
-            builder.thenParse(unEscape(text));
 
-            Matcher attributeMatcher = KEY_VALUE_PATTERN.matcher(attributes);
+            Matcher attributeMatcher = KEY_VALUE_PATTERN.matcher(rawAttributes);
+            HashMap<String, String> attributes = new HashMap<>();
             while (attributeMatcher.find()) {
                 String key = attributeMatcher.group("key").toUpperCase();
                 String value = unEscape(attributeMatcher.group("value"));
+                attributes.put(key, value);
+            }
 
+            if(attributes.containsKey("TRANSLATABLE"))
+                builder.thenTranslatable(text);
+            else
+                builder.thenParse(unEscape(text));
+
+            attributes.forEach((key, value) -> {
                 switch (key) {
                     case "OPEN_URL":
                     case "OPEN_FILE":
@@ -302,7 +310,7 @@ public class ComponentBuilder {
                         builder.setFont(value);
                         break;
                 }
-            }
+            });
         }
         return builder;
     }
@@ -341,6 +349,7 @@ public class ComponentBuilder {
      * @return A builder based on the given string.
      * @see <a href="https://github.com/Tabuu/TabuuCore/wiki/ComponentBuilder#parsing">ComponentBuilder parsing info.</a>
      */
+    @Deprecated
     public static ComponentBuilder parseOld(String string) {
         Map<Vector2f, BaseComponent[]> components = new HashMap<>();
 
