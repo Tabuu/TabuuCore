@@ -126,6 +126,6 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
 
     @Override
     public void updateStyle() {
-        setDisplayItem(isEnabled() ? _value.clone() : getStyle().getDisabled());
+        setDisplayItem(isEnabled() ? _value : getStyle().getDisabled());
     }
 }
