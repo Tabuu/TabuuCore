@@ -52,18 +52,18 @@ public class JsonDataHolder extends AbstractDataHolder<JsonObject, JsonElement> 
             JsonObject object = element.getAsJsonObject();
 
             try {
-                Constructor<T> constructor = type.getConstructor(IDataHolder.class);
-                constructor.setAccessible(true);
-                return constructor.newInstance(createDataHolder(object));
-            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException ignore) { ignore.printStackTrace(); } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 Method method = type.getDeclaredMethod("deserialize", IDataHolder.class);
                 method.setAccessible(true);
                 return (T) method.invoke(null, createDataHolder(object));
             } catch (ClassCastException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Constructor<T> constructor = type.getConstructor(IDataHolder.class);
+                constructor.setAccessible(true);
+                return constructor.newInstance(createDataHolder(object));
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
 
