@@ -63,7 +63,8 @@ public abstract class AbstractDataHolder<P extends C, C> implements IDataHolder 
     }
 
     protected <T> void setValue(@Nonnull String path, T value, Function<T, C> valueToElementFunction) {
-        setElement(path, valueToElementFunction.apply(value));
+        if(Objects.isNull(value)) delete(path);
+        else setElement(path, valueToElementFunction.apply(value));
     }
 
     protected <T> void setValue(@Nonnull String path, List<T> value, Function<T, C> valueToElementFunction) {
