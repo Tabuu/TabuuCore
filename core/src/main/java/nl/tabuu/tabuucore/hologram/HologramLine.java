@@ -2,7 +2,7 @@ package nl.tabuu.tabuucore.hologram;
 
 import java.util.Objects;
 
-public abstract class HologramLine {
+public abstract class HologramLine implements Cloneable {
 
     private double _pitch = 0d, _yaw = 0d;
     private boolean _updating = true;
