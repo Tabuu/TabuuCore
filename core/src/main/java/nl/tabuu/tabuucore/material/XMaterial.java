@@ -2109,7 +2109,7 @@ public enum XMaterial {
      *
      * @return a list of suggested material names.
      * @see #parseMaterial(boolean)
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Nonnull
     public List<String> getSuggestions() {
