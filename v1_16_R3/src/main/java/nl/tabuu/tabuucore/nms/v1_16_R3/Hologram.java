@@ -87,13 +87,13 @@ public class Hologram implements IHologram {
             return;
         }
 
-        //Synchronizing new instances with old instances
+        // Synchronizing new instances with old instances
         for(int i = 0; i < lines.length; i++) {
-            if(lines.length != _lines.size()) break;
+            if(lines.length > _lines.size()) break;
             HologramLine newLine = lines[i];
             HologramLine oldLine = _lines.get(i).getValue();
 
-            newLine.setUpdating(!newLine.equals(oldLine));
+            newLine.setUpdating(!newLine.equals(oldLine) || !newLine.getClass().equals(oldLine.getClass()));
         }
 
         // Calculating hologram size, and start location
@@ -173,10 +173,17 @@ public class Hologram implements IHologram {
             HologramStringLine string = (HologramStringLine) line;
             stand.setCustomName(new ChatComponentText(string.getString()));
             stand.setCustomNameVisible(true);
-        } else if (line instanceof HologramItemLine) {
+        } else {
+            stand.setCustomName(null);
+            stand.setCustomNameVisible(false);
+        }
+
+        if (line instanceof HologramItemLine) {
             HologramItemLine item = (HologramItemLine) line;
             stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
             stand.setCustomName(new ChatComponentText(" "));
+        } else {
+            stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(XMaterial.AIR.parseItem()));
         }
 
         sendPacket(player, new PacketPlayOutSpawnEntityLiving(stand));
@@ -229,17 +236,28 @@ public class Hologram implements IHologram {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
-    private EntityArmorStand createArmorStand(Location location) {
-        if(location.getWorld() == null)
+    private EntityArmorStand createArmorStand(World world, double x, double y, double z) {
+        if(world == null)
             throw new IllegalArgumentException("World cannot be null when creating a hologram.");
 
-        WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
-        EntityArmorStand entity = new EntityArmorStand(world, location.getX(), location.getY(), location.getZ());
+        EntityArmorStand entity = new EntityArmorStand(world, x, y, z);
 
         entity.setNoGravity(true);
         entity.setInvisible(true);
         entity.setMarker(false);
 
         return entity;
+    }
+
+    private EntityArmorStand createArmorStand(Location location) {
+        if(location.getWorld() == null)
+            throw new IllegalArgumentException("World cannot be null when creating a hologram.");
+
+        World world = ((CraftWorld) location.getWorld()).getHandle();
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+
+        return createArmorStand(world, x, y, z);
     }
 }

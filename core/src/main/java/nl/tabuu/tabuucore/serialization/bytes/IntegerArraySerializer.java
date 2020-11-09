@@ -2,6 +2,8 @@ package nl.tabuu.tabuucore.serialization.bytes;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class IntegerArraySerializer extends AbstractByteSerializer<int[]> {
@@ -17,6 +19,11 @@ public class IntegerArraySerializer extends AbstractByteSerializer<int[]> {
     @Override
     public int[] deserialize(byte[] value) {
         if(Objects.isNull(value)) return null;
-        return ByteBuffer.wrap(value).order(ByteOrder.BIG_ENDIAN).asIntBuffer().array();
+
+        IntBuffer buffer = ByteBuffer.wrap(value).order(ByteOrder.BIG_ENDIAN).asIntBuffer();
+        int[] array = new int[buffer.remaining()];
+        buffer.get(array);
+
+        return array;
     }
 }

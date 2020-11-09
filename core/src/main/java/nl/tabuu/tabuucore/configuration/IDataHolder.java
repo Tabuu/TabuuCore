@@ -615,15 +615,15 @@ public interface IDataHolder {
             method.setAccessible(true);
             return (T) method.invoke(null, data);
         } catch (ClassCastException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            e.getCause().printStackTrace();
         }
 
         try {
-            Constructor<T> constructor = type.getConstructor(IDataHolder.class);
+            Constructor<T> constructor = type.getDeclaredConstructor(IDataHolder.class);
             constructor.setAccessible(true);
             return constructor.newInstance(data);
         } catch (InstantiationException | NoSuchMethodException | IllegalAccessException ignore) { } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            e.getCause().printStackTrace();
         }
 
         return null;

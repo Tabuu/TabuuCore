@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore.nms.v1_14_R1;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_14_R1.*;
 import nl.tabuu.tabuucore.hologram.HologramItemLine;
 import nl.tabuu.tabuucore.hologram.HologramLine;
@@ -87,13 +86,13 @@ public class Hologram implements IHologram {
             return;
         }
 
-        //Synchronizing new instances with old instances
+        // Synchronizing new instances with old instances
         for(int i = 0; i < lines.length; i++) {
-            if(lines.length != _lines.size()) break;
+            if(lines.length > _lines.size()) break;
             HologramLine newLine = lines[i];
             HologramLine oldLine = _lines.get(i).getValue();
 
-            newLine.setUpdating(!newLine.equals(oldLine));
+            newLine.setUpdating(!newLine.equals(oldLine) || !newLine.getClass().equals(oldLine.getClass()));
         }
 
         // Calculating hologram size, and start location
@@ -173,10 +172,17 @@ public class Hologram implements IHologram {
             HologramStringLine string = (HologramStringLine) line;
             stand.setCustomName(new ChatComponentText(string.getString()));
             stand.setCustomNameVisible(true);
-        } else if (line instanceof HologramItemLine) {
+        } else {
+            stand.setCustomName(null);
+            stand.setCustomNameVisible(false);
+        }
+
+        if (line instanceof HologramItemLine) {
             HologramItemLine item = (HologramItemLine) line;
-            stand.setEquipment(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
+            stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
             stand.setCustomName(new ChatComponentText(" "));
+        } else {
+            stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(XMaterial.AIR.parseItem()));
         }
 
         sendPacket(player, new PacketPlayOutSpawnEntityLiving(stand));

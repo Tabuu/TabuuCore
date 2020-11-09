@@ -5,14 +5,13 @@ import nl.tabuu.tabuucore.nms.NBTTagType;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.TileState;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -20,11 +19,11 @@ public class NBTTagCompound implements INBTTagCompound {
 
     private net.minecraft.server.v1_16_R3.NBTTagCompound _tagCompound;
 
-    public NBTTagCompound(){
+    public NBTTagCompound() {
         _tagCompound = new net.minecraft.server.v1_16_R3.NBTTagCompound();
     }
 
-    public NBTTagCompound(net.minecraft.server.v1_16_R3.NBTTagCompound tagCompound){
+    public NBTTagCompound(net.minecraft.server.v1_16_R3.NBTTagCompound tagCompound) {
         _tagCompound = tagCompound;
     }
 
@@ -51,7 +50,7 @@ public class NBTTagCompound implements INBTTagCompound {
         CraftWorld world = ((CraftWorld) block.getWorld());
 
         TileEntity tileEntity = world.getHandle().getTileEntity(position);
-        if(tileEntity == null) return null;
+        if (tileEntity == null) return null;
 
         tileEntity.load(null, _tagCompound);
         return block;
@@ -78,7 +77,7 @@ public class NBTTagCompound implements INBTTagCompound {
         CraftWorld world = ((CraftWorld) block.getWorld());
 
         TileEntity tileEntity = world.getHandle().getTileEntity(position);
-        if(tileEntity != null)
+        if (tileEntity != null)
             _tagCompound = tileEntity.save(_tagCompound);
 
         return this;
@@ -124,7 +123,7 @@ public class NBTTagCompound implements INBTTagCompound {
 
     @Override
     public <T> void setList(String key, List<T> list) {
-        if(list.isEmpty())
+        if (list.isEmpty())
             return;
 
         NBTTagList tagList = new NBTTagList();
@@ -132,7 +131,7 @@ public class NBTTagCompound implements INBTTagCompound {
 
         NBTTagType type = NBTTagType.valueOf(sample.getClass());
 
-        for(T item : list){
+        for (T item : list) {
             byte[] bytes = type.toByteArray(item);
             NBTBase base = baseFromByteArray(type, bytes);
 
@@ -242,7 +241,7 @@ public class NBTTagCompound implements INBTTagCompound {
     }
 
     @Override
-    public INBTTagCompound getTagCompound(String key){
+    public INBTTagCompound getTagCompound(String key) {
         return new NBTTagCompound(_tagCompound.getCompound(key));
     }
 
@@ -250,7 +249,7 @@ public class NBTTagCompound implements INBTTagCompound {
     public <T> List<T> getList(NBTTagType type, Class<T> clazz, String key) {
         List<T> list = new ArrayList<>();
 
-        for(NBTBase base : _tagCompound.getList(key, type.ordinal())){
+        for (NBTBase base : _tagCompound.getList(key, type.ordinal())) {
             byte[] bytes = baseToByteArray(base);
             T object = (T) type.fromBytes(bytes);
 
@@ -302,7 +301,7 @@ public class NBTTagCompound implements INBTTagCompound {
         return compound.toString();
     }
 
-    protected byte[] baseToByteArray(NBTBase base){
+    protected byte[] baseToByteArray(NBTBase base) {
         byte[] bytes = new byte[0];
         ByteArrayOutputStream byteOStream = new ByteArrayOutputStream();
         DataOutputStream dataOStream = new DataOutputStream(byteOStream);
@@ -311,18 +310,19 @@ public class NBTTagCompound implements INBTTagCompound {
             base.write(dataOStream);
             bytes = byteOStream.toByteArray();
             dataOStream.close();
-        } catch (IOException ignore) { }
+        } catch (IOException ignore) { ignore.printStackTrace(); }
 
         return bytes;
     }
 
-    protected NBTBase baseFromByteArray(NBTTagType type, byte[] bytes){
+    protected NBTBase baseFromByteArray(NBTTagType type, byte[] bytes) {
         ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
         DataInputStream dataStream = new DataInputStream(byteStream);
 
         try {
+            net.minecraft.server.v1_16_R3.NBTTagType<?> nmsType = NBTTagTypes.a(type.ordinal());
             return NBTTagTypes.a(type.ordinal()).b(dataStream, 0, NBTReadLimiter.a);
-        } catch (IOException ignore) { }
+        } catch (IOException ignore) { ignore.printStackTrace();}
 
         return null;
     }
