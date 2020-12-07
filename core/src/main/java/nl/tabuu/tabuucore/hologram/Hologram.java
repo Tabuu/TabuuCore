@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.hologram;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,7 +16,7 @@ public class Hologram implements IHologram {
     private List<HologramLine> _lines;
     private boolean _destroyed, _global, _visible;
 
-    public Hologram(Set<UUID> viewers, Location location, List<HologramLine> lines, boolean destroyed, boolean global, boolean visible) {
+    protected Hologram(Set<UUID> viewers, Location location, List<HologramLine> lines, boolean destroyed, boolean global, boolean visible) {
         _viewers = new HashSet<>(viewers);
         _location = location.clone();
         _lines = new ArrayList<>(lines);
@@ -24,11 +25,11 @@ public class Hologram implements IHologram {
         _visible = visible;
     }
 
-    public Hologram(Location location, HologramLine... lines) {
+    public Hologram(Location location) {
         this(
                 Collections.emptySet(),
                 location,
-                Arrays.asList(lines),
+                Collections.emptyList(),
                 false,
                 false,
                 true
@@ -52,10 +53,9 @@ public class Hologram implements IHologram {
     public void update(boolean force) {
         for(HologramLine line : getLines()) {
             if(!line.isUpdating() && !force) continue;
-            for(OfflinePlayer offlinePlayer : isGlobal() ? getPlayers() : Bukkit.getOnlinePlayers()) {
-                if(!offlinePlayer.isOnline()) continue;
-                Player player = (Player) offlinePlayer;
-                update(line, player);
+            for(OfflinePlayer player : getPlayers()) {
+                if(!player.isOnline()) continue;
+                update(line, (Player) player);
             }
 
             line.setUpdating(false);
@@ -70,7 +70,7 @@ public class Hologram implements IHologram {
         _viewers.add(player.getUniqueId());
 
         if(player.isOnline())
-            _lines.forEach(line -> line.setVisible((Player) player, true));
+            _lines.forEach(line -> line.setVisible((Player) player, isVisible()));
     }
 
     public void removePlayer(OfflinePlayer player) {
@@ -85,7 +85,7 @@ public class Hologram implements IHologram {
     }
 
     public List<OfflinePlayer> getPlayers() {
-        return _viewers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toList());
+        return isGlobal() ? new LinkedList<>(Bukkit.getOnlinePlayers()) : _viewers.stream().map(Bukkit::getOfflinePlayer).collect(Collectors.toList());
     }
 
     public List<HologramLine> getLines() {
@@ -101,6 +101,8 @@ public class Hologram implements IHologram {
 
             return;
         }
+
+        boolean forceUpdate = _lines.size() != lines.length;
 
         // Synchronizing new instances with old instances
         for(int i = 0; i < lines.length || i < _lines.size(); i++) {
@@ -137,7 +139,7 @@ public class Hologram implements IHologram {
             location.subtract(0, line.getBottomSpacing(), 0);
         }
 
-        update();
+        update(forceUpdate);
     }
 
     public Location getLocation() {
@@ -149,6 +151,7 @@ public class Hologram implements IHologram {
     }
 
     public void destroy() {
+        removeAll();
         _lines.forEach(HologramLine::destroy);
         _destroyed = true;
     }

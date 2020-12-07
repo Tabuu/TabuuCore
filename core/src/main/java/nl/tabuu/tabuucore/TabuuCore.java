@@ -4,6 +4,7 @@ import nl.tabuu.tabuucore.command.CommandRegister;
 import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
 import nl.tabuu.tabuucore.event.listener.InventoryListener;
+import nl.tabuu.tabuucore.hologram.Hologram;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
@@ -74,7 +75,7 @@ public class TabuuCore extends TabuuCorePlugin {
         getInventoryUIManager().forEach(InventoryUI::closeAll);
 
         // Destroy all holograms.
-        HologramAPI.getInstance().getHolograms().forEach(IHologram::destroy);
+        HologramAPI.getInstance().getHolograms().forEach(Hologram::destroy);
 
         getInstance().getLogger().info("TabuuCore disabled.");
     }

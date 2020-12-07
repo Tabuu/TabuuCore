@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore.hologram;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -13,11 +14,9 @@ public class HologramStringLine extends SingleStandHologramLine {
 
     @Override
     public void update(Player player) {
-        getStand().sendPacketDestroy(player);
-        getStand().setLocation(getLocation());
+        super.update(player);
         getStand().setCustomName(getString());
         getStand().setCustomNameVisible(true);
-        getStand().sendPacketSpawn(player);
     }
 
     @Override

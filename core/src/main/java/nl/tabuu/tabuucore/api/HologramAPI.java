@@ -1,9 +1,11 @@
 package nl.tabuu.tabuucore.api;
 
+import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.hologram.Hologram;
 import nl.tabuu.tabuucore.hologram.HologramLine;
 import nl.tabuu.tabuucore.hologram.HologramStringLine;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class HologramAPI {
         Hologram hologram = new Hologram(location);
         hologram.setLines(lines);
         _holograms.add(hologram);
+
+        Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> hologram.update(true));
         return hologram;
     }
 
