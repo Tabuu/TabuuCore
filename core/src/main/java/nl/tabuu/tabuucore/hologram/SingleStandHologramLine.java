@@ -4,7 +4,7 @@ import nl.tabuu.tabuucore.nms.wrapper.entity.IClientArmorStand;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public abstract class SimpleHologramLine extends HologramLine {
+public abstract class SingleStandHologramLine extends HologramLine {
 
     private IClientArmorStand _stand;
 

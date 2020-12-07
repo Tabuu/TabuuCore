@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
-public class HologramItemLine extends SimpleHologramLine {
+public class HologramItemLine extends SingleStandHologramLine {
 
     private ItemStack _item;
 

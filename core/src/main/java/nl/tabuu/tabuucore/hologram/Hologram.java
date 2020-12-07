@@ -1,6 +1,5 @@
 package nl.tabuu.tabuucore.hologram;
 
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -1,11 +1,10 @@
 package nl.tabuu.tabuucore.hologram;
 
-import nl.tabuu.tabuucore.debug.Debug;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-public class HologramStringLine extends SimpleHologramLine {
+public class HologramStringLine extends SingleStandHologramLine {
     private String _string;
 
     public HologramStringLine(String string) {
