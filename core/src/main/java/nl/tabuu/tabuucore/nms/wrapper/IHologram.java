@@ -4,11 +4,11 @@ import nl.tabuu.tabuucore.hologram.HologramLine;
 import nl.tabuu.tabuucore.hologram.HologramStringLine;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Deprecated
 public interface IHologram {
 
     /**

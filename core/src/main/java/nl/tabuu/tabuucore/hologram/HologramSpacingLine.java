@@ -1,5 +1,8 @@
 package nl.tabuu.tabuucore.hologram;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 public class HologramSpacingLine extends HologramLine {
 
     private double _top, _bottom;
@@ -17,5 +20,41 @@ public class HologramSpacingLine extends HologramLine {
     @Override
     public double getBottomSpacing() {
         return _bottom;
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
+    }
+
+    @Override
+    public void setLocation(Location location) { }
+
+    @Override
+    public void spawn(Location location) { }
+
+    @Override
+    public void destroy() { }
+
+    @Override
+    public void update(Player player) { }
+
+    @Override
+    public void setVisible(Player player, boolean visible) { }
+
+    @Override
+    public boolean recycle(HologramLine line) {
+        if(!(line instanceof HologramSpacingLine)) return false;
+
+        HologramSpacingLine spacingLine = (HologramSpacingLine) line;
+        _top = spacingLine.getTopSpacing();
+        _bottom = spacingLine.getBottomSpacing();
+
+        return true;
+    }
+
+    @Override
+    public HologramLine clone() {
+        return new HologramSpacingLine(getTopSpacing(), getBottomSpacing());
     }
 }

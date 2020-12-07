@@ -1,11 +1,23 @@
 package nl.tabuu.tabuucore.hologram;
 
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.util.Objects;
 
 public abstract class HologramLine implements Cloneable {
 
-    private double _pitch = 0d, _yaw = 0d;
     private boolean _updating = true;
+
+    public abstract void destroy();
+
+    public abstract void update(Player player);
+
+    public abstract void spawn(Location location);
+
+    public abstract void setVisible(Player player, boolean visible);
+
+    public abstract boolean recycle(HologramLine line);
 
     /**
      * Returns the distance between this line and the line above minus that line's bottom-spacing.
@@ -19,47 +31,28 @@ public abstract class HologramLine implements Cloneable {
      */
     public abstract double getBottomSpacing();
 
-    /**
-     * Returns the rotation of the line on the y-axis (yaw).
-     * @return The rotation of the line on the y-axis (yaw).
-     */
-    public double getYaw() { return _yaw; }
+    public abstract Location getLocation();
 
-    /**
-     * Sets the rotation of the hologram line on the y-axis (yaw).
-     * @param yaw The rotation on the y-axis (yaw).
-     */
-    public void setYaw(double yaw) { _yaw = yaw; }
-
-    /**
-     * Returns the rotation of the line on the x-axis (pitch).
-     * @return The rotation of the line on the x-axis (pitch).
-     */
-    public double getPitch() { return _pitch; }
-
-    /**
-     * Sets the rotation of the hologram line on the x-axis (pitch).
-     * @param pitch The rotation on the x-axis (pitch).
-     */
-    public void setPitch(double pitch) { _pitch = pitch; }
+    public abstract void setLocation(Location location);
 
     public boolean isUpdating() { return _updating; }
 
     public void setUpdating(boolean updating) { _updating = updating; }
 
     @Override
+    public abstract HologramLine clone();
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof HologramLine)) return false;
         HologramLine line = (HologramLine) object;
-        return Double.compare(line.getPitch(), getPitch()) == 0 &&
-                Double.compare(line.getYaw(), getYaw()) == 0 &&
-                Double.compare(line.getBottomSpacing(), getBottomSpacing()) == 0 &&
+        return Double.compare(line.getBottomSpacing(), getBottomSpacing()) == 0 &&
                 Double.compare(line.getTopSpacing(), getTopSpacing()) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPitch(), getYaw(), getBottomSpacing(), getTopSpacing());
+        return Objects.hash(getBottomSpacing(), getTopSpacing());
     }
 }

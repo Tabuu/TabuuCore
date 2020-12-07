@@ -81,6 +81,7 @@ public class Hologram implements IHologram {
     public void setLines(HologramLine... lines) {
         if(lines.length == 0) {
             setVisible(false);
+            _lines.forEach(this::destroyEntry);
             _lines.clear();
             setVisible(true);
 
@@ -103,11 +104,17 @@ public class Hologram implements IHologram {
         // Adjusting ArmorStand count.
         int lineDelta = lines.length - _lines.size();
         if(lineDelta > 0) {
-            for(int i = 0; i < lineDelta; i++)
-                _lines.add(new HashMap.SimpleEntry<>(createArmorStand(location.clone()), null));
+            for(int i = 0; i < lineDelta; i++) {
+                EntityArmorStand newStand = createArmorStand(location.clone());
+                _lines.add(new HashMap.SimpleEntry<>(newStand, null));
+            }
         } else if (lineDelta < 0) {
-            for(int i = lineDelta; i < 0; i++)
-                _lines.remove(0);
+            for(int i = lineDelta; i < 0; i++) {
+                Map.Entry<EntityArmorStand, HologramLine> entry = _lines.remove(0);
+                if(Objects.isNull(entry)) continue;
+
+                destroyEntry(entry);
+            }
         }
 
         // Matching ArmorStands with lines
@@ -123,7 +130,7 @@ public class Hologram implements IHologram {
             hologramLine.setValue(line);
         }
 
-        update();
+        update(lineDelta != 0);
     }
 
     @Override
@@ -166,8 +173,8 @@ public class Hologram implements IHologram {
         sendPacket(player, new PacketPlayOutEntityDestroy(stand.getId()));
         if(!isVisible()) return;
 
-        stand.pitch = (float) line.getPitch();
-        stand.yaw = (float) line.getYaw();
+        stand.pitch = line.getLocation().getPitch();
+        stand.yaw = getLocation().getYaw();
 
         if(line instanceof HologramStringLine) {
             HologramStringLine string = (HologramStringLine) line;
@@ -181,7 +188,6 @@ public class Hologram implements IHologram {
         if (line instanceof HologramItemLine) {
             HologramItemLine item = (HologramItemLine) line;
             stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(item.getItem()));
-            stand.setCustomName(new ChatComponentText(" "));
         } else {
             stand.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(XMaterial.AIR.parseItem()));
         }
@@ -230,6 +236,26 @@ public class Hologram implements IHologram {
 
     private void update() {
         update(false);
+    }
+
+    private void destroyEntry(Map.Entry<EntityArmorStand, HologramLine> entry) {
+        if(Objects.isNull(entry)) return;
+
+        destroyArmorStand(entry.getKey());
+    }
+
+    private void destroyArmorStand(EntityArmorStand stand) {
+        if(Objects.isNull(stand)) return;
+
+        sendPacket(new PacketPlayOutEntityDestroy(stand.getId()));
+        stand.die();
+    }
+
+    private void sendPacket(Packet<PacketListenerPlayOut> packet) {
+        getPlayers().stream()
+                .filter(OfflinePlayer::isOnline)
+                .map(offlinePlayer -> (Player) offlinePlayer)
+                .forEach(player -> sendPacket(player, packet));
     }
 
     private void sendPacket(Player player, Packet<PacketListenerPlayOut> packet) {

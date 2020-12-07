@@ -1,12 +1,34 @@
 package nl.tabuu.tabuucore.hologram;
 
+import nl.tabuu.tabuucore.debug.Debug;
+import org.bukkit.entity.Player;
+
 import java.util.Objects;
 
-public class HologramStringLine extends HologramLine {
+public class HologramStringLine extends SimpleHologramLine {
     private String _string;
 
     public HologramStringLine(String string) {
         _string = string;
+    }
+
+    @Override
+    public void update(Player player) {
+        getStand().sendPacketDestroy(player);
+        getStand().setLocation(getLocation());
+        getStand().setCustomName(getString());
+        getStand().setCustomNameVisible(true);
+        getStand().sendPacketSpawn(player);
+    }
+
+    @Override
+    public boolean recycle(HologramLine line) {
+        if(!(line instanceof HologramStringLine)) return false;
+
+        HologramStringLine stringLine = (HologramStringLine) line;
+        _string = stringLine.getString();
+
+        return true;
     }
 
     public String getString() {
@@ -21,6 +43,11 @@ public class HologramStringLine extends HologramLine {
     @Override
     public double getBottomSpacing() {
         return 0.125D;
+    }
+
+    @Override
+    public HologramLine clone() {
+        return new HologramStringLine(getString());
     }
 
     @Override

@@ -165,8 +165,8 @@ public class Hologram implements IHologram {
         sendPacket(player, new PacketPlayOutEntityDestroy(stand.getId()));
         if(!isVisible()) return;
 
-        stand.pitch = (float) line.getPitch();
-        stand.yaw = (float) line.getYaw();
+        stand.pitch = line.getLocation().getPitch();
+        stand.yaw = getLocation().getYaw();
 
         if(line instanceof HologramStringLine) {
             HologramStringLine string = (HologramStringLine) line;

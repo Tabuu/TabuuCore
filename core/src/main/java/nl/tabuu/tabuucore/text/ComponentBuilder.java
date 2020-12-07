@@ -3,7 +3,6 @@ package nl.tabuu.tabuucore.text;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
@@ -22,10 +21,11 @@ import java.util.regex.Pattern;
 public class ComponentBuilder {
 
     private static Pattern KEY_VALUE_PATTERN, STRUCTURE_PATTERN;
+    // (?:\[(?<text>(?:[^](]|\\.)+)]\((?<attributes>(?:[^](]|\\.)+)\)|(?<flat>(?:[^\[]|\\.)+))
 
     static {
         KEY_VALUE_PATTERN = Pattern.compile("(?<key>(?:[^=\\\\]|\\\\.)+)=(?<value>(?:[^,\\\\)]|\\\\.)+),?");
-        STRUCTURE_PATTERN = Pattern.compile("(?:\\[(?<text>(?:[^](]|\\\\.)+)]\\((?<attributes>(?:[^](]|\\\\.)+)\\)|(?<flat>(?:[^\\[]|\\\\.)+))");
+        STRUCTURE_PATTERN = Pattern.compile("(?:\\[(?<text>(?:[^](]|\\\\.)+)]\\((?<attributes>(?:[^](]|\\\\.)+)\\)|(?<flat>(?:[^\\[\\\\]|\\\\.)+))");
     }
 
     private BaseComponent[] _current;
@@ -263,7 +263,7 @@ public class ComponentBuilder {
             String rawAttributes = structureMatcher.group("attributes");
 
             if (Objects.nonNull(flat)) {
-                builder.thenText(flat);
+                builder.thenText(unEscape(flat));
                 continue;
             }
 
