@@ -47,6 +47,7 @@ public abstract class InventoryFormUI extends InventoryUI {
         })));
 
         for (ItemInput input : inputs) {
+            if(input.isCloaning()) continue;
             ItemStack value = input.getValue().clone();
             int available = value.getMaxStackSize() - value.getAmount();
             int amount = item.getAmount();
@@ -107,7 +108,7 @@ public abstract class InventoryFormUI extends InventoryUI {
             }
 
             Element element = _elements.get(slot);
-            if (element instanceof ItemInput) {
+            if (element instanceof ItemInput && !((ItemInput) element).isCloaning()) { // ?
                 ItemInput input = (ItemInput) element;
                 input.setValue(player, entry.getValue());
             } else {
@@ -119,7 +120,7 @@ public abstract class InventoryFormUI extends InventoryUI {
 
                 int delta = item.getAmount() - oldItem.getAmount();
                 illegallyPlaced += delta;
-                Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> setItemAt(slot, oldItem));
+                Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> setItemAt(slot, oldItem)); // TODO: Fishy?
             }
         }
 

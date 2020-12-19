@@ -8,12 +8,12 @@ public class HologramNameTagLine extends SingleStandHologramLine {
 
     private BaseComponent[] _nameTag;
 
-    public HologramNameTagLine(BaseComponent[] nameTag) {
+    public HologramNameTagLine(BaseComponent... nameTag) {
         _nameTag = nameTag;
     }
 
     public HologramNameTagLine(String string) {
-        _nameTag = ComponentBuilder.create().thenText(string).build();
+        this(ComponentBuilder.create().thenText(string).build());
     }
 
     public BaseComponent[] getNameTag() {

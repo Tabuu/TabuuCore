@@ -1,18 +1,19 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.util.BukkitUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.BiConsumer;
 
 public class ItemInput extends StyleableElement<Style> implements IClickable, IValuable<ItemStack> {
-
     private boolean _clone;
     private ItemStack _value;
     private BiConsumer<Player, ItemStack> _consumer;
@@ -38,6 +39,23 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
         ItemStack cursor = player.getItemOnCursor().clone();
         ItemStack value = getValue().clone();
         ItemStack swap = value.clone();
+
+        if(_clone) {
+            switch (event.getAction()) {
+                case PLACE_ALL:
+                case PICKUP_ALL:
+                case SWAP_WITH_CURSOR:
+                    break;
+
+                default:
+                    event.setCancelled(true);
+                    return;
+            }
+
+            setValue(player, cursor.clone());
+            player.setItemOnCursor(cursor.clone());
+            return;
+        }
 
         switch (event.getClick()) {
             case LEFT:
@@ -102,11 +120,15 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
                 break;
         }
 
-        if (!_clone) player.setItemOnCursor(cursor.clone());
+        player.setItemOnCursor(cursor.clone());
 
         if (value == null) value = XMaterial.AIR.parseItem();
         assert value != null;
         setValue(player, value.clone());
+    }
+
+    public boolean isCloaning() {
+        return _clone;
     }
 
     @Override
