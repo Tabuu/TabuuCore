@@ -1,6 +1,7 @@
 package nl.tabuu.tabuucore.nms.wrapper;
 
 import nl.tabuu.tabuucore.hologram.HologramLine;
+import nl.tabuu.tabuucore.hologram.HologramNameTagLine;
 import nl.tabuu.tabuucore.hologram.HologramStringLine;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -59,7 +60,7 @@ public interface IHologram {
      * @param lines the lines to be set.
      */
     default void setLines(String... lines) {
-        setLines(Arrays.stream(lines).map(HologramStringLine::new).toArray(HologramLine[]::new));
+        setLines(Arrays.stream(lines).map(HologramNameTagLine::new).toArray(HologramLine[]::new));
     }
 
     /**

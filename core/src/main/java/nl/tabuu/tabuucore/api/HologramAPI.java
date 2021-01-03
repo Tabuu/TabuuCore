@@ -33,6 +33,10 @@ public class HologramAPI {
         return create(location, Arrays.stream(lines).map(HologramStringLine::new).toArray(HologramStringLine[]::new));
     }
 
+    public void updateHolograms() {
+        _holograms.forEach(hologram -> hologram.update(true));
+    }
+
     public Hologram create(Location location, HologramLine... lines) {
         Hologram hologram = new Hologram(location);
         hologram.setLines(lines);

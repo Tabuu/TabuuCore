@@ -108,7 +108,12 @@ public abstract class InventoryFormUI extends InventoryUI {
             }
 
             Element element = _elements.get(slot);
-            if (element instanceof ItemInput && !((ItemInput) element).isCloaning()) { // ?
+            if (element instanceof ItemInput) { // ?
+                ItemInput itemInput = (ItemInput) element;
+                if(itemInput.isCloaning()) {
+                    illegallyPlaced += item.getAmount();
+                }
+
                 ItemInput input = (ItemInput) element;
                 input.setValue(player, entry.getValue());
             } else {

@@ -91,6 +91,11 @@ public class Hologram implements IHologram {
         return Collections.unmodifiableList(_lines);
     }
 
+    @Override
+    public void setLines(String... lines) {
+        setLines(Arrays.stream(lines).map(HologramNameTagLine::new).toArray(HologramLine[]::new));
+    }
+
     public void setLines(HologramLine... lines) {
         if(lines.length == 0) {
             setVisible(false);
@@ -118,6 +123,8 @@ public class Hologram implements IHologram {
 
                 if(!oldLine.recycle(newLine))
                     _lines.set(i, newLine);
+                else
+                    oldLine.setUpdating(true);
 
             } else {
                 newLine.spawn(getLocation());
