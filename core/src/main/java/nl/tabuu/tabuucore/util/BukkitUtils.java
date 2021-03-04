@@ -5,7 +5,7 @@
 
 package nl.tabuu.tabuucore.util;
 
-import nl.tabuu.tabuucore.item.ItemList;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.serialization.string.Serializer;
@@ -18,13 +18,11 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -108,6 +106,52 @@ public class BukkitUtils {
 	 */
 	public static OfflinePlayer getOfflinePlayerByName(String playerName){
 		return Serializer.OFFLINE_PLAYER.deserialize(playerName);
+	}
+
+	/**
+	 * Returns true if the material is air or null.
+	 * @param material The material to check.
+	 * @return True if the material is air or null.
+	 */
+	public static boolean isAir(Material material) {
+		if(Objects.isNull(material)) return true;
+
+		else if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
+			return material.isAir();
+		else
+			return material.equals(Material.AIR);
+	}
+
+	/**
+	 * Returns true if the item is air or null.
+	 * @param item The item to check.
+	 * @return True if the item is air or null.
+	 */
+	public static boolean isAir(ItemStack item) {
+		return Objects.isNull(item) || isAir(item.getType());
+	}
+
+	/**
+	 * Returns true if the material is air or null.
+	 * @param material The material to check.
+	 * @return True if the material is air or null.
+	 */
+	public static boolean isAir(XMaterial material) {
+		return Objects.isNull(material) || isAir(material.parseItem());
+	}
+
+	public static Inventory getClickedInventory(InventoryClickEvent event) {
+		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3)) {
+			int slot = event.getRawSlot();
+			InventoryView view = event.getView();
+			Inventory top = view.getTopInventory();
+			Inventory bottom = view.getBottomInventory();
+
+			if(slot < 0 || Objects.isNull(top)) return null;
+			return slot < top.getSize() ? top : bottom;
+		}
+
+		return event.getClickedInventory();
 	}
 
 	/**

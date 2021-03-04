@@ -4,6 +4,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.BaseComponent;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.configuration.IConfiguration;
+import nl.tabuu.tabuucore.nms.NMSUtil;
+import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.text.ComponentBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -100,6 +102,6 @@ public class Dictionary extends HashMap<String, String> {
     }
 
     public void send(Player player, String key, Object... replacements) {
-        send(player, key, true, true, '&', true, replacements);
+        send(player, key, true, true, '&', NMSUtil.getVersion().isPost(NMSVersion.v1_8_R3), replacements);
     }
 }

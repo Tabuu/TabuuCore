@@ -7,6 +7,7 @@ import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
 import nl.tabuu.tabuucore.inventory.ui.element.ItemInput;
 import nl.tabuu.tabuucore.inventory.ui.element.StyleableElement;
 import nl.tabuu.tabuucore.material.XMaterial;
+import nl.tabuu.tabuucore.util.BukkitUtils;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public abstract class InventoryFormUI extends InventoryUI {
     public void onClick(InventoryClickEvent event) {
         if (!event.getClick().equals(ClickType.SHIFT_LEFT) && !event.getClick().equals(ClickType.SHIFT_RIGHT)) return;
 
-        if (event.getInventory().equals(event.getClickedInventory())) return;
+        if (event.getInventory().equals(BukkitUtils.getClickedInventory(event))) return;
 
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
@@ -64,7 +65,7 @@ public abstract class InventoryFormUI extends InventoryUI {
                 }
 
                 input.setValue(player, value.clone());
-            } else if (value.getType().isAir()) {
+            } else if (BukkitUtils.isAir(value)) {
                 input.setValue(player, item.clone());
                 item.setAmount(0);
             }

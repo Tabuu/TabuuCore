@@ -1,5 +1,6 @@
 package nl.tabuu.tabuucore;
 
+import nl.tabuu.tabuucore.api.HologramAPI;
 import nl.tabuu.tabuucore.command.CommandRegister;
 import nl.tabuu.tabuucore.configuration.file.YamlConfiguration;
 import nl.tabuu.tabuucore.event.listener.HologramListener;
@@ -10,8 +11,6 @@ import nl.tabuu.tabuucore.inventory.ui.InventoryUIManager;
 import nl.tabuu.tabuucore.metrics.bstats.Metrics;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
-import nl.tabuu.tabuucore.api.HologramAPI;
-import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import nl.tabuu.tabuucore.plugin.TabuuCorePlugin;
 import nl.tabuu.tabuucore.util.Dictionary;
 import org.bukkit.Bukkit;

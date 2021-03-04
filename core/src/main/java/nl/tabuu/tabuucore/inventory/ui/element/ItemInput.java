@@ -1,13 +1,10 @@
 package nl.tabuu.tabuucore.inventory.ui.element;
 
-import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemList;
 import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.util.BukkitUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -77,7 +74,7 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
                 break;
 
             case RIGHT:
-                if (cursor.getType().isAir() && !value.getType().isAir()) {
+                if (BukkitUtils.isAir(cursor) && !BukkitUtils.isAir(value)) {
                     int half = (int) Math.ceil(swap.getAmount() / 2d);
                     cursor = swap.clone();
                     cursor.setAmount(half);
@@ -85,7 +82,7 @@ public class ItemInput extends StyleableElement<Style> implements IClickable, IV
                 } else if ((cursor.isSimilar(value)) && value.getAmount() < value.getMaxStackSize()) {
                     cursor.setAmount(cursor.getAmount() - 1);
                     value.setAmount(value.getAmount() + 1);
-                } else if (value.getType().isAir()) {
+                } else if (BukkitUtils.isAir(value)) {
                     value = cursor.clone();
                     value.setAmount(1);
                     cursor.setAmount(cursor.getAmount() - 1);

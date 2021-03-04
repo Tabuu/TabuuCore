@@ -5,7 +5,6 @@ import nl.tabuu.tabuucore.nms.NMSUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.block.TileState;
 
 import java.util.List;
 import java.util.Set;

@@ -9,9 +9,7 @@ public abstract class SingleStandHologramLine extends HologramLine {
 
     @Override
     public void destroy() {
-        if(!getStand().isDestroyed()) {
-            getStand().destroy();
-        }
+        getStand().destroy();
     }
 
     @Override

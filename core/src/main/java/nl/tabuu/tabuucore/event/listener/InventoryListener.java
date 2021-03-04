@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.event.listener;
 import nl.tabuu.tabuucore.TabuuCore;
 import nl.tabuu.tabuucore.inventory.ui.InventoryUI;
 import nl.tabuu.tabuucore.item.ItemBuilder;
+import nl.tabuu.tabuucore.util.BukkitUtils;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,7 +27,7 @@ public class InventoryListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
-        Inventory inventory = event.getClickedInventory();
+        Inventory inventory = BukkitUtils.getClickedInventory(event);
         if (inventory == null) return;
 
         Inventory topInventory = event.getView().getTopInventory();

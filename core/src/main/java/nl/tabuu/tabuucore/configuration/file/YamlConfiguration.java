@@ -2,10 +2,10 @@ package nl.tabuu.tabuucore.configuration.file;
 
 import nl.tabuu.tabuucore.configuration.IConfiguration;
 import nl.tabuu.tabuucore.configuration.holder.YamlDataHolder;
+import nl.tabuu.tabuucore.nms.NMSUtil;
+import nl.tabuu.tabuucore.nms.NMSVersion;
 import org.bukkit.configuration.file.YamlConstructor;
-import org.bukkit.configuration.file.YamlRepresenter;
 import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
@@ -24,13 +24,16 @@ public class YamlConfiguration extends YamlDataHolder implements IConfiguration 
 
         // Using the same style as the Bukkit YAML files.
         DumperOptions dumper = new DumperOptions();
-        LoaderOptions loader = new LoaderOptions();
         Representer representer = new Representer();
 
         dumper.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        _parser = new Yaml(new YamlConstructor(), representer, dumper, loader);
+        if (NMSUtil.getVersion().isPost(NMSVersion.v1_8_R3)) {
+            org.yaml.snakeyaml.LoaderOptions loader = new org.yaml.snakeyaml.LoaderOptions();
+            _parser = new Yaml(new YamlConstructor(), representer, dumper, loader);
+        } else _parser = new Yaml(new YamlConstructor(), representer, dumper);
+
         writeDefaults();
     }
 
@@ -41,9 +44,9 @@ public class YamlConfiguration extends YamlDataHolder implements IConfiguration 
 
     @Override
     public void reload() {
-        try (Reader yamlReader = new FileReader(getFile())){
-            Map<String, Object> element = _parser.load(yamlReader);
-            if(element != null) setRoot(element);
+        try (Reader yamlReader = new FileReader(getFile())) {
+            Object object = _parser.load(yamlReader);
+            if (object != null) setRoot((Map<String, Object>) object); // Cast for 1.8
             else setRoot(createEmptyParent());
         } catch (IOException e) {
             e.printStackTrace();
