@@ -86,6 +86,11 @@ public class BukkitUtils {
 			return player.getInventory().getItemInMainHand();
 	}
 
+	/**
+	 * Returns the storage contents of a players inventory.
+	 * @param player The player to get the storage contents from.
+	 * @return The storage contents of a players inventory.
+	 */
 	public static ItemStack[] getStorageContents(Player player) {
 		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
 			return player.getInventory().getContents();
@@ -116,7 +121,7 @@ public class BukkitUtils {
 	public static boolean isAir(Material material) {
 		if(Objects.isNull(material)) return true;
 
-		else if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3))
+		else if(NMSUtil.getVersion().isPostOrEquals(NMSVersion.v1_14_R1))
 			return material.isAir();
 		else
 			return material.equals(Material.AIR);
@@ -140,6 +145,11 @@ public class BukkitUtils {
 		return Objects.isNull(material) || isAir(material.parseItem());
 	}
 
+	/**
+	 * Returns the inventory that was clicked in the event.
+	 * @param event The event to get the clicked inventory from.
+	 * @return The inventory that was clicked in the event.
+	 */
 	public static Inventory getClickedInventory(InventoryClickEvent event) {
 		if(NMSUtil.getVersion().isPreOrEquals(NMSVersion.v1_8_R3)) {
 			int slot = event.getRawSlot();
