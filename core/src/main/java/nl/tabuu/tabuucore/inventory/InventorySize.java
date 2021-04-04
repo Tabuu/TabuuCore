@@ -10,7 +10,7 @@ public enum InventorySize {
     FIVE_ROWS(9, 5),
     SIX_ROWS(9, 6),
     THREE_BY_THREE(3, 3),
-    ONE_BY_FIVE(1, 5);
+    ONE_BY_FIVE(5, 1);
 
     private int _width, _height;
 
