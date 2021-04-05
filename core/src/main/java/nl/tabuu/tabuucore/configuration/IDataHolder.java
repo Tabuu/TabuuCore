@@ -907,6 +907,7 @@ public interface IDataHolder {
      * @param keySerializer The serializer to serialize the key with.
      */
     default <V, T extends ISerializable<IDataHolder>> void setSerializableMap(@Nonnull String path, @Nonnull Map<V, T> map, @Nonnull IObjectSerializer<V, String> keySerializer) {
+        delete(path);
         map.forEach((child, value) -> set(path + getPathDivider() + keySerializer.serialize(child), value));
     }
     /**
