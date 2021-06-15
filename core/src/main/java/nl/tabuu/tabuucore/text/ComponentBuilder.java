@@ -3,6 +3,7 @@ package nl.tabuu.tabuucore.text;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
 
 public class ComponentBuilder {
 
-    private static Pattern KEY_VALUE_PATTERN, STRUCTURE_PATTERN;
+    private static final Pattern KEY_VALUE_PATTERN, STRUCTURE_PATTERN;
     // (?:\[(?<text>(?:[^](]|\\.)+)]\((?<attributes>(?:[^](]|\\.)+)\)|(?<flat>(?:[^\[]|\\.)+))
 
     static {
@@ -29,7 +30,7 @@ public class ComponentBuilder {
     }
 
     private BaseComponent[] _current;
-    private Stack<BaseComponent> _components;
+    private final Stack<BaseComponent> _components;
 
     private ComponentBuilder() {
         _components = new Stack<>();
@@ -43,8 +44,16 @@ public class ComponentBuilder {
         return new ComponentBuilder();
     }
 
+    public static ComponentBuilder create(String json) {
+        return create().thenJson(json);
+    }
+
+    public static ComponentBuilder create(BaseComponent[] components) {
+        return create().then(components);
+    }
+
     private void push() {
-        if (_current != null) forCurrent(_components::push);
+        forCurrent(_components::push);
         _current = null;
     }
 
@@ -56,6 +65,18 @@ public class ComponentBuilder {
         push();
         _components.removeIf(Objects::isNull);
         return _components.toArray(new BaseComponent[0]);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public String toString() {
+        Stack<BaseComponent> components = (Stack<BaseComponent>) _components.clone();
+        if(_current != null)
+            for(BaseComponent component : _current)
+                components.push(component);
+
+        components.removeIf(Objects::isNull);
+        return ComponentSerializer.toString(components.toArray(new BaseComponent[0]));
     }
 
     /**
@@ -87,6 +108,15 @@ public class ComponentBuilder {
         push();
         _current = TextComponent.fromLegacyText(text);
         return this;
+    }
+
+    /**
+     * Converts the json to base components and adds them to the builder.
+     * @param json The json to convert.
+     * @return This builder.
+     */
+    public ComponentBuilder thenJson(String json) {
+        return then(ComponentSerializer.parse(json));
     }
 
     /**

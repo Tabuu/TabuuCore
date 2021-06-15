@@ -48,8 +48,11 @@ public enum NMSVersion {
     /** Latest used by Minecraft version 1.16.3*/
     v1_16_R2(true, "1.16"),
 
-    /** Latest used by Minecraft version 1.16.4*/
-    v1_16_R3(true, "1.16");
+    /** Latest used by Minecraft version 1.16.5*/
+    v1_16_R3(true, "1.16"),
+
+    /** Latest used by Minecraft version 1.17*/
+    v1_17_R1(true, "1.17");
 
     private boolean _supported;
     private String _spigotAPIVersion;

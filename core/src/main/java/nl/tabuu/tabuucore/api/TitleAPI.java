@@ -1,17 +1,12 @@
 package nl.tabuu.tabuucore.api;
 
-import nl.tabuu.tabuucore.nms.wrapper.ITitleUtil;
+import nl.tabuu.tabuucore.nms.wrapper.TitlePacketBuilder;
 import org.bukkit.entity.Player;
 
+@Deprecated
 public class TitleAPI {
 
     private static TitleAPI INSTANCE;
-
-    private ITitleUtil _util;
-
-    protected TitleAPI(){
-        _util = ITitleUtil.get();
-    }
 
     /**
      * Sends a subtitle packet to a player.
@@ -22,8 +17,12 @@ public class TitleAPI {
      * @param fadeOut fade-out time in server ticks.
      * @see <a href="http://minecraft.tools/en/title.php">http://minecraft.tools/en/title.php</a>
      */
-    public void sendSubTitle(Player player, String json, int fadeIn, int stay, int fadeOut){
-        _util.sendSubTitle(player, json, fadeIn, stay, fadeOut);
+    public void sendSubTitle(Player player, String json, int fadeIn, int stay, int fadeOut) {
+        TitlePacketBuilder.get()
+                .setTimings(fadeIn, stay, fadeOut)
+                .setSubTitle(json)
+                .getTitlePacket()
+                .accept(player);
     }
 
     /**
@@ -35,8 +34,12 @@ public class TitleAPI {
      * @param fadeOut fade-out time in server ticks.
      * @see <a href="http://minecraft.tools/en/title.php">http://minecraft.tools/en/title.php</a>
      */
-    public void sendTitle(Player player, String json, int fadeIn, int stay, int fadeOut){
-        _util.sendTitle(player, json, fadeIn, stay, fadeOut);
+    public void sendTitle(Player player, String json, int fadeIn, int stay, int fadeOut) {
+        TitlePacketBuilder.get()
+                .setTimings(fadeIn, stay, fadeOut)
+                .setTitle(json)
+                .getTitlePacket()
+                .accept(player);
     }
 
     /**
@@ -48,8 +51,12 @@ public class TitleAPI {
      * @param fadeOut fade-out time in server ticks.
      * @see <a href="http://minecraft.tools/en/title.php">http://minecraft.tools/en/title.php</a>
      */
-    public void sendActionbar(Player player, String json, int fadeIn, int stay, int fadeOut){
-        _util.sendActionbar(player, json, fadeIn, stay, fadeOut);
+    public void sendActionbar(Player player, String json, int fadeIn, int stay, int fadeOut) {
+        TitlePacketBuilder.get()
+                .setTimings(fadeIn, stay, fadeOut)
+                .setActionBar(json)
+                .getTitlePacket()
+                .accept(player);
     }
 
     public static TitleAPI getInstance(){

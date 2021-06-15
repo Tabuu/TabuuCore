@@ -6,7 +6,7 @@
 
     <groupId>nl.tabuu</groupId>
     <artifactId>tabuucore-parent</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
     <name>TabuuCore</name>
     <url>http://www.tabuu.nl</url>
     <description>Tabuu's core plugin.</description>
@@ -24,6 +24,7 @@
         <module>v1_16_R1</module>
         <module>v1_16_R2</module>
         <module>v1_16_R3</module>
+        <module>v1_17_R1</module>
     </modules>
 
     <build>
