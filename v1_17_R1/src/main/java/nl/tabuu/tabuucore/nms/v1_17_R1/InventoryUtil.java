@@ -1,13 +1,11 @@
 package nl.tabuu.tabuucore.nms.v1_17_R1;
 
-import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.protocol.game.PacketPlayOutCloseWindow;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.ItemStack;
-import nl.tabuu.tabuucore.debug.Debug;
+import net.minecraft.world.inventory.Container;
+import net.minecraft.world.inventory.Containers;
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
