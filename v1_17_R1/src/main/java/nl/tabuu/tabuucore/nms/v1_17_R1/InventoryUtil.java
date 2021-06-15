@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
@@ -47,21 +48,7 @@ public class InventoryUtil implements IInventoryUtil {
 
     @Override
     public void addActiveContainerSlotListener(Player player, IContainerWindow container) {
-        EntityPlayer entity = playerToNMS(player);
-
-        // region Code snippet from EntityPlayer.
-        ICrafting crafting = new ICrafting() {
-            public void a(Container container, int i, ItemStack itemstack) {
-                Slot slot = container.getSlot(i);
-                if (!(slot instanceof SlotResult) && slot.c == entity.getInventory())
-                    CriterionTriggers.e.a(entity, entity.getInventory(), itemstack);
-            }
-
-            public void setContainerData(Container container, int i, int j) { }
-        };
-        // endregion
-
-        ((Container) container.getNMSContainer()).addSlotListener(crafting);
+        playerToNMS(player).initMenu((Container) container.getNMSContainer());
     }
 
     private EntityPlayer playerToNMS(Player player){
