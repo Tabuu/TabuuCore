@@ -6,7 +6,6 @@ import nl.tabuu.tabuucore.inventory.ui.element.Button;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemBuilder;
 import nl.tabuu.tabuucore.material.XMaterial;
-import nl.tabuu.tabuucore.nms.wrapper.IInventoryUtil;
 import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
@@ -14,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -21,48 +21,48 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TextInputUI extends InventoryFormUI {
-    private IInventoryUtil _anvilUtil;
     private IAnvilContainerWindow _anvilWindow;
-    private BiConsumer<Player, String> _onTextSubmit;
-    private Consumer<Player> _onClose;
-    private ItemStack _renameItem;
-    private String _defaultValue;
+    private final BiConsumer<Player, String> _onTextSubmit;
+    private final Consumer<Player> _onClose;
+    private final ItemStack _renameItem;
+    private final String _defaultValue;
+    private final Player _player;
 
-    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+    public TextInputUI(Player player, ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
         super("", InventorySize.ONE_ROW);
+        _player = player;
         _onTextSubmit = onTextSubmit;
         _renameItem = renameItem;
-        _anvilUtil = IInventoryUtil.get();
         _defaultValue = defaultValue;
         _onClose = onClose;
     }
 
-    public TextInputUI(ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
-        this(renameItem, defaultValue, onTextSubmit, null);
+    public TextInputUI(Player player, ItemStack renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(player, renameItem, defaultValue, onTextSubmit, null);
     }
 
-    public TextInputUI(ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
-        this(renameItem.build(), defaultValue, onTextSubmit, onClose);
+    public TextInputUI(Player player, ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(player, renameItem.build(), defaultValue, onTextSubmit, onClose);
     }
 
-    public TextInputUI(Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
-        this(new ItemStack(renameItem), defaultValue, onTextSubmit, onClose);
+    public TextInputUI(Player player, Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(player, new ItemStack(renameItem), defaultValue, onTextSubmit, onClose);
     }
 
-    public TextInputUI(XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
-        this(renameItem.parseItem(), defaultValue, onTextSubmit, onClose);
+    public TextInputUI(Player player, XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit, Consumer<Player> onClose) {
+        this(player, renameItem.parseItem(), defaultValue, onTextSubmit, onClose);
     }
 
-    public TextInputUI(ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
-        this(renameItem.build(), defaultValue, onTextSubmit);
+    public TextInputUI(Player player, ItemBuilder renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(player, renameItem.build(), defaultValue, onTextSubmit);
     }
 
-    public TextInputUI(Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
-        this(new ItemStack(renameItem), defaultValue, onTextSubmit);
+    public TextInputUI(Player player, Material renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(player, new ItemStack(renameItem), defaultValue, onTextSubmit);
     }
 
-    public TextInputUI(XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
-        this(renameItem.parseItem(), defaultValue, onTextSubmit);
+    public TextInputUI(Player player, XMaterial renameItem, String defaultValue, BiConsumer<Player, String> onTextSubmit) {
+        this(player, renameItem.parseItem(), defaultValue, onTextSubmit);
     }
 
     @Override
@@ -85,34 +85,39 @@ public class TextInputUI extends InventoryFormUI {
 
     @Override
     public void open(HumanEntity human) {
-        Player player = (Player) human;
+        if(human != getPlayer())
+            throw new IllegalArgumentException("Can only open inventory for intended player.");
 
-        _anvilWindow = IContainerWindow.get(player, IAnvilContainerWindow.class);
-
-        setInventory(_anvilWindow.getInventory());
-
-        TabuuCore.getInstance().getInventoryUIManager().register(this);
-
-        this.onDraw();
+        initialize();
         _anvilWindow.open();
     }
 
     @Override
-    public void onClose(Player player) {
-        _anvilUtil.setActiveContainerToDefault(player);
-        _anvilUtil.sendPacketCloseWindow(player, _anvilWindow.getWindowId());
+    public void close(HumanEntity human) {
+        if(human != getPlayer())
+            throw new IllegalArgumentException("Can only open inventory for intended player.");
 
+        _anvilWindow.close();
+    }
+
+    @Override
+    public void onClose(Player player) {
         if(_onClose != null)
             Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> _onClose.accept(player));
     }
 
     @Override
-    protected void createInventory() {
+    protected Inventory createInventory() {
+        _anvilWindow = IContainerWindow.get(getPlayer(), IAnvilContainerWindow.class);
+        return _anvilWindow.getInventory();
+    }
+
+    public Player getPlayer() {
+        return _player;
     }
 
     private void submit(Player player) {
-        String string = _anvilWindow.getRenameText();
-        _anvilUtil.handleInventoryCloseEvent(player);
-        _onTextSubmit.accept(player, string);
+        close(player);
+        _onTextSubmit.accept(player, _anvilWindow.getRenameText());
     }
 }

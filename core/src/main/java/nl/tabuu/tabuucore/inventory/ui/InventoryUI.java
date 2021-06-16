@@ -22,8 +22,8 @@ import java.util.List;
 
 public abstract class InventoryUI extends InventoryCanvas {
 
-    private Inventory _inventory;
     private String _title;
+    private Inventory _inventory;
     private List<InventoryAction> _blockedActions;
     private boolean _initial;
 
@@ -34,13 +34,23 @@ public abstract class InventoryUI extends InventoryCanvas {
         setSize(size);
     }
 
-    public void open(HumanEntity player) {
-        if(_initial) {
-            createInventory();
+    protected boolean initialize() {
+        return initialize(false);
+    }
+
+    protected boolean initialize(boolean force) {
+        if(_initial || force) {
+            setInventory(createInventory());
             onDraw();
             _initial = false;
+            return true;
         }
 
+        return false;
+    }
+
+    public void open(HumanEntity player) {
+        initialize();
         player.openInventory(getInventory());
     }
 
@@ -62,31 +72,23 @@ public abstract class InventoryUI extends InventoryCanvas {
         List<HumanEntity> viewers = new ArrayList<>(getInventory().getViewers());
 
         ItemStack[] contents = Arrays.copyOfRange(getInventory().getContents().clone(), 0, getSize().getSize());
-        createInventory();
+        setInventory(createInventory());
         getInventory().setContents(contents);
 
         viewers.forEach(this::open);
     }
 
-    protected void createInventory() {
-
-        switch (getSize()){
-
+    protected Inventory createInventory() {
+        switch (getSize()) {
             case ONE_BY_FIVE:
-                _inventory = Bukkit.createInventory(null, InventoryType.HOPPER, _title);
-                break;
+                return Bukkit.createInventory(null, InventoryType.HOPPER, _title);
 
             case THREE_BY_THREE:
-                _inventory = Bukkit.createInventory(null, InventoryType.DROPPER, _title);
-                break;
+                return Bukkit.createInventory(null, InventoryType.DROPPER, _title);
 
             default:
-                _inventory = Bukkit.createInventory(null, getSize().getSize(), _title);
-                break;
-
+                return Bukkit.createInventory(null, getSize().getSize(), _title);
         }
-        
-        TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
     public void setTitle(String title){
@@ -122,6 +124,7 @@ public abstract class InventoryUI extends InventoryCanvas {
     @Override
     public void setInventory(Inventory inventory){
         _inventory = inventory;
+        TabuuCore.getInstance().getInventoryUIManager().register(this);
     }
 
     @Override

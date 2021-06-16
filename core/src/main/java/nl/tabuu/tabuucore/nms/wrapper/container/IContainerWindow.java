@@ -8,22 +8,19 @@ import java.lang.reflect.Constructor;
 
 public interface IContainerWindow {
 
-    Player getPlayer();
-
-    int getWindowId();
-
     void open();
 
     void close();
 
+    Player getPlayer();
+
     Inventory getInventory();
 
-    Object getNMSContainer();
-
+    @SuppressWarnings("unchecked")
     static <T extends IContainerWindow> T get(Player player, Class<T> type){
         try {
             String className = type.getSimpleName().substring(1);
-            Class wrapper = NMSUtil.getWrapperClass("container." + className);
+            Class<T> wrapper = (Class<T>) NMSUtil.getWrapperClass("container." + className);
 
             Constructor<T> constructor = wrapper.getDeclaredConstructor(Player.class);
             constructor.setAccessible(true);
