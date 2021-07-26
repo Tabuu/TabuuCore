@@ -1,11 +1,10 @@
 package nl.tabuu.tabuucore.nms.v1_15_R1;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.v1_15_R1.*;
 import nl.tabuu.tabuucore.hologram.HologramItemLine;
 import nl.tabuu.tabuucore.hologram.HologramLine;
 import nl.tabuu.tabuucore.hologram.HologramStringLine;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

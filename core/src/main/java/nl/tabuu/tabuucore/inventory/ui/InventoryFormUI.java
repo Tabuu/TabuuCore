@@ -6,7 +6,7 @@ import nl.tabuu.tabuucore.inventory.ui.element.Element;
 import nl.tabuu.tabuucore.inventory.ui.element.IClickable;
 import nl.tabuu.tabuucore.inventory.ui.element.ItemInput;
 import nl.tabuu.tabuucore.inventory.ui.element.StyleableElement;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import nl.tabuu.tabuucore.util.BukkitUtils;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Bukkit;

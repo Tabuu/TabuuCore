@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EnumItemSlot;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3D;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.entity.IClientArmorStand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -1,7 +1,7 @@
 package nl.tabuu.tabuucore.inventory.ui.element.style;
 
 import nl.tabuu.tabuucore.item.ItemBuilder;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

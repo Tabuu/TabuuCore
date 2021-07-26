@@ -1,9 +1,8 @@
 package nl.tabuu.tabuucore.inventory.ui.graphics.brush;
 
 import nl.tabuu.tabuucore.inventory.InventorySize;
-import nl.tabuu.tabuucore.inventory.ui.graphics.InventoryCanvas;
 import nl.tabuu.tabuucore.item.ItemBuilder;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

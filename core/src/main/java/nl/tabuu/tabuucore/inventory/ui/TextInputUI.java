@@ -5,7 +5,7 @@ import nl.tabuu.tabuucore.inventory.InventorySize;
 import nl.tabuu.tabuucore.inventory.ui.element.Button;
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemBuilder;
-import nl.tabuu.tabuucore.material.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
 import nl.tabuu.tabuucore.nms.wrapper.container.IContainerWindow;
 import nl.tabuu.tabuucore.util.vector.Vector2f;
