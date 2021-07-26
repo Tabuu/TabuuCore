@@ -3,7 +3,7 @@ package nl.tabuu.tabuucore.nms.v1_16_R3.entity;
 import com.mojang.datafixers.util.Pair;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R3.*;
-import com.cryptomorin.xseries.XMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.entity.IClientArmorStand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

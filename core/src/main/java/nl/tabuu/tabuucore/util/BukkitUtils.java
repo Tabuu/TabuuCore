@@ -5,7 +5,7 @@
 
 package nl.tabuu.tabuucore.util;
 
-import com.cryptomorin.xseries.XMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.serialization.string.Serializer;

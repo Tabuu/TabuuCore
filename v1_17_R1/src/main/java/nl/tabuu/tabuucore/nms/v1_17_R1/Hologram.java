@@ -11,7 +11,7 @@ import net.minecraft.world.entity.EnumItemSlot;
 import nl.tabuu.tabuucore.hologram.HologramItemLine;
 import nl.tabuu.tabuucore.hologram.HologramLine;
 import nl.tabuu.tabuucore.hologram.HologramStringLine;
-import com.cryptomorin.xseries.XMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.IHologram;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

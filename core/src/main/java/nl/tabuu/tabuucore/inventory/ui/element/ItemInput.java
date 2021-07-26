@@ -2,7 +2,7 @@ package nl.tabuu.tabuucore.inventory.ui.element;
 
 import nl.tabuu.tabuucore.inventory.ui.element.style.Style;
 import nl.tabuu.tabuucore.item.ItemList;
-import com.cryptomorin.xseries.XMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.util.BukkitUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

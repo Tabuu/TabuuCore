@@ -1,6 +1,6 @@
 package nl.tabuu.tabuucore.item;
 
-import com.cryptomorin.xseries.XMaterial;
+import nl.tabuu.tabuucore.material.XMaterial;
 import nl.tabuu.tabuucore.nms.wrapper.INBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
