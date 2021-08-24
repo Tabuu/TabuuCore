@@ -102,10 +102,10 @@ public class TextInputUI extends InventoryFormUI {
 
     @Override
     public void onClose(Player player) {
-        getInventory().clear();
-
         if(_onClose != null)
             Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> _onClose.accept(player));
+
+        getInventory().clear();
     }
 
     @Override
