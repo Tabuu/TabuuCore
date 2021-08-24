@@ -95,13 +95,15 @@ public class TextInputUI extends InventoryFormUI {
     @Override
     public void close(HumanEntity human) {
         if(human != getPlayer())
-            throw new IllegalArgumentException("Can only open inventory for intended player.");
+            throw new IllegalArgumentException("Can only close inventory for intended player.");
 
         _anvilWindow.close();
     }
 
     @Override
     public void onClose(Player player) {
+        getInventory().clear();
+
         if(_onClose != null)
             Bukkit.getScheduler().runTask(TabuuCore.getInstance(), () -> _onClose.accept(player));
     }
@@ -117,7 +119,7 @@ public class TextInputUI extends InventoryFormUI {
     }
 
     private void submit(Player player) {
-        close(player);
         _onTextSubmit.accept(player, _anvilWindow.getRenameText());
+        close(player);
     }
 }
