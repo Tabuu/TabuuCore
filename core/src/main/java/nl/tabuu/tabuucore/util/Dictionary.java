@@ -8,6 +8,7 @@ import nl.tabuu.tabuucore.nms.NMSUtil;
 import nl.tabuu.tabuucore.nms.NMSVersion;
 import nl.tabuu.tabuucore.text.ComponentBuilder;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -92,16 +93,16 @@ public class Dictionary extends HashMap<String, String> {
         return translation;
     }
 
-    public void send(Player player, String key, boolean usePlaceholderApi, boolean useColor, char colorSymbol, boolean useTextComponents, Object... replacements) {
-        String message = translate(key, player, usePlaceholderApi, useColor, colorSymbol, replacements);
+    public void send(CommandSender sender, String key, boolean usePlaceholderApi, boolean useColor, char colorSymbol, boolean useTextComponents, Object... replacements) {
+        String message = translate(key, sender, usePlaceholderApi, useColor, colorSymbol, replacements);
 
         if(useTextComponents) {
             BaseComponent[] components = ComponentBuilder.parse(message).build();
-            player.spigot().sendMessage(components);
-        } else player.sendMessage(message);
+            sender.spigot().sendMessage(components);
+        } else sender.sendMessage(message);
     }
 
-    public void send(Player player, String key, Object... replacements) {
-        send(player, key, true, true, '&', NMSUtil.getVersion().isPost(NMSVersion.v1_8_R3), replacements);
+    public void send(CommandSender sender, String key, Object... replacements) {
+        send(sender, key, true, true, '&', NMSUtil.getVersion().isPost(NMSVersion.v1_8_R3), replacements);
     }
 }
