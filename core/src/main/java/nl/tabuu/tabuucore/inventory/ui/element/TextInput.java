@@ -57,10 +57,8 @@ public class TextInput extends StyleableElement<TextInputStyle> implements IClic
 
     private void returnToUI(Player player){
         InventoryUI ui = getReturnUI();
-        if (Objects.nonNull(ui)) {
+        if (Objects.nonNull(ui))
             ui.open(player);
-            Debug.log("Open: " + ui.toString());
-        }
     }
 
     @Override

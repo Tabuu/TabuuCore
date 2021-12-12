@@ -78,6 +78,16 @@
             <artifactId>tabuucore-nms_1_16_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>nl.tabuu</groupId>
+            <artifactId>tabuucore-nms_1_17_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>nl.tabuu</groupId>
+            <artifactId>tabuucore-nms_1_18_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
