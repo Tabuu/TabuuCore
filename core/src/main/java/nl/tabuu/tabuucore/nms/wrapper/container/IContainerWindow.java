@@ -28,7 +28,7 @@ public interface IContainerWindow {
             return constructor.newInstance(player);
         }
         catch (ReflectiveOperationException e) {
-            throw new UnsupportedOperationException("Could not create wrapper class!");
+            throw new UnsupportedOperationException("Could not create wrapper class! ("+ e.getCause().getMessage() +")");
         }
     }
 }
