@@ -65,7 +65,7 @@ public class ClientArmorStand implements IClientArmorStand {
 
     @Override
     public Location getLocation() {
-        org.bukkit.World world = Bukkit.getWorld(getHandle().cA().toString());
+        org.bukkit.World world = Bukkit.getWorld(getHandle().cC().toString());
         Vec3D position = getHandle().cZ();
         double x = position.a();
         double y = position.b();
