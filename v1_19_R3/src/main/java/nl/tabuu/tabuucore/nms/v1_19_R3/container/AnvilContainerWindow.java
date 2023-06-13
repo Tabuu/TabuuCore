@@ -22,6 +22,7 @@ public class AnvilContainerWindow extends ContainerWindow implements IAnvilConta
         World world = getEntityPlayer().H;
         BlockPosition blockPosition = new BlockPosition(0, 0, 0);
         _container = new ContainerAnvil(getId(), getEntityPlayer().fJ(), ContainerAccess.a(world, blockPosition));
+        _container.setTitle(IChatBaseComponent.a(" "));
         _container.checkReachable = false;
     }
 
