@@ -10,7 +10,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
-import java.util.*;
+import java.util.Map;
 
 public class YamlConfiguration extends YamlDataHolder implements IConfiguration {
 
@@ -22,17 +22,36 @@ public class YamlConfiguration extends YamlDataHolder implements IConfiguration 
         _file = file;
         _defaults = defaults;
 
-        // Using the same style as the Bukkit YAML files.
-        DumperOptions dumper = new DumperOptions();
-        Representer representer = new Representer();
+        final Representer representer;
+        final YamlConstructor constructor;
+        final DumperOptions dumper = new DumperOptions();
 
+        if (NMSUtil.getVersion().isPre(NMSVersion.v1_15_R1)) {
+            try {
+                representer = Representer.class.getConstructor().newInstance();
+            }   catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            representer = new Representer(dumper);
+        }
+
+        // Using the same style as the Bukkit YAML files.
         dumper.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         representer.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 
-        if (NMSUtil.getVersion().isPost(NMSVersion.v1_8_R3)) {
+        if (NMSUtil.getVersion().isPre(NMSVersion.v1_19_R3)) {
+            try {
+                constructor = YamlConstructor.class.getConstructor().newInstance();
+            }   catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
             org.yaml.snakeyaml.LoaderOptions loader = new org.yaml.snakeyaml.LoaderOptions();
-            _parser = new Yaml(new YamlConstructor(), representer, dumper, loader);
-        } else _parser = new Yaml(new YamlConstructor(), representer, dumper);
+            constructor = new YamlConstructor(loader);
+        }
+
+        _parser = new Yaml(constructor, representer, dumper);
 
         writeDefaults();
     }
