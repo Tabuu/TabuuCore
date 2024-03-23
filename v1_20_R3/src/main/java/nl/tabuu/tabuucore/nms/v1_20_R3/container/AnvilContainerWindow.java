@@ -7,6 +7,7 @@ import net.minecraft.world.inventory.ContainerAccess;
 import net.minecraft.world.inventory.ContainerAnvil;
 import net.minecraft.world.inventory.Containers;
 import net.minecraft.world.level.World;
+import nl.tabuu.tabuucore.debug.Debug;
 import nl.tabuu.tabuucore.nms.wrapper.container.IAnvilContainerWindow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -33,7 +34,7 @@ public class AnvilContainerWindow extends ContainerWindow implements IAnvilConta
 
     @Override
     protected void sendContainerWindowOpenPacket() {
-        getEntityPlayer().c.a(new PacketPlayOutOpenWindow(getId(), Containers.h, IChatBaseComponent.b(InventoryType.ANVIL.getDefaultTitle())));
+        getEntityPlayer().c.b(new PacketPlayOutOpenWindow(getId(), Containers.i, IChatBaseComponent.b(InventoryType.ANVIL.getDefaultTitle())));
     }
 
     @Override
