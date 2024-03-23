@@ -107,6 +107,11 @@
             <artifactId>tabuucore-nms_1_20_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>nl.tabuu</groupId>
+            <artifactId>tabuucore-nms_1_20_R3</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -70,7 +70,13 @@ public enum NMSVersion {
     v1_19_R3(true, "1.19"),
 
     /** Latest used by Minecraft version 1.20.1*/
-    v1_20_R1(true, "1.20");
+    v1_20_R1(true, "1.20"),
+
+    /** Latest used by Minecraft version 1.20.3*/
+    v1_20_R2(false, "1.20"),
+
+    /** Latest used by Minecraft version 1.20.4*/
+    v1_20_R3(true, "1.20");
 
     private final boolean _supported;
     private final String _spigotAPIVersion;
